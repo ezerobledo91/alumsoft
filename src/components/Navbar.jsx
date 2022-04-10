@@ -1,4 +1,4 @@
-import { AddIcon, EditIcon, HamburgerIcon, ViewIcon } from '@chakra-ui/icons'
+import { AddIcon, ArrowBackIcon, HamburgerIcon, ViewIcon } from '@chakra-ui/icons'
 import { IconButton, Menu, MenuButton, MenuDivider, MenuGroup, MenuItem, MenuList } from '@chakra-ui/react'
 
 import React from 'react'
@@ -36,22 +36,22 @@ function Navbar() {
           <MenuButton as={IconButton} aria-label='Options' icon={<HamburgerIcon />} />
           <MenuList>
             <MenuGroup title='Presupuestos' textAlign={'left'}>
-              <MenuItem icon={<AddIcon />}>Añadir</MenuItem>
+              <MenuItem icon={<AddIcon />}>Nuevo</MenuItem>
               <MenuItem icon={<ViewIcon />}>Ver Todos</MenuItem>
             </MenuGroup>
             <MenuDivider />
-            <MenuGroup title='Clientes' textAlign={'left'}>
-              <MenuItem icon={<AddIcon />}>Añadir</MenuItem>
+            <MenuItem>Proveedores</MenuItem>
+            <MenuItem>Clientes</MenuItem>
+            <MenuDivider />
+            <MenuGroup title='Componentes' textAlign={'left'}>
+              <MenuItem>Perfiles</MenuItem>
+              <MenuItem>Vidrios</MenuItem>
+              <MenuItem>Accesorios</MenuItem>
+              <MenuItem>Grupos</MenuItem>
             </MenuGroup>
             <MenuDivider />
-
-            <MenuGroup title='Proveedores' textAlign={'left'}>
-              <MenuItem icon={<AddIcon />}>Añadir</MenuItem>
-            </MenuGroup>
-            <MenuDivider />
-
             <MenuGroup title='Cuenta' textAlign={'left'}>
-              <MenuItem icon={<EditIcon />}>Salir</MenuItem>
+              <MenuItem icon={<ArrowBackIcon />}>Salir</MenuItem>
             </MenuGroup>
           </MenuList>
         </Menu>
