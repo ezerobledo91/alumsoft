@@ -2,6 +2,7 @@ import { AddIcon, ArrowBackIcon, HamburgerIcon, ViewIcon } from '@chakra-ui/icon
 import { IconButton, Menu, MenuButton, MenuDivider, MenuGroup, MenuItem, MenuList } from '@chakra-ui/react'
 
 import React from 'react'
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import { mobile } from '../responsive'
 const Container = styled.div`
@@ -40,8 +41,12 @@ function Navbar() {
               <MenuItem icon={<ViewIcon />}>Ver Todos</MenuItem>
             </MenuGroup>
             <MenuDivider />
-            <MenuItem>Proveedores</MenuItem>
-            <MenuItem>Clientes</MenuItem>
+            <Link to='/proveedores'>
+              <MenuItem>Proveedores</MenuItem>
+            </Link>
+            <Link to='/clientes'>
+              <MenuItem>Clientes</MenuItem>
+            </Link>
             <MenuDivider />
             <MenuGroup title='Componentes' textAlign={'left'}>
               <MenuItem>Perfiles</MenuItem>

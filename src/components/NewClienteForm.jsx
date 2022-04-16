@@ -44,20 +44,15 @@ const NewClienteForm = () => {
         <Input id='descripcion' type='text' size='sm' {...register('descripcion')} />
         <FormHelperText>Ingrese una descripcion basica del Cliente</FormHelperText>
       </FormControl>
-      <FormControl isRequired>
-        <FormLabel htmlFor='razon_social'>Razon Social</FormLabel>
-        <Input id='razon_social' type='text' size='sm' {...register('razon_social')} />
-        <FormHelperText>Ingrese la Razon Social si tuviera</FormHelperText>
-      </FormControl>
-      <FormControl isRequired>
-        <FormLabel htmlFor='condicion_iva'>Condicion IVA</FormLabel>
-        <Input id='condicion_iva' type='text' size='sm' {...register('condicion_iva')} />
-        <FormHelperText>Condicion frente al IVA</FormHelperText>
-      </FormControl>
       <FormControl>
         <FormLabel htmlFor='telefono'>Telefono</FormLabel>
         <Input id='telefono' type='text' size='sm' {...register('telefono')} />
         <FormHelperText>Ingrese el Telefono del Cliente</FormHelperText>
+      </FormControl>
+      <FormControl>
+        <FormLabel htmlFor='direccion'>Direccion</FormLabel>
+        <Input id='direccion' type='text' size='sm' {...register('direccion')} />
+        <FormHelperText>Ingrese el Direccion del Cliente</FormHelperText>
       </FormControl>
       <FormControl>
         <FormLabel htmlFor='email'>Email</FormLabel>

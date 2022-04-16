@@ -11,7 +11,7 @@ const IconWrapper = styled.div`
 `
 
 const TableList = ({ type, entidad }) => {
-  const { _id, nombre, categoria, telefono, email, razon_social } = entidad
+  const { _id, nombre, categoria, telefono, email, descripcion } = entidad
 
   const dispatch = useDispatch()
 
@@ -22,7 +22,7 @@ const TableList = ({ type, entidad }) => {
   return (
     <Tr>
       <Td>{nombre}</Td>
-      <Td>{type === 'proveedor' ? categoria : razon_social}</Td>
+      <Td>{type === 'proveedor' ? categoria : descripcion}</Td>
       <Td>{telefono}</Td>
       <Td>{email}</Td>
       <Td>

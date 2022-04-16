@@ -31,7 +31,7 @@ function Tables({ list, type }) {
               </Th>
               <Th>
                 <Wrapper>
-                  <LinkIcon /> {type === 'proveedor' ? 'Categoria' : 'Razon Social'}
+                  <LinkIcon /> {type === 'proveedor' ? 'Categoria' : 'Descripcion'}
                 </Wrapper>
               </Th>
               <Th>
