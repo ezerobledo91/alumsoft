@@ -11,6 +11,7 @@ import {
 } from '@chakra-ui/react'
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import { close } from '../reducer/modalSlice'
 
 function NewModal({ name, form }) {
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -24,11 +25,11 @@ function NewModal({ name, form }) {
       return
     }
     onClose()
-  }, [stateModal, dispatch, onOpen, onClose])
+  }, [stateModal, onOpen, onClose])
 
   return (
     <>
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} onClose={onClose} onCloseComplete={() => dispatch(close())}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Añadir {name}</ModalHeader>

@@ -32,4 +32,20 @@ const deleteProveedor = async (id) => {
     return result
 }
 
-export { saveProveedor, getAllProveedores, deleteProveedor }
+// Actualizar Proveedor
+const updateProveedor = async (entidad) => {
+    console.log()
+    const { _id, ...others } = entidad
+    let response = await fetch(`http://localhost:5000/api/proveedor/${_id}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8',
+        },
+        body: JSON.stringify(others),
+    })
+
+    let result = await response.json()
+    return result
+}
+
+export { saveProveedor, getAllProveedores, deleteProveedor, updateProveedor }

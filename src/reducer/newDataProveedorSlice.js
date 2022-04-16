@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { deleteProveedor, getAllProveedores, saveProveedor } from '../services/proveedores'
+import { deleteProveedor, getAllProveedores, saveProveedor, updateProveedor } from '../services/proveedores'
 
 
 export const getDataAsync = createAsyncThunk(
@@ -29,6 +29,15 @@ export const removeDataAsync = createAsyncThunk(
 
 )
 
+export const updateDataAsync = createAsyncThunk(
+    'newDataProveedor/updateDataAsync',
+    async (payload) => {
+        const response = await updateProveedor(payload)
+        return response
+    }
+
+)
+
 
 export const newDataProveedorSlice = createSlice({
     name: 'newDataProveedor',
@@ -47,7 +56,11 @@ export const newDataProveedorSlice = createSlice({
             const id = action.payload;
             const index = state.findIndex((item) => item._id === id);
             state.splice(index, 1);
-        }
+        },
+        [updateDataAsync.fulfilled]: (state, action) => {
+            return state
+        },
+
     }
 
 })

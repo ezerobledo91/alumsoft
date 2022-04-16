@@ -21,10 +21,10 @@ function Proveedores() {
   return (
     <div>
       <Navbar />
-      <HeadTable name='Proveedores' />
+      <HeadTable name='Proveedores' type='proveedor' />
       <Tables list={newData} type='proveedor' />
       <AlertConfirm type='proveedor' reducer={removeDataAsync} />
-      <NewModal name='Proveedor' form={<NewProveedorForm />} />
+      <NewModal name='Proveedor' form={<NewProveedorForm/>} />
     </div>
   )
 }

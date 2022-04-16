@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { deleteCliente, getAllClientes, saveCliente } from '../services/clientes'
+import { deleteCliente, getAllClientes, saveCliente, updateCliente } from '../services/clientes'
 
 
 export const getDataAsync = createAsyncThunk(
@@ -30,6 +30,15 @@ export const removeDataAsync = createAsyncThunk(
 )
 
 
+export const updateDataAsyncCliente = createAsyncThunk(
+    'newDataCliente/updateDataAsync',
+    async (payload) => {
+        const response = await updateCliente(payload)
+        return response
+    }
+
+)
+
 export const newDataClienteSlice = createSlice({
     name: 'newDataCliente',
     initialState: [],
@@ -47,6 +56,9 @@ export const newDataClienteSlice = createSlice({
             const id = action.payload;
             const index = state.findIndex((item) => item._id === id);
             state.splice(index, 1);
+        },
+        [updateDataAsyncCliente.fulfilled]: (state, action) => {
+            return state
         }
     }
 

@@ -25,24 +25,33 @@ const FiltersContainer = styled.div`
   padding: 10px 0px;
 `
 
-function HeadTable({ name }) {
+function HeadTable({ name, type }) {
   const dispatch = useDispatch()
 
   return (
     <Wrapper>
       <Title>{name}</Title>
       <FiltersContainer>
-        <Select placeholder='Categoría' size='sm'>
-          <option value='option1'>Option 1</option>
-          <option value='option2'>Option 2</option>
-          <option value='option3'>Option 3</option>
-        </Select>
+        {type === 'proveedor' ? (
+          <Select placeholder='Categoría' size='sm'>
+            <option value='option1'>Option 1</option>
+            <option value='option2'>Option 2</option>
+            <option value='option3'>Option 3</option>
+          </Select>
+        ) : (
+          <></>
+        )}
         <InputGroup size='sm'>
           <InputLeftElement pointerEvents='none' children={<SearchIcon color='gray.300' />} />
           <Input type='search' placeholder='Buscar' />
         </InputGroup>
         <Tooltip label={'Añadir ' + name} fontSize='xs'>
-          <IconButton aria-label={'Añadir ' + name} icon={<AddIcon />} size='sm' onClick={() => dispatch(open({name:name}))} />
+          <IconButton
+            aria-label={'Añadir ' + name}
+            icon={<AddIcon />}
+            size='sm'
+            onClick={() => dispatch(open({ name: name }))}
+          />
         </Tooltip>
       </FiltersContainer>
       <Divider />

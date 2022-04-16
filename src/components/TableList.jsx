@@ -1,42 +1,53 @@
-import { DeleteIcon, EditIcon, ViewIcon } from '@chakra-ui/icons'
-import { Td, Tooltip, Tr } from '@chakra-ui/react'
-import React from 'react'
-import { useDispatch } from 'react-redux'
-import styled from 'styled-components'
-import { open } from '../reducer/alertConfirmSlice'
-
-const IconWrapper = styled.div`
-  display: flex;
-  gap: 5px;
-`
+import { Editable, EditableInput, EditablePreview, Input, Td, Tr } from '@chakra-ui/react'
+import React, { useState } from 'react'
+import TableControls from './TableControls'
 
 const TableList = ({ type, entidad }) => {
   const { _id, nombre, categoria, telefono, email, descripcion } = entidad
 
-  const dispatch = useDispatch()
+  const [edit, setEditing] = useState(false)
 
-  const deleteAction = () => {
-    dispatch(open({ name: 'ALERT_CONFIRM', id: _id }))
+  const new_value = {}
+  const handleNewValue = (value, element) => {
+    new_value[element] = value
   }
 
   return (
-    <Tr>
-      <Td>{nombre}</Td>
-      <Td>{type === 'proveedor' ? categoria : descripcion}</Td>
-      <Td>{telefono}</Td>
-      <Td>{email}</Td>
+    <Tr bg={edit ? '#EDF2F7' : ''}>
       <Td>
-        <IconWrapper>
-          <Tooltip label='Editar' fontSize='xs'>
-            <EditIcon focusable='true' cursor={'pointer'} />
-          </Tooltip>
-          <Tooltip label='Eliminar' fontSize='xs'>
-            <DeleteIcon focusable='true' cursor={'pointer'} onClick={() => deleteAction()} />
-          </Tooltip>
-          <Tooltip label='Ver Detalles' fontSize='xs'>
-            <ViewIcon focusable='true' cursor={'pointer'} />
-          </Tooltip>
-        </IconWrapper>
+        <Editable defaultValue={nombre} isPreviewFocusable={edit} onSubmit={(value) => handleNewValue(value, 'nombre')}>
+          <EditablePreview />
+          <Input as={EditableInput} size='sm' />
+        </Editable>
+      </Td>
+      <Td>
+        <Editable
+          defaultValue={type === 'proveedor' ? categoria : descripcion}
+          isPreviewFocusable={edit}
+          onSubmit={(value) => handleNewValue(value, type === 'proveedor' ? 'categoria' : 'descripcion')}
+        >
+          <EditablePreview />
+          <Input as={EditableInput} size='sm' />
+        </Editable>
+      </Td>
+      <Td>
+        <Editable
+          defaultValue={telefono}
+          isPreviewFocusable={edit}
+          onSubmit={(value) => handleNewValue(value, 'telefono')}
+        >
+          <EditablePreview />
+          <Input as={EditableInput} size='sm' />
+        </Editable>
+      </Td>
+      <Td>
+        <Editable defaultValue={email} isPreviewFocusable={edit} onSubmit={(value) => handleNewValue(value, 'email')}>
+          <EditablePreview />
+          <Input as={EditableInput} size='sm' />
+        </Editable>
+      </Td>
+      <Td>
+        <TableControls edit={edit} setEditing={setEditing} _id={_id} new_value={new_value} type={type}/>
       </Td>
     </Tr>
   )

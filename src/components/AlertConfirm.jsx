@@ -11,9 +11,9 @@ import {
 import React, { useEffect, useRef, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useSelector } from 'react-redux'
+import { close } from '../reducer/alertConfirmSlice'
 
-
-const AlertConfirm = ({type, reducer}) => {
+const AlertConfirm = ({ type, reducer }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const cancelRef = useRef()
   const [isLoading, setLoading] = useState(false)
@@ -22,8 +22,8 @@ const AlertConfirm = ({type, reducer}) => {
   const alert = useSelector((state) => state.alertConfirm) // Recuperar el estado despachado desde otro componente
 
   useEffect(() => {
-    console.log('Render Alert')
-    if (alert.name) {
+  console.log('Render Alert')
+    if (alert.name) {  
       onOpen()
       return
     }
@@ -38,7 +38,12 @@ const AlertConfirm = ({type, reducer}) => {
 
   return (
     <>
-      <AlertDialog isOpen={isOpen} leastDestructiveRef={cancelRef} onClose={onClose}>
+      <AlertDialog
+        isOpen={isOpen}
+        leastDestructiveRef={cancelRef}
+        onClose={onClose}
+        onCloseComplete={() => dispatch(close())}
+      >
         <AlertDialogOverlay>
           <AlertDialogContent>
             <AlertDialogHeader fontSize='lg' fontWeight='bold'>
