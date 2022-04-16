@@ -1,8 +1,9 @@
 import { AddIcon, SearchIcon } from '@chakra-ui/icons'
 import { Divider, IconButton, Input, InputGroup, InputLeftElement, Select, Tooltip } from '@chakra-ui/react'
-import React, { useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
-import NewProveedorModal from './NewProveedorModal'
+import { useDispatch } from 'react-redux'
+import { open } from '../reducer/modalSlice'
 
 const Wrapper = styled.div`
   padding: 10px 20px;
@@ -24,12 +25,12 @@ const FiltersContainer = styled.div`
   padding: 10px 0px;
 `
 
-function HeadTable() {
-  const [boolMod, setModal] = useState(false)
+function HeadTable({ name }) {
+  const dispatch = useDispatch()
 
   return (
     <Wrapper>
-      <Title>Proveedores</Title>
+      <Title>{name}</Title>
       <FiltersContainer>
         <Select placeholder='Categoría' size='sm'>
           <option value='option1'>Option 1</option>
@@ -40,12 +41,11 @@ function HeadTable() {
           <InputLeftElement pointerEvents='none' children={<SearchIcon color='gray.300' />} />
           <Input type='search' placeholder='Buscar' />
         </InputGroup>
-        <Tooltip label='Añadir Proveedor' fontSize='xs'>
-          <IconButton aria-label='Añadir Proveedor' icon={<AddIcon />} size='sm' onClick={() => setModal(true)} />
+        <Tooltip label={'Añadir ' + name} fontSize='xs'>
+          <IconButton aria-label={'Añadir ' + name} icon={<AddIcon />} size='sm' onClick={() => dispatch(open({name:name}))} />
         </Tooltip>
       </FiltersContainer>
       <Divider />
-      <NewProveedorModal open={boolMod} setModal={setModal} />
     </Wrapper>
   )
 }

@@ -1,7 +1,8 @@
-import { AtSignIcon, DeleteIcon, EditIcon, InfoIcon, LinkIcon, PhoneIcon, ViewIcon } from '@chakra-ui/icons'
-import { Table, TableContainer, Tbody, Td, Tfoot, Th, Thead, Tooltip, Tr } from '@chakra-ui/react'
+import { AtSignIcon, EditIcon, InfoIcon, LinkIcon, PhoneIcon } from '@chakra-ui/icons'
+import { Table, TableContainer, Tbody, Tfoot, Th, Thead, Tr } from '@chakra-ui/react'
 import React from 'react'
 import styled from 'styled-components'
+import TableList from './TableList'
 
 const Wrapper = styled.div`
   display: flex;
@@ -16,12 +17,7 @@ const Container = styled.div`
   padding: 10px;
 `
 
-const IconWrapper = styled.div`
-  display: flex;
-  gap: 5px;
-`
-
-function Tables() {
+function Tables({ list, type }) {
   return (
     <Container>
       <TableContainer>
@@ -35,7 +31,7 @@ function Tables() {
               </Th>
               <Th>
                 <Wrapper>
-                  <LinkIcon /> Categoria
+                  <LinkIcon /> {type === 'proveedor' ? 'Categoria' : 'Razon Social'}
                 </Wrapper>
               </Th>
               <Th>
@@ -56,25 +52,9 @@ function Tables() {
             </Tr>
           </Thead>
           <Tbody>
-            <Tr>
-              <Td>Aluflex</Td>
-              <Td>Perfiles</Td>
-              <Td>3482-44333223</Td>
-              <Td>aluflex@gmail.com</Td>
-              <Td>
-                <IconWrapper>
-                  <Tooltip label='Editar' fontSize='xs'>
-                    <EditIcon focusable='true' cursor={'pointer'} />
-                  </Tooltip>
-                  <Tooltip label='Eliminar' fontSize='xs'>
-                    <DeleteIcon focusable='true' cursor={'pointer'} />
-                  </Tooltip>
-                  <Tooltip label='Ver Detalles' fontSize='xs'>
-                    <ViewIcon focusable='true' cursor={'pointer'} />
-                  </Tooltip>
-                </IconWrapper>
-              </Td>
-            </Tr>
+            {list.map((item, index) => (
+              <TableList key={index} entidad={item} type={type} />
+            ))}
           </Tbody>
           <Tfoot></Tfoot>
         </Table>

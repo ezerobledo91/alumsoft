@@ -10,33 +10,34 @@ import {
   useDisclosure,
 } from '@chakra-ui/react'
 import React, { useEffect } from 'react'
-import NewProveedorForm from './NewProveedorForm'
+import { useSelector, useDispatch } from 'react-redux'
 
-function NewProveedorModal({ open, setModal }) {
+function NewModal({ name, form }) {
   const { isOpen, onOpen, onClose } = useDisclosure()
-  //Manejo el estado del open desde modal recibiendo al funcion setModal.
+  //Manejo del Estado con Redux Open o Close
+  const stateModal = useSelector((state) => state.modal)
+  const dispatch = useDispatch()
+
   useEffect(() => {
-    if (open) {
+    if (stateModal.name) {
       onOpen()
-      setModal(false)
+      return
     }
-  })
+    onClose()
+  }, [stateModal, dispatch, onOpen, onClose])
 
   return (
     <>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Añadir Proveedor</ModalHeader>
+          <ModalHeader>Añadir {name}</ModalHeader>
           <ModalCloseButton />
-          <ModalBody>
-            <NewProveedorForm close={onClose} />
-          </ModalBody>
+          <ModalBody> {form}</ModalBody>
           <ModalFooter>
             <Button colorScheme='blue' mr={3} onClick={onClose}>
               Cerrar
             </Button>
-
           </ModalFooter>
         </ModalContent>
       </Modal>
@@ -44,4 +45,4 @@ function NewProveedorModal({ open, setModal }) {
   )
 }
 
-export default NewProveedorModal
+export default NewModal
