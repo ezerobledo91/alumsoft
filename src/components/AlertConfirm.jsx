@@ -13,17 +13,16 @@ import { useDispatch } from 'react-redux'
 import { useSelector } from 'react-redux'
 import { close } from '../reducer/alertConfirmSlice'
 
-const AlertConfirm = ({ type, reducer }) => {
+const AlertConfirm = ({ reducer }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const cancelRef = useRef()
   const [isLoading, setLoading] = useState(false)
   const dispatch = useDispatch()
 
   const alert = useSelector((state) => state.alertConfirm) // Recuperar el estado despachado desde otro componente
-
+  const type = useSelector((state) => state.entityContext)
   useEffect(() => {
-  console.log('Render Alert')
-    if (alert.name) {  
+    if (alert.name) {
       onOpen()
       return
     }
@@ -47,10 +46,10 @@ const AlertConfirm = ({ type, reducer }) => {
         <AlertDialogOverlay>
           <AlertDialogContent>
             <AlertDialogHeader fontSize='lg' fontWeight='bold'>
-              Borrar {type}
+              Borrar {type.entity}
             </AlertDialogHeader>
 
-            <AlertDialogBody>Esta seguro que desea borrar el {type}.</AlertDialogBody>
+            <AlertDialogBody>Esta seguro que desea borrar el {type.entity}.</AlertDialogBody>
 
             <AlertDialogFooter>
               <Button ref={cancelRef} onClick={onClose}>

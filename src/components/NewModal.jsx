@@ -13,12 +13,12 @@ import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { close } from '../reducer/modalSlice'
 
-function NewModal({ name, form }) {
+function NewModal({ form }) {
   const { isOpen, onOpen, onClose } = useDisclosure()
   //Manejo del Estado con Redux Open o Close
   const stateModal = useSelector((state) => state.modal)
   const dispatch = useDispatch()
-
+  const type = useSelector((state) => state.entityContext)
   useEffect(() => {
     if (stateModal.name) {
       onOpen()
@@ -32,7 +32,7 @@ function NewModal({ name, form }) {
       <Modal isOpen={isOpen} onClose={onClose} onCloseComplete={() => dispatch(close())}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Añadir {name}</ModalHeader>
+          <ModalHeader>Añadir {type.entity}</ModalHeader>
           <ModalCloseButton />
           <ModalBody> {form}</ModalBody>
           <ModalFooter>

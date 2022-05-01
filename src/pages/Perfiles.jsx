@@ -10,14 +10,14 @@ import { setEntity } from '../reducer/entityWindowSlice'
 import { getDataAsync } from '../reducer/newDataProveedorSlice'
 import { removeDataAsync } from '../reducer/newDataProveedorSlice'
 
-function Proveedores() {
-  const newData = useSelector((state) => state.newDataProveedor) //Estado de la app en todo momento
-  const dispatch = useDispatch() // Set state redux toolkit
-  useEffect(() => {
-    dispatch(setEntity('proveedor'))
-    dispatch(getDataAsync())
-    console.log('Render')
-  }, [dispatch])
+function Perfiles() {
+  // const newData = useSelector((state) => state.newDataProveedor) //Estado de la app en todo momento
+  // const dispatch = useDispatch() // Set state redux toolkit
+  // useEffect(() => {
+  //   dispatch(setEntity('proveedor'))
+  //   dispatch(getDataAsync())
+  //   console.log('Render')
+  // }, [dispatch])
 
   return (
     <div>
@@ -30,4 +30,4 @@ function Proveedores() {
   )
 }
 
-export default Proveedores
+export default Perfiles

@@ -3,9 +3,10 @@ import { useSelector, useDispatch } from 'react-redux'
 import AlertConfirm from '../components/AlertConfirm'
 import HeadTable from '../components/HeadTable'
 import Navbar from '../components/Navbar'
-import NewClienteForm from '../components/NewClienteForm'
+import NewClienteForm from '../components/Forms/NewClienteForm'
 import NewModal from '../components/NewModal'
-import Tables from '../components/Tables'
+import Tables from '../components/Tables/Tables'
+import { setEntity } from '../reducer/entityWindowSlice'
 import { getDataAsync, removeDataAsync } from '../reducer/newDataClienteSlice'
 
 function Clientes() {
@@ -13,6 +14,7 @@ function Clientes() {
   const dispatch = useDispatch() // Set state redux toolkit
 
   useEffect(() => {
+    dispatch(setEntity('cliente'))
     dispatch(getDataAsync())
     console.log('Render')
   }, [dispatch])
@@ -20,10 +22,10 @@ function Clientes() {
   return (
     <div>
       <Navbar />
-      <HeadTable name='Clientes' type='cliente' />
-      <Tables list={newData} type='cliente' />
-      <AlertConfirm type='cliente' reducer={removeDataAsync} />
-      <NewModal name='Cliente' form={<NewClienteForm />} />
+      <HeadTable />
+      <Tables list={newData}/>
+      <AlertConfirm reducer={removeDataAsync} />
+      <NewModal form={<NewClienteForm />} />
     </div>
   )
 }
