@@ -29,7 +29,7 @@ function NewModal({ form }) {
 
   return (
     <>
-      <Modal isOpen={isOpen} onClose={onClose} onCloseComplete={() => dispatch(close())}>
+      <Modal isOpen={isOpen} onClose={onClose} onCloseComplete={() => dispatch(close())} size={'xl'}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Añadir {type.entity}</ModalHeader>

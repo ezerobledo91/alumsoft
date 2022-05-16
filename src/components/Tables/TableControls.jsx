@@ -1,11 +1,13 @@
 import React from 'react'
 import styled from 'styled-components'
-import { CheckIcon, DeleteIcon, EditIcon, ViewIcon } from '@chakra-ui/icons'
+import { CheckIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons'
 import { Tooltip, useToast } from '@chakra-ui/react'
 import { open } from '../../reducer/alertConfirmSlice'
 import { updateDataAsync } from '../../reducer/newDataProveedorSlice'
 import { updateDataAsyncCliente } from '../../reducer/newDataClienteSlice'
+import { updateDataAsyncPerfil } from '../../reducer/newDataPerfilSlice'
 import { useDispatch, useSelector } from 'react-redux'
+import { updateDataAsyncPieza } from '../../reducer/newDataPiezaSlice'
 const IconWrapper = styled.div`
   display: flex;
   gap: 5px;
@@ -19,7 +21,6 @@ const TableControls = ({ _id, edit, setEditing, new_value }) => {
   }
 
   const type = useSelector((state) => state.entityContext)
-
   const saveAction = async () => {
     setEditing(false)
     new_value._id = _id
@@ -30,10 +31,24 @@ const TableControls = ({ _id, edit, setEditing, new_value }) => {
         status: 'success',
         isClosable: true,
       })
-    } else {
+    } else if (type.entity === 'cliente') {
       await dispatch(updateDataAsyncCliente(new_value))
       toast({
         title: `Cliente Actualizado Correctamente`,
+        status: 'success',
+        isClosable: true,
+      })
+    } else if (type.entity === 'perfil') {
+      await dispatch(updateDataAsyncPerfil(new_value))
+      toast({
+        title: `Perfil Actualizado Correctamente`,
+        status: 'success',
+        isClosable: true,
+      })
+    } else if (type.entity === 'pieza') {
+      await dispatch(updateDataAsyncPieza(new_value))
+      toast({
+        title: `Pieza Actualizado Correctamente`,
         status: 'success',
         isClosable: true,
       })

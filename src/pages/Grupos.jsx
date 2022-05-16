@@ -4,11 +4,11 @@ import AlertConfirm from '../components/AlertConfirm'
 import HeadTable from '../components/HeadTable'
 import Navbar from '../components/Navbar'
 import NewModal from '../components/NewModal'
-import NewPerfilForm from '../components/Forms/NewPerfilForm'
+import NewPiezaForm from '../components/Forms/NewPiezaForm'
 import Tables from '../components/Tables/Tables'
 import { setEntity } from '../reducer/entityWindowSlice'
-import { getDataAsync } from '../reducer/newDataPerfilSlice'
-import { removeDataAsync } from '../reducer/newDataPerfilSlice'
+import { getDataAsync } from '../reducer/newDataPiezaSlice'
+import { removeDataAsync } from '../reducer/newDataPiezaSlice'
 import styled from 'styled-components'
 import { NotAllowedIcon } from '@chakra-ui/icons'
 
@@ -16,11 +16,11 @@ const NoData = styled.div`
   padding: 10px 20px;
 `
 
-function Perfiles() {
-  const newData = useSelector((state) => state.newDataPerfil) //Estado de la app en todo momento
+function Piezas() {
+  const newData = useSelector((state) => state.newDataPieza) //Estado de la app en todo momento
   const dispatch = useDispatch() // Set state redux toolkit
   useEffect(() => {
-    dispatch(setEntity('perfil'))
+    dispatch(setEntity('pieza'))
     dispatch(getDataAsync())
     console.log('Render')
   }, [dispatch])
@@ -38,9 +38,9 @@ function Perfiles() {
       )}
 
       <AlertConfirm reducer={removeDataAsync} />
-      <NewModal form={<NewPerfilForm />} />
+      <NewModal form={<NewPiezaForm />} />
     </div>
   )
 }
 
-export default Perfiles
+export default Piezas

@@ -8,6 +8,12 @@ import NewModal from '../components/NewModal'
 import Tables from '../components/Tables/Tables'
 import { setEntity } from '../reducer/entityWindowSlice'
 import { getDataAsync, removeDataAsync } from '../reducer/newDataClienteSlice'
+import { NotAllowedIcon } from '@chakra-ui/icons'
+import styled from 'styled-components'
+
+const NoData = styled.div`
+  padding: 10px 20px;
+`
 
 function Clientes() {
   const newData = useSelector((state) => state.newDataCliente) //Estado de la app en todo momento
@@ -23,7 +29,13 @@ function Clientes() {
     <div>
       <Navbar />
       <HeadTable />
-      <Tables list={newData}/>
+      {newData.length > 0 ? (
+        <Tables list={newData} />
+      ) : (
+        <NoData>
+          <NotAllowedIcon /> No existen Datos
+        </NoData>
+      )}
       <AlertConfirm reducer={removeDataAsync} />
       <NewModal form={<NewClienteForm />} />
     </div>

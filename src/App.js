@@ -4,7 +4,9 @@ import './App.css';
 import Clientes from './pages/Clientes';
 
 import Home from './pages/Home'
+import Perfiles from './pages/Perfiles';
 import Proveedores from './pages/Proveedores';
+import Piezas from './pages/Piezas';
 
 function App() {
   return (
@@ -14,6 +16,9 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/proveedores" element={<Proveedores />} />
           <Route path="/clientes" element={<Clientes />} />
+          <Route path="/perfiles" element={<Perfiles />} />
+          <Route path="/piezas" element={<Piezas />} />
+
         </Routes>
       </BrowserRouter>
     </ChakraProvider>
