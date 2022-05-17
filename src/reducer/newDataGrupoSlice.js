@@ -1,46 +1,46 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { deletePieza, getAllPiezas, savePieza, updatePieza } from '../services/piezas'
+import { deleteGrupo, getAllGrupos, saveGrupo, updateGrupo } from '../services/grupos'
 
 
 export const getDataAsync = createAsyncThunk(
-    'newDataPieza/getDataAsync',
+    'newDataGrupo/getDataAsync',
     async () => {
-        const response = await getAllPiezas()
+        const response = await getAllGrupos()
         return response
     }
 
 )
 
 export const saveDataAsync = createAsyncThunk(
-    'newDataPieza/saveDataAsync',
+    'newDataGrupo/saveDataAsync',
     async (payload) => {
-        const response = await savePieza(payload)
+        const response = await saveGrupo(payload)
         return response
     }
 
 )
 
 export const removeDataAsync = createAsyncThunk(
-    'newDataPieza/removeDataAsync',
+    'newDataGrupo/removeDataAsync',
     async (payload) => {
-        const response = await deletePieza(payload)
+        const response = await deleteGrupo(payload)
         return response.id
     }
 
 )
 
-export const updateDataAsyncPieza = createAsyncThunk(
-    'newDataPieza/updateDataAsyncPieza',
+export const updateDataAsyncGrupo = createAsyncThunk(
+    'newDataGrupo/updateDataAsyncGrupo',
     async (payload) => {
-        const response = await updatePieza(payload)
+        const response = await updateGrupo(payload)
         return response
     }
 
 )
 
 
-export const newDataPiezaSlice = createSlice({
-    name: 'newDataPieza',
+export const newDataGrupoSlice = createSlice({
+    name: 'newDataGrupo',
     initialState: [],
     reducers: {
 
@@ -57,7 +57,7 @@ export const newDataPiezaSlice = createSlice({
             const index = state.findIndex((item) => item._id === id);
             state.splice(index, 1);
         },
-        [updateDataAsyncPieza.fulfilled]: (state, action) => {
+        [updateDataAsyncGrupo.fulfilled]: (state, action) => {
             return state
         },
 
@@ -65,4 +65,4 @@ export const newDataPiezaSlice = createSlice({
 
 })
 
-export default newDataPiezaSlice.reducer
+export default newDataGrupoSlice.reducer

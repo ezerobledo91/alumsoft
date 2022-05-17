@@ -8,6 +8,7 @@ import { updateDataAsyncCliente } from '../../reducer/newDataClienteSlice'
 import { updateDataAsyncPerfil } from '../../reducer/newDataPerfilSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import { updateDataAsyncPieza } from '../../reducer/newDataPiezaSlice'
+import { updateDataAsyncGrupo } from '../../reducer/newDataGrupoSlice'
 const IconWrapper = styled.div`
   display: flex;
   gap: 5px;
@@ -49,6 +50,13 @@ const TableControls = ({ _id, edit, setEditing, new_value }) => {
       await dispatch(updateDataAsyncPieza(new_value))
       toast({
         title: `Pieza Actualizado Correctamente`,
+        status: 'success',
+        isClosable: true,
+      })
+    } else if (type.entity === 'grupo') {
+      await dispatch(updateDataAsyncGrupo(new_value))
+      toast({
+        title: `Grupo Actualizado Correctamente`,
         status: 'success',
         isClosable: true,
       })

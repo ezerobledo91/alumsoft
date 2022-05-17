@@ -16,7 +16,7 @@ const Container = styled.div`
   padding: 10px;
 `
 
-function Tables({ list }) {
+function Tables({ list, controls = true, addOption = false }) {
   const keyList = []
   if (list.length > 0) {
     for (const key in list[0]) {
@@ -36,14 +36,12 @@ function Tables({ list }) {
                   <Wrapper>{title}</Wrapper>
                 </Th>
               ))}
-              <Th>
-                <Wrapper>Accion</Wrapper>
-              </Th>
+            { controls ? <Th><Wrapper>Accion</Wrapper></Th> : ''}
             </Tr>
           </Thead>
           <Tbody>
             {list.map((item, index) => (
-              <TableList key={index} items={item} />
+              <TableList key={index} items={item} controls={controls} addOption = {addOption}/>
             ))}
           </Tbody>
           <Tfoot></Tfoot>

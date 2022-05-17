@@ -55,9 +55,11 @@ function Navbar() {
               <MenuItem>Vidrios</MenuItem>
               <MenuItem>Accesorios</MenuItem>
               <Link to='/piezas'>
-              <MenuItem>Piezas</MenuItem>
-            </Link>
-              <MenuItem>Grupos</MenuItem>
+                <MenuItem>Piezas</MenuItem>
+              </Link>
+              <Link to='/grupos'>
+                <MenuItem>Grupos</MenuItem>
+              </Link>
             </MenuGroup>
             <MenuDivider />
             <MenuGroup title='Cuenta' textAlign={'left'}>
