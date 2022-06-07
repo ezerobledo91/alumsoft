@@ -1,13 +1,16 @@
-import { Editable, EditableInput, EditablePreview, Input, Td, Tr } from '@chakra-ui/react'
+import { Editable, EditableInput, EditablePreview, Input, Tag, TagLabel, Td, Tr } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { setObject } from '../../reducer/entityEditContextSlice'
+import { open } from '../../reducer/modalSlice'
 import { remove, setPiezas } from '../../reducer/selectedPiezasSlice'
 import TableControls from './TableControls'
 
 const TableList = ({ items, controls = true, addOption = false }) => {
   const { _id, __v, ...others } = items
   const [edit, setEditing] = useState(false)
+  const entity = useSelector((state) => state.entityContext)
   const dispatch = useDispatch()
   const new_value = {} // Los valores a enviar cuando se edita
   const handleNewValue = (value, element) => {
@@ -25,7 +28,7 @@ const TableList = ({ items, controls = true, addOption = false }) => {
   const selectedPiezas = useSelector((state) => state.selectedPiezasSlice)
   useEffect(() => {
     selectedPiezas.piezas.map((item) => {
-      return item._id === items._id ? setSelected(true) : null
+      return item._id === items._id && entity === 'piezas' ? setSelected(true) : null
     })
   })
 
@@ -49,11 +52,43 @@ const TableList = ({ items, controls = true, addOption = false }) => {
     cursor: 'pointer',
   }
 
+  const textStyle = {
+    width: '60px',
+    whiteSpace: 'nowrap',
+    textOverflow: 'ellipsis',
+    overflow: 'hidden',
+    marginRight: '10px',
+  }
+
+  function renderValue(item) {
+    if (others[item].length > 0 && others[item][0].hasOwnProperty('_id')) {
+      // VER ESTO SACAR LOS TAGS Y EDITABLE PARA OTRO COMPONENTE
+      return others[item].map((u) => (
+        <Tag style={textStyle} key={u._id} size='sm' borderRadius='full' variant='solid' colorScheme='cyan'>
+          <TagLabel>{u.nombre}</TagLabel>
+        </Tag>
+      ))
+    } else if (others[item].hasOwnProperty('_id')) {
+      return others[item].nombre
+    } else {
+      return others[item]
+    }
+  }
+
+  function openModalEdit(object) {
+    dispatch(setObject(object))
+    dispatch(open({ name: entity }))
+  }
+
   return (
     <Tr bg={edit ? '#EDF2F7' : ''} onClick={() => addOptionFunction()} style={selectStyle}>
       {keyList.map((item, index) => (
         <Td key={index}>
-          <Editable defaultValue={others[item]} isPreviewFocusable={edit} onSubmit={(value) => handleNewValue(value, item)}>
+          <Editable
+            defaultValue={renderValue(item)} // Valor render segun el listado
+            isPreviewFocusable={edit}
+            onSubmit={(value) => handleNewValue(value, item)}
+          >
             <EditablePreview />
             <Input as={EditableInput} size='sm' />
           </Editable>
@@ -62,6 +97,13 @@ const TableList = ({ items, controls = true, addOption = false }) => {
       {controls ? (
         <Td>
           <TableControls edit={edit} setEditing={setEditing} _id={_id} new_value={new_value} />
+          <div
+            onClick={() => {
+              openModalEdit(items)
+            }}
+          >
+            EDIT
+          </div>
         </Td>
       ) : (
         ''

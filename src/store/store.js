@@ -8,6 +8,7 @@ import newDataProveedorSlice from '../reducer/newDataProveedorSlice'
 import newDataPiezaSlice from '../reducer/newDataPiezaSlice'
 import newDataGrupoSlice from '../reducer/newDataGrupoSlice'
 import selectedPiezasSlice from '../reducer/selectedPiezasSlice'
+import entityEditContextSlice from '../reducer/entityEditContextSlice'
 
 
 
@@ -22,5 +23,6 @@ export default configureStore({
     alertConfirm: alertConfirmSlice,
     entityContext: entityContextSlice,
     selectedPiezasSlice: selectedPiezasSlice,
+    entityEditContextSlice: entityEditContextSlice,
   },
 })

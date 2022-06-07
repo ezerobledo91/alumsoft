@@ -51,7 +51,7 @@ function HeadTable() {
             aria-label={'Añadir ' + entity}
             icon={<AddIcon />}
             size='sm'
-            onClick={() => dispatch(open({ name: entity }))}
+            onClick={() => dispatch(open({ name: entity, type: 'new', }))}
           />
         </Tooltip>
       </FiltersContainer>

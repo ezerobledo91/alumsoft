@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
     name: null,
+    type: null,
 }
 
 export const modalSlice = createSlice({

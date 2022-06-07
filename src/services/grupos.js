@@ -34,8 +34,8 @@ const deleteGrupo = async (id) => {
 
 // Actualizar Grupo
 const updateGrupo = async (entidad) => {
-    console.log()
     const { _id, ...others } = entidad
+    // console.log(entidad)
     let response = await fetch(`http://localhost:5000/api/grupo/${_id}`, {
         method: 'PUT',
         headers: {
