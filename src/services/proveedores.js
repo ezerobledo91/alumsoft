@@ -34,7 +34,6 @@ const deleteProveedor = async (id) => {
 
 // Actualizar Proveedor
 const updateProveedor = async (entidad) => {
-    console.log()
     const { _id, ...others } = entidad
     let response = await fetch(`http://localhost:5000/api/proveedor/${_id}`, {
         method: 'PUT',

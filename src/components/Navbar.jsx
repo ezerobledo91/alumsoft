@@ -37,8 +37,12 @@ function Navbar() {
           <MenuButton as={IconButton} aria-label='Options' icon={<HamburgerIcon />} />
           <MenuList>
             <MenuGroup title='Presupuestos' textAlign={'left'}>
-              <MenuItem icon={<AddIcon />}>Nuevo</MenuItem>
-              <MenuItem icon={<ViewIcon />}>Ver Todos</MenuItem>
+              <Link to='/presupuestos/nuevo'>
+                <MenuItem icon={<AddIcon />}>Nuevo</MenuItem>
+              </Link>
+              <Link to='/presupuestos'>
+                <MenuItem icon={<ViewIcon />}>Ver Todos</MenuItem>
+              </Link>
             </MenuGroup>
             <MenuDivider />
             <Link to='/proveedores'>

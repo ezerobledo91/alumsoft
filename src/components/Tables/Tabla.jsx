@@ -1,7 +1,7 @@
-import { Table, TableContainer, Tbody, Tfoot, Th, Thead, Tr } from '@chakra-ui/react'
 import React from 'react'
 import styled from 'styled-components'
-import TableList from './TableList'
+import { Table, TableContainer, Tbody, Tfoot, Th, Thead, Tr } from '@chakra-ui/react'
+import Item from './Item'
 
 const Wrapper = styled.div`
   display: flex;
@@ -16,32 +16,25 @@ const Container = styled.div`
   padding: 10px;
 `
 
-function Tables({ list, controls = true, addOption = false }) {
-  const keyList = []
-  if (list.length > 0) {
-    for (const key in list[0]) {
-      if (key === '_id' || key === '__v') continue
+// header array de titulos de la tabla o datos a mostrar
+const Tabla = ({ header, data, title}) => {
 
-      keyList.push(key)
-    }
-  }
   return (
     <Container>
       <TableContainer>
         <Table size='sm'>
           <Thead>
             <Tr>
-              {keyList.map((title, index) => (
-                <Th key={index}>
+              {header.map((title, index) => (
+                <Th key={title}>
                   <Wrapper>{title}</Wrapper>
                 </Th>
               ))}
-            { controls ? <Th><Wrapper>Accion</Wrapper></Th> : ''}
             </Tr>
           </Thead>
           <Tbody>
-            {list.map((item, index) => (
-              <TableList key={index} items={item} controls={controls} addOption = {addOption}/>
+            {data.map((item, index) => (
+              <Item key={index} item={item} claves={header} title={title} />
             ))}
           </Tbody>
           <Tfoot></Tfoot>
@@ -51,4 +44,4 @@ function Tables({ list, controls = true, addOption = false }) {
   )
 }
 
-export default Tables
+export default Tabla

@@ -3,8 +3,8 @@ import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
-import { close } from '../../reducer/modalSlice'
-import { saveDataAsync } from '../../reducer/newDataPerfilSlice'
+import { saveDataPerfil } from '../../../reducer/DataTablesSlice'
+import { updateStateModal } from '../../../reducer/UiSlice'
 
 const Container = styled.form`
   display: flex;
@@ -12,7 +12,7 @@ const Container = styled.form`
   gap: 10px;
 `
 
-const NewPerfilForm = () => {
+const NewPerfil = () => {
   //React Hook form
   const { register, handleSubmit } = useForm()
   const [isLoading, setLoading] = useState(false)
@@ -22,9 +22,9 @@ const NewPerfilForm = () => {
   //Guardar Perfil Nuevo
   const onSubmit = async (data) => {
     setLoading(true)
-    await dispatch(saveDataAsync(data))
+    await dispatch(saveDataPerfil(data))
     setLoading(false)
-    dispatch(close()) // Close Modal
+    dispatch(updateStateModal(false)) // Close Modal
     toast({
       title: `Perfil Guardado Correctamente`,
       status: 'success',
@@ -34,7 +34,7 @@ const NewPerfilForm = () => {
 
   return (
     <Container onSubmit={handleSubmit(onSubmit)}>
-      <SimpleGrid columns={2} spacing={10}>
+     <SimpleGrid columns={2} spacing={10}>
         <Box>
           <FormControl isRequired>
             <FormLabel htmlFor='codigo'>Codigo</FormLabel>
@@ -100,7 +100,6 @@ const NewPerfilForm = () => {
           </FormControl>
         </Box>
       </SimpleGrid>
-
       <Button type='submit' isLoading={isLoading}>
         Guardar Cambios
       </Button>
@@ -108,4 +107,4 @@ const NewPerfilForm = () => {
   )
 }
 
-export default NewPerfilForm
+export default NewPerfil
