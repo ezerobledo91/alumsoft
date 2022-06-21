@@ -3,9 +3,8 @@ import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
-import { close } from '../../reducer/modalSlice'
-import { getDataAsync } from '../../reducer/newDataPerfilSlice'
-import { saveDataAsync } from '../../reducer/newDataPiezaSlice'
+import { getDataPerfil, saveDataPieza } from '../../../reducer/DataTablesSlice'
+import { updateStateModal } from '../../../reducer/UiSlice'
 
 const Container = styled.form`
   display: flex;
@@ -13,19 +12,19 @@ const Container = styled.form`
   gap: 10px;
 `
 
-const NewPiezaForm = () => {
+const NewPieza = () => {
   //React Hook form
   const { register, handleSubmit } = useForm()
   const [isLoading, setLoading] = useState(false)
   const toast = useToast()
   const dispatch = useDispatch()
 
-  //Guardar Pieza Nuevo
+  //Guardar Perfil Nuevo
   const onSubmit = async (data) => {
     setLoading(true)
-    dispatch(saveDataAsync(data))
+    await dispatch(saveDataPieza(data))
     setLoading(false)
-    dispatch(close()) // Close Modal
+    dispatch(updateStateModal(false)) // Close Modal
     toast({
       title: `Pieza Guardada Correctamente`,
       status: 'success',
@@ -34,9 +33,9 @@ const NewPiezaForm = () => {
   }
 
   // GET DATA FROM PERFILES
-  const newDataPerfil = useSelector((state) => state.newDataPerfil)
+  const newDataPerfil = useSelector((state) => state.DataTables.perfiles)
   useEffect(() => {
-    dispatch(getDataAsync())
+    dispatch(getDataPerfil())
   }, [dispatch])
 
   return (
@@ -87,7 +86,7 @@ const NewPiezaForm = () => {
       </FormControl>
       <FormControl isRequired>
         <FormLabel htmlFor='constante'>Constante</FormLabel>
-        <Input id='constante' type='number' size='sm' step="0.01" {...register('constante_m')} />
+        <Input id='constante' type='number' size='sm' step='0.01' {...register('constante_m')} />
         <FormHelperText>Ingrese un constante para la Pieza (unidad x medida 1 x 1)</FormHelperText>
       </FormControl>
       <FormControl isRequired>
@@ -102,4 +101,4 @@ const NewPiezaForm = () => {
   )
 }
 
-export default NewPiezaForm
+export default NewPieza

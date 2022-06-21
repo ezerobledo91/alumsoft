@@ -1,6 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { deleteCliente, getAllClientes, saveCliente, updateCliente } from '../services/clientes'
+import { deleteGrupo, getAllGrupos, saveGrupo, updateGrupo } from '../services/grupos'
 import { deletePerfil, getAllPerfiles, savePerfil, updatePerfil } from '../services/perfiles'
+import { deletePieza, getAllPiezas, savePieza, updatePieza } from '../services/piezas'
 import { deleteProveedor, getAllProveedores, saveProveedor, updateProveedor } from '../services/proveedores'
 
 // PROVEEDORES
@@ -113,12 +115,93 @@ export const updateDataPerfil = createAsyncThunk(
 
 )
 
+// PIEZAS 
+
+export const getDataPieza = createAsyncThunk(
+    'DataTables/getDataPieza',
+    async () => {
+        const response = await getAllPiezas()
+        return response
+    }
+
+)
+
+export const saveDataPieza = createAsyncThunk(
+    'DataTables/saveDataPieza',
+    async (payload) => {
+        const response = await savePieza(payload)
+        return response
+    }
+
+)
+
+export const removeDataPieza = createAsyncThunk(
+    'DataTables/removeDataPiza',
+    async (payload) => {
+        const response = await deletePieza(payload)
+        return response.id
+    }
+
+)
+
+export const updateDataPieza = createAsyncThunk(
+    'DataTables/updateDataPieza',
+    async (payload) => {
+        const response = await updatePieza(payload)
+        return response
+    }
+
+)
+// Grupos / Aberturas
+export const getDataGrupo = createAsyncThunk(
+    'DataTables/getDataGrupo',
+    async () => {
+        const response = await getAllGrupos()
+        return response
+    }
+
+)
+
+export const saveDataGrupo = createAsyncThunk(
+    'DataTables/saveDataGrupo',
+    async (payload) => {
+        const response = await saveGrupo(payload)
+        return response
+    }
+
+)
+
+export const removeDataGrupo = createAsyncThunk(
+    'DataTables/removeDataGrupo',
+    async (payload) => {
+        const response = await deleteGrupo(payload)
+        return response.id
+    }
+
+)
+
+export const updateDataGrupo = createAsyncThunk(
+    'DataTables/updateDataGrupo',
+    async (payload) => {
+        const response = await updateGrupo(payload)
+        return response
+    }
+
+)
+
+
+
+
+
 export const DataTableSlice = createSlice({
     name: 'DataTables',
     initialState: {
         proveedores: [],
         clientes: [],
         perfiles: [],
+        piezas: [],
+        grupos: []
+
     },
     reducers: {
 
@@ -175,6 +258,40 @@ export const DataTableSlice = createSlice({
             state.perfiles.splice(index, 1);
         },
         [updateDataPerfil.fulfilled]: (state, action) => {
+            return state
+        },
+        [getDataPieza.fulfilled]: (state, action) => {
+            return {
+                ...state,
+                piezas: action.payload
+            }
+        },
+        [saveDataPieza.fulfilled]: (state, action) => {
+            state.piezas.push(action.payload)
+        },
+        [removeDataPieza.fulfilled]: (state, action) => {
+            const id = action.payload;
+            const index = state.piezas.findIndex((item) => item._id === id);
+            state.piezas.splice(index, 1);
+        },
+        [updateDataPieza.fulfilled]: (state, action) => {
+            return state
+        },
+        [getDataGrupo.fulfilled]: (state, action) => {
+            return {
+                ...state,
+                grupos: action.payload
+            }
+        },
+        [saveDataGrupo.fulfilled]: (state, action) => {
+            state.grupos.push(action.payload)
+        },
+        [removeDataGrupo.fulfilled]: (state, action) => {
+            const id = action.payload;
+            const index = state.grupos.findIndex((item) => item._id === id);
+            state.grupos.splice(index, 1);
+        },
+        [updateDataGrupo.fulfilled]: (state, action) => {
             return state
         },
 

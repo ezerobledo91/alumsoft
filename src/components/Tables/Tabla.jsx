@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { Table, TableContainer, Tbody, Tfoot, Th, Thead, Tr } from '@chakra-ui/react'
 import Item from './Item'
+import { useSelector } from 'react-redux'
 
 const Wrapper = styled.div`
   display: flex;
@@ -17,7 +18,9 @@ const Container = styled.div`
 `
 
 // header array de titulos de la tabla o datos a mostrar
-const Tabla = ({ header, data, title}) => {
+const Tabla = ({ header, data, title, edit=true }) => {
+  const select = useSelector((state)=>state.UiSlice.modalAux.select)
+
 
   return (
     <Container>
@@ -25,16 +28,18 @@ const Tabla = ({ header, data, title}) => {
         <Table size='sm'>
           <Thead>
             <Tr>
+              {select ? <Th>Seleccion</Th> : ''}
               {header.map((title, index) => (
                 <Th key={title}>
                   <Wrapper>{title}</Wrapper>
                 </Th>
               ))}
+              {edit ? <Th>Editar</Th> : ''}
             </Tr>
           </Thead>
           <Tbody>
             {data.map((item, index) => (
-              <Item key={index} item={item} claves={header} title={title} />
+              <Item key={index} item={item} claves={header} title={title} edit={edit}/>
             ))}
           </Tbody>
           <Tfoot></Tfoot>

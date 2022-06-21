@@ -53,17 +53,17 @@ function Navbar() {
             </Link>
             <MenuDivider />
             <MenuGroup title='Componentes' textAlign={'left'}>
+              <Link to='/aberturas'>
+                <MenuItem>Aberturas</MenuItem>
+              </Link>
+              <Link to='/piezas'>
+                <MenuItem>Piezas</MenuItem>
+              </Link>
               <Link to='/perfiles'>
                 <MenuItem>Perfiles</MenuItem>
               </Link>
               <MenuItem>Vidrios</MenuItem>
               <MenuItem>Accesorios</MenuItem>
-              <Link to='/piezas'>
-                <MenuItem>Piezas</MenuItem>
-              </Link>
-              <Link to='/grupos'>
-                <MenuItem>Grupos</MenuItem>
-              </Link>
             </MenuGroup>
             <MenuDivider />
             <MenuGroup title='Cuenta' textAlign={'left'}>

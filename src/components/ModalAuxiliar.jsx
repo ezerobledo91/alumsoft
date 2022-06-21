@@ -12,28 +12,26 @@ import {
 } from '@chakra-ui/react'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { removeAllSelected, setEditModal, updateStateModal } from '../reducer/UiSlice'
+import { setDataInfo} from '../reducer/UiSlice'
 
-const ModalComponent = (props) => {
+const ModalComponentAuxiliar = (props) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const { modalState } = useSelector((state) => state.UiSlice) // Estados de la Interfaz de usuario.
+  const { modalAux } = useSelector((state) => state.UiSlice) // Estados de la Interfaz de usuario.
   const dispatch = useDispatch()
 
   useEffect(() => {
-    modalState.open ? onOpen() : onClose()
-  }, [modalState, onOpen, onClose])
+    modalAux.open ? onOpen() : onClose()
+  }, [modalAux, onOpen, onClose])
 
   const onCloseModal = () => {
-    dispatch(updateStateModal(false))
-    dispatch(setEditModal({edit:false,edit_object:{}}))
-    dispatch(removeAllSelected())
+    dispatch(setDataInfo({ open: false, data_info: [] }))
   }
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} onCloseComplete={() => onCloseModal()} size={'xl'}>
+    <Modal isOpen={isOpen} onClose={onClose} onCloseComplete={() => onCloseModal()} size={'xxl'}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader> {modalState.edit ? 'Editar' : 'Añadir'} {props.title}</ModalHeader>
+        <ModalHeader> {props.title}</ModalHeader>
         <ModalCloseButton />
         <ModalBody> {props.children}</ModalBody>
         <ModalFooter>
@@ -46,4 +44,4 @@ const ModalComponent = (props) => {
   )
 }
 
-export default ModalComponent
+export default ModalComponentAuxiliar
