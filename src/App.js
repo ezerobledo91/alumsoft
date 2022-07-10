@@ -21,7 +21,7 @@ function App() {
           <Route path="/perfiles" element={<Perfiles />}/>
            <Route path="/piezas" element={<Piezas/>} />
           <Route path="/aberturas" element={<Aberturas/>} />
-          <Route path="/presupuestos" element={<Presupuestos />} />
+          <Route path="/presupuestos/nuevo" element={<Presupuestos />} />
 
         </Routes>
       </BrowserRouter>

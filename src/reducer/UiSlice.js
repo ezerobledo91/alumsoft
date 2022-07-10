@@ -16,6 +16,10 @@ export const UiSlice = createSlice({
             data_selected:[],
             select: false,
         },
+        previewPres: {
+            data:[],
+            
+        }
 
     },
     reducers: {
@@ -46,11 +50,15 @@ export const UiSlice = createSlice({
         removeAllSelected: (state, action) => {
             state.modalAux.data_selected= [];
         },
+        setDataPreview: (state, action) => {
+            const {data,abertura, medidas, peso_total, precio_total} = action.payload 
+             state.previewPres.data.push({data:data, abertura: abertura, medidas: medidas, peso_total: peso_total, precio_total: precio_total});
+        },
 
     }
 
 })
 
 
-export const { removeAllSelected,updateStateModal, setEditModal,setDataSelected, setEditObject, setDataInfo, removeDataSelected } = UiSlice.actions
+export const { removeAllSelected,updateStateModal, setEditModal,setDataSelected, setEditObject, setDataInfo, removeDataSelected,setDataPreview } = UiSlice.actions
 export default UiSlice.reducer

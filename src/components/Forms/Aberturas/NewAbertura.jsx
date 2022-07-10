@@ -49,13 +49,13 @@ const NewAbertura = () => {
      <FormControl isRequired>
         <FormLabel htmlFor='nombre'>Nombre</FormLabel>
         <Input id='nombre' type='text' size='sm' {...register('nombre')} />
-        <FormHelperText>Ingrese el nombre del Grupo</FormHelperText>
+        <FormHelperText>Ingrese el nombre de la Abertura</FormHelperText>
       </FormControl>
       <FormControl isRequired>
         <Button leftIcon={<SearchIcon />} colorScheme='teal' variant='solid' onClick={() => {dispatch(setDataInfo({open:true, data_info:data_piezas, select:true}))}}>
           Buscar Piezas
         </Button>
-        <FormHelperText>Seleccione Piezas para este Grupo</FormHelperText>
+        <FormHelperText>Seleccione Piezas para esta Abertura</FormHelperText>
       </FormControl>
       <FormControl>
         <TagSelected />
@@ -63,12 +63,12 @@ const NewAbertura = () => {
       <FormControl isRequired>
         <FormLabel htmlFor='categoria'>Categoria</FormLabel>
         <Input id='categoria' type='text' size='sm' {...register('categoria')} />
-        <FormHelperText>Ingrese la categoria del Grupo</FormHelperText>
+        <FormHelperText>Ingrese la categoria de la Abertura</FormHelperText>
       </FormControl>
       <FormControl isRequired>
         <FormLabel htmlFor='modelo'>Modelo</FormLabel>
         <Input id='modelo' type='text' size='sm' {...register('modelo')} />
-        <FormHelperText>Ingrese el modelo del Grupo</FormHelperText>
+        <FormHelperText>Ingrese el modelo  de la Abertura</FormHelperText>
       </FormControl>
       <Button type='submit' isLoading={isLoading}>
         Guardar Cambios

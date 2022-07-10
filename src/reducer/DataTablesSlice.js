@@ -3,6 +3,7 @@ import { deleteCliente, getAllClientes, saveCliente, updateCliente } from '../se
 import { deleteGrupo, getAllGrupos, saveGrupo, updateGrupo } from '../services/grupos'
 import { deletePerfil, getAllPerfiles, savePerfil, updatePerfil } from '../services/perfiles'
 import { deletePieza, getAllPiezas, savePieza, updatePieza } from '../services/piezas'
+import { savePresupuesto } from '../services/presupuestos'
 import { deleteProveedor, getAllProveedores, saveProveedor, updateProveedor } from '../services/proveedores'
 
 // PROVEEDORES
@@ -189,6 +190,16 @@ export const updateDataGrupo = createAsyncThunk(
 
 )
 
+// Presupuestos
+export const saveDataPresupuesto = createAsyncThunk(
+    'DataTables/saveDataPresupuesto',
+    async (payload) => {
+        const response = await savePresupuesto(payload)
+        return response
+    }
+
+)
+
 
 
 
@@ -200,7 +211,8 @@ export const DataTableSlice = createSlice({
         clientes: [],
         perfiles: [],
         piezas: [],
-        grupos: []
+        grupos: [],
+        presupuestos:[],
 
     },
     reducers: {
@@ -293,6 +305,9 @@ export const DataTableSlice = createSlice({
         },
         [updateDataGrupo.fulfilled]: (state, action) => {
             return state
+        },
+        [saveDataPresupuesto.fulfilled]: (state, action) => {
+            state.presupuestos.push(action.payload)
         },
 
     }
