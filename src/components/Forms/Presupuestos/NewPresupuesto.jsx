@@ -13,12 +13,10 @@ const Container = styled.form`
   flex-direction: column;
   gap: 10px;
 `
-
 const WrapperInput = styled.div`
   display: flex;
   gap: 20px;
 `
-
 const DividerAberturas = styled.div`
   border: solid #979797 1px;
   padding: 10px;
@@ -39,8 +37,9 @@ const NewPre = () => {
   const data_aberturas = useSelector((state) => state.DataTables.grupos)
   const data_clientes = useSelector((state) => state.DataTables.clientes)
   const data_perfiles = useSelector((state) => state.DataTables.perfiles)
-
-  //Guardar Perfil Nuevo
+  const data_preview = useSelector((state) => state.UiSlice.previewPres.data)
+  const ID = data_preview.length
+  //Guardar Presupuesto Nuevo
   const onSubmit = async (data) => {
     // setLoading(true)
     // data.piezas = data_selected
@@ -54,10 +53,9 @@ const NewPre = () => {
     //   isClosable: true,
     // })
   }
-
-  // GET DATA ABERTURAS
+  // Guardar items de presupuesto generados.
   const handeClick = (values) => {
-    const new_item = createPresupuestoItem(values, data_aberturas, data_perfiles)
+    const new_item = createPresupuestoItem(values, data_aberturas, data_perfiles, ID)
     dispatch(setDataPreview(new_item)) // Guardo ese item en una variable global. 
   }
 
@@ -112,8 +110,12 @@ const NewPre = () => {
               <FormHelperText>Precio Kg</FormHelperText>
             </div>
             <div>
-              <Input id='precio' type='number' step='0.01' size='sm' {...register('porcentaje')} />
+              <Input id='porcentaje' type='number' step='0.01' size='sm' {...register('porcentaje')} />
               <FormHelperText>Porcentaje</FormHelperText>
+            </div>
+            <div>
+              <Input id='cantidad' type='number' step='0.01' size='sm' {...register('cantidad')} />
+              <FormHelperText>Cantidad</FormHelperText>
             </div>
           </WrapperInput>
 
