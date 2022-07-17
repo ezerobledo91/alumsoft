@@ -3,7 +3,7 @@ import { deleteCliente, getAllClientes, saveCliente, updateCliente } from '../se
 import { deleteGrupo, getAllGrupos, saveGrupo, updateGrupo } from '../services/grupos'
 import { deletePerfil, getAllPerfiles, savePerfil, updatePerfil } from '../services/perfiles'
 import { deletePieza, getAllPiezas, savePieza, updatePieza } from '../services/piezas'
-import { savePresupuesto } from '../services/presupuestos'
+import { getAllPresupuestos, savePresupuesto } from '../services/presupuestos'
 import { deleteProveedor, getAllProveedores, saveProveedor, updateProveedor } from '../services/proveedores'
 
 // PROVEEDORES
@@ -200,6 +200,15 @@ export const saveDataPresupuesto = createAsyncThunk(
 
 )
 
+export const getDataPresupuesto = createAsyncThunk(
+    'DataTables/getDataPresupuesto',
+    async () => {
+        const response = await getAllPresupuestos()
+        return response
+    }
+
+)
+
 
 
 
@@ -309,7 +318,12 @@ export const DataTableSlice = createSlice({
         [saveDataPresupuesto.fulfilled]: (state, action) => {
             state.presupuestos.push(action.payload)
         },
-
+        [getDataPresupuesto.fulfilled]: (state, action) => {
+            return {
+                ...state,
+                presupuestos: action.payload
+            }
+        },
     }
 
 })

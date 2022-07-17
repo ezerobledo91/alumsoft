@@ -1,12 +1,12 @@
-// Traer Grupos
-// const getAllGrupos = async () => {
-//     let response = await fetch("http://localhost:5000/api/grupo/", {
-//         method: 'GET',
-//     })
+// Traer Presupuestos
+const getAllPresupuestos = async () => {
+    let response = await fetch("http://localhost:5000/api/presupuesto/", {
+        method: 'GET',
+    })
 
-//     let result = await response.json()
-//     return result
-// }
+    let result = await response.json()
+    return result
+}
 
 // Guardar Presupuesto
 const savePresupuesto = async (data) => {
@@ -48,4 +48,4 @@ const savePresupuesto = async (data) => {
 //     return result
 // }
 
-export { savePresupuesto}
+export { savePresupuesto, getAllPresupuestos}

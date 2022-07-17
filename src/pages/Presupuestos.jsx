@@ -1,11 +1,28 @@
-import { Divider, Stat, StatHelpText, StatLabel, StatNumber, Table, TableCaption, TableContainer, Tbody, Th, Thead, Tr } from '@chakra-ui/react'
-import React from 'react'
+import {
+  Button,
+  Divider,
+  Stat,
+  StatHelpText,
+  StatLabel,
+  StatNumber,
+  Table,
+  TableContainer,
+  Tbody,
+  Th,
+  Thead,
+  Tr,
+  useToast,
+} from '@chakra-ui/react'
+import React, { useEffect } from 'react'
 import { useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
 import Items from '../components/Forms/Presupuestos/Items'
 import NewPresupuesto from '../components/Forms/Presupuestos/NewPresupuesto'
 import Navbar from '../components/Navbar'
+import { FaFileInvoiceDollar, FaRegSave } from 'react-icons/fa'
+import { getDataPresupuesto, saveDataPresupuesto } from '../reducer/DataTablesSlice'
+import { removeAllDataPreview } from '../reducer/UiSlice'
 
 const Wrapper = styled.div`
   padding: 10px 20px;
@@ -19,6 +36,9 @@ const Title = styled.h1`
   text-align: left;
   font-size: 1.2rem;
   text-transform: capitalize;
+  display: flex;
+  gap: 10px;
+  align-items: center;
 `
 const Container = styled.div`
   display: flex;
@@ -40,8 +60,8 @@ const ContainerPre = styled.div`
   height: fit-content;
 `
 const WrapperTop = styled.div`
-display: flex;
-justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
 `
 
 const FooterTextObs = styled.div`
@@ -49,6 +69,11 @@ const FooterTextObs = styled.div`
   font-weight: 300;
   font-size: 12px;
   padding: 10px;
+`
+const WrapperFooter = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 `
 
 const date = new Date()
@@ -59,39 +84,77 @@ let currentDate = `${day}-${month}-${year}`
 
 const Presupuestos = () => {
   const data_preview = useSelector((state) => state.UiSlice.previewPres.data) // Los items de Presupuestos.
-  let precio = 0 // precio total de los items
-  
+  const presupuestos = useSelector((state) => state.DataTables.presupuestos)
+
   // Cliente
-  const [cliente, setCliente]= useState('Consumidor Final')
+  const [cliente, setCliente] = useState('Consumidor Final')
   // Observaciones
   let [textObservacion, setObservacion] = useState('')
+  // Reset Form
+  const [reset, setReset] = useState(false)
 
+  let precio = 0 // precio total de los items.
+  let numero = presupuestos.length + 1 // numero de presupuestos.
   data_preview.forEach((item) => {
     precio = precio + item.precio_total * item.cantidad // Precio total.
   })
+
+  // GUARDAR PRESUPUESTO
+  const [isLoading, setLoading] = useState(false)
+  const toast = useToast()
+  const dispatch = useDispatch()
+  const onSubmit = async () => {
+    const data = {
+      aberturas: data_preview,
+      observaciones: textObservacion,
+      cliente: cliente,
+      numero: numero,
+    }
+    setLoading(true)
+    await dispatch(saveDataPresupuesto(data))
+    setLoading(false)
+    toast({
+      title: `Prespuesto Guardado Correctamente`,
+      status: 'success',
+      isClosable: true,
+    })
+    dispatch(removeAllDataPreview())
+    setReset(true)
+    setTimeout(()=> setReset(false), 1000)
+    setCliente('Consumidor Final')
+    }
+
+  useEffect(() => {
+    dispatch(getDataPresupuesto())
+  }, [dispatch])
 
   return (
     <>
       <Navbar />
       <Wrapper>
-        <Title>Nuevo Presupuesto</Title> 
+        <Title>
+          <FaFileInvoiceDollar /> Nuevo Presupuesto
+        </Title>
       </Wrapper>
       <Divider />
       <Container>
         <ContainerForm>
-          <NewPresupuesto setCliente={setCliente}  setObservacion={setObservacion}/>
+          <NewPresupuesto setCliente={setCliente} setObservacion={setObservacion} resetForm={reset} />
         </ContainerForm>
         <ContainerPre>
-          <Title>Previsualizacion</Title> 
+          <Title>Previsualizacion</Title>
           <WrapperTop>
-             <div>Cliente: {cliente === '' ? 'Consumidor Final' : cliente} </div> <Stat style={{flex:'none'}}> <StatHelpText>{currentDate}</StatHelpText></Stat>
+            <div>Cliente: {cliente === '' ? 'Consumidor Final' : cliente} </div>
+            <Stat style={{ flex: 'none', textAlign:'right' }}>
+              <StatHelpText>Presupuesto N°: {numero}</StatHelpText>
+              <StatHelpText>Fecha: {currentDate}</StatHelpText>
+            </Stat>
           </WrapperTop>
-          <Divider/>
+          <Divider />
           <Wrapper>
-            <TableContainer overflowY="auto" height="450px">
+            <TableContainer overflowY='auto' height='450px'>
               <Table variant='simple' size='sm'>
-                <TableCaption>Presupuesto N° </TableCaption>
-                <Thead position="sticky" top={0} bgColor="white">
+                <Thead position='sticky' top={0} bgColor='white'>
                   <Tr>
                     <Th textAlign='center'>Abertura</Th>
                     <Th textAlign='center'>Medidas</Th>
@@ -103,18 +166,23 @@ const Presupuestos = () => {
                 </Thead>
                 <Tbody>
                   {data_preview.map((data, index) => (
-                    <Items data={data} index={index} ></Items>
+                    <Items data={data} index={index}></Items>
                   ))}
                 </Tbody>
               </Table>
             </TableContainer>
           </Wrapper>
-          <Divider/>
-          <Stat style={{flex:'none',marginTop:'10px'}}>
-            <StatLabel>Total</StatLabel>
-            <StatNumber>$ {Math.round(precio * 100) / 100}</StatNumber>
-            <FooterTextObs>{textObservacion}</FooterTextObs>
-          </Stat>
+          <Divider />
+          <WrapperFooter>
+            <Stat style={{ flex: 'none', marginTop: '10px' }}>
+              <StatLabel>Total</StatLabel>
+              <StatNumber>$ {Math.round(precio * 100) / 100}</StatNumber>
+              <FooterTextObs>{textObservacion}</FooterTextObs>
+            </Stat>
+            <Button onClick={onSubmit} isLoading={isLoading}>
+              <FaRegSave />
+            </Button>
+          </WrapperFooter>
         </ContainerPre>
       </Container>
     </>

@@ -26,9 +26,9 @@ const DividerAberturas = styled.div`
   border-radius: 5px;
 `
 
-const NewPre = ({setCliente, setObservacion}) => {
+const NewPre = ({setCliente, setObservacion, resetForm}) => {
   //React Hook form
-  const { register, handleSubmit } = useForm()
+  const { register, handleSubmit, reset } = useForm()
   const dispatch = useDispatch()
 
   // GET DATA
@@ -51,6 +51,11 @@ const NewPre = ({setCliente, setObservacion}) => {
     dispatch(getDataPerfil())
   }, [dispatch])
 
+  useEffect(() => {
+    console.log(resetForm)
+    resetForm && reset()
+  }, [resetForm, reset])
+  
 
   return (
     <Container onSubmit={handleSubmit(onSubmit)}>

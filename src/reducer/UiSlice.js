@@ -57,12 +57,15 @@ export const UiSlice = createSlice({
           const {_id} = action.payload   
           const index = state.previewPres.data.findIndex((item) => item._id === _id);
           state.previewPres.data.splice(index, 1);; 
-        }
+        },
+        removeAllDataPreview: (state, action) => {
+            state.previewPres.data = [];
+          }
 
     }
 
 })
 
 
-export const { removeAllSelected,updateStateModal, setEditModal,setDataSelected, setEditObject, setDataInfo, removeDataSelected,setDataPreview, removeDataPreview } = UiSlice.actions
+export const { removeAllSelected,updateStateModal, setEditModal,setDataSelected, setEditObject, setDataInfo, removeDataSelected,setDataPreview, removeDataPreview, removeAllDataPreview } = UiSlice.actions
 export default UiSlice.reducer
