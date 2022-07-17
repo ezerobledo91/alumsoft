@@ -1,12 +1,11 @@
-import { DeleteIcon } from '@chakra-ui/icons'
-import { Divider, ListItem, Stat, StatHelpText, StatLabel, StatNumber, UnorderedList } from '@chakra-ui/react'
+import { Divider, Stat, StatHelpText, StatLabel, StatNumber, Table, TableCaption, TableContainer, Tbody, Th, Thead, Tr } from '@chakra-ui/react'
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useState } from 'react'
+import { useSelector } from 'react-redux'
 import styled from 'styled-components'
+import Items from '../components/Forms/Presupuestos/Items'
 import NewPresupuesto from '../components/Forms/Presupuestos/NewPresupuesto'
-
 import Navbar from '../components/Navbar'
-import { removeDataPreview } from '../reducer/UiSlice'
 
 const Wrapper = styled.div`
   padding: 10px 20px;
@@ -14,6 +13,7 @@ const Wrapper = styled.div`
   flex-direction: column;
   justify-content: space-between;
   align-items: left;
+  height: -webkit-fill-available;
 `
 const Title = styled.h1`
   text-align: left;
@@ -24,6 +24,7 @@ const Container = styled.div`
   display: flex;
   gap: 30px;
   padding: 20px;
+  height: 80vh;
 `
 const ContainerForm = styled.div`
   flex: 1;
@@ -33,35 +34,24 @@ const ContainerPre = styled.div`
   border: solid #979797 1px;
   padding: 10px;
   border-radius: 5px;
-`
-const WrapperItems = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 30px;
-  max-height: 500px;
-  overflow: auto;
+  justify-content: space-between;
+  height: fit-content;
 `
-const RemoveLine = styled.span`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 3px;
-  font-size: 10px;
-  width: 15px;
-  height: 15px;
-  border-radius: 50%;
-  background: black;
-  color: white;
-  cursor: pointer;
+const WrapperTop = styled.div`
+display: flex;
+justify-content: space-between;
 `
-const WrapperLine = styled.div`
+
+const FooterTextObs = styled.div`
   display: flex;
-  gap: 10px;
-  align-items: center;
+  font-weight: 300;
+  font-size: 12px;
+  padding: 10px;
 `
 
 const date = new Date()
-
 let day = date.getDate()
 let month = date.getMonth() + 1
 let year = date.getFullYear()
@@ -70,61 +60,60 @@ let currentDate = `${day}-${month}-${year}`
 const Presupuestos = () => {
   const data_preview = useSelector((state) => state.UiSlice.previewPres.data) // Los items de Presupuestos.
   let precio = 0 // precio total de los items
+  
+  // Cliente
+  const [cliente, setCliente]= useState('Consumidor Final')
+  // Observaciones
+  let [textObservacion, setObservacion] = useState('')
+
   data_preview.forEach((item) => {
     precio = precio + item.precio_total * item.cantidad // Precio total.
   })
-
-  const dispatch = useDispatch()
 
   return (
     <>
       <Navbar />
       <Wrapper>
-        <Title>Presupuesto</Title>
+        <Title>Nuevo Presupuesto</Title> 
       </Wrapper>
       <Divider />
       <Container>
         <ContainerForm>
-          <NewPresupuesto />
+          <NewPresupuesto setCliente={setCliente}  setObservacion={setObservacion}/>
         </ContainerForm>
         <ContainerPre>
-          <Title>Previsualizacion</Title>
+          <Title>Previsualizacion</Title> 
+          <WrapperTop>
+             <div>Cliente: {cliente === '' ? 'Consumidor Final' : cliente} </div> <Stat style={{flex:'none'}}> <StatHelpText>{currentDate}</StatHelpText></Stat>
+          </WrapperTop>
+          <Divider/>
           <Wrapper>
-            <WrapperItems>
-              {data_preview.map((data, index) => (
-                <div key={index}>
-                  <div>
-                    <WrapperLine>
-                      <strong>{data.abertura}</strong> | Ancho: {data.medidas.ancho}m Alto: {data.medidas.alto} m 
-                      | Peso total:
-                      {data.peso_total}Kg
-                      <RemoveLine onClick={() => dispatch(removeDataPreview(data))}>
-                        <DeleteIcon />
-                      </RemoveLine>
-                    </WrapperLine>
-                    <p>Precio Unitario: ${data.precio_total}</p>
-                    <p>Cantidad: {data.cantidad}u</p>
-                    <p>Precio Total: ${data.precio_total * data.cantidad}</p>
-                  </div>
-                  {/* <p>Piezas</p>
-                  <UnorderedList>
-                    {data.data.map((pieza, index) => (
-                      <ListItem key={index}>
-                        {pieza.nombre_pieza} | Total Aluminio Longitud: {pieza.total_aluminio_long}m | Total Peso:{' '}
-                        {pieza.total_aluminio_peso}Kg
-                      </ListItem>
-                    ))}
-                  </UnorderedList> */}
-
-                  <Divider />
-                </div>
-              ))}
-            </WrapperItems>
+            <TableContainer overflowY="auto" height="450px">
+              <Table variant='simple' size='sm'>
+                <TableCaption>Presupuesto N° </TableCaption>
+                <Thead position="sticky" top={0} bgColor="white">
+                  <Tr>
+                    <Th textAlign='center'>Abertura</Th>
+                    <Th textAlign='center'>Medidas</Th>
+                    <Th textAlign='center'>Cantidad</Th>
+                    <Th textAlign='center'>P.Unitario</Th>
+                    <Th textAlign='center'>P.Total</Th>
+                    <Th></Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {data_preview.map((data, index) => (
+                    <Items data={data} index={index} ></Items>
+                  ))}
+                </Tbody>
+              </Table>
+            </TableContainer>
           </Wrapper>
-          <Stat>
+          <Divider/>
+          <Stat style={{flex:'none',marginTop:'10px'}}>
             <StatLabel>Total</StatLabel>
-            <StatNumber>${Math.round(precio * 100) / 100}</StatNumber>
-            <StatHelpText>{currentDate}</StatHelpText>
+            <StatNumber>$ {Math.round(precio * 100) / 100}</StatNumber>
+            <FooterTextObs>{textObservacion}</FooterTextObs>
           </Stat>
         </ContainerPre>
       </Container>

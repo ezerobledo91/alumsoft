@@ -22,7 +22,7 @@ export const createPresupuestoItem = (values, data_aberturas, data_perfiles, ID)
         data: calculated,
         abertura: abertura.nombre,
         peso_total: Math.round(peso * 100) / 100,
-        precio_total: Math.round(peso * values.precio * 100) / 100,
+        precio_total: peso * values.precio  * (1+(values.porcentaje/100)),
         medidas: {
             alto: values.alto,
             ancho: values.ancho,

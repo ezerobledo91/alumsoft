@@ -1,0 +1,38 @@
+import { DeleteIcon } from '@chakra-ui/icons'
+import { Td, Tr } from '@chakra-ui/react'
+import React from 'react'
+import { useDispatch } from 'react-redux'
+import styled from 'styled-components'
+import { removeDataPreview } from '../../../reducer/UiSlice'
+
+const RemoveLine = styled.span`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3px;
+  font-size: 10px;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: black;
+  color: white;
+  cursor: pointer;
+  margin: 0 auto;
+`
+
+const Items = ({data, index}) => {
+const dispatch = useDispatch()
+
+  return (
+    <Tr key={index} >
+        <Td  textAlign="center" >{data.abertura}</Td>
+        <Td  textAlign="center"> ancho: {data.medidas.ancho}m alto: {data.medidas.alto} m </Td>
+        <Td  textAlign="center">{data.cantidad}</Td>
+        <Td  textAlign="center">${data.precio_total.toFixed(2)}</Td>
+        <Td  textAlign="center">${(data.precio_total * data.cantidad).toFixed(2)}</Td>
+        <Td ><RemoveLine onClick={() => dispatch(removeDataPreview(data))}><DeleteIcon /></RemoveLine></Td>
+   </Tr>
+  )
+}
+
+export default Items
