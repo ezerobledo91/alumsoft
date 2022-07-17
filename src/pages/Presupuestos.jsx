@@ -103,6 +103,7 @@ const Presupuestos = () => {
   const [isLoading, setLoading] = useState(false)
   const toast = useToast()
   const dispatch = useDispatch()
+  // On Submit Presupuesto. 
   const onSubmit = async () => {
     const data = {
       aberturas: data_preview,
@@ -110,6 +111,16 @@ const Presupuestos = () => {
       cliente: cliente,
       numero: numero,
     }
+    
+    if(data.aberturas.length === 0) {
+      toast({
+        title: `Error Presupuesto Vacio.`,
+        status: 'error',
+        isClosable: true,
+      })
+      return
+    }
+
     setLoading(true)
     await dispatch(saveDataPresupuesto(data))
     setLoading(false)

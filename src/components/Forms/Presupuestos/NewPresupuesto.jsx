@@ -52,7 +52,6 @@ const NewPre = ({setCliente, setObservacion, resetForm}) => {
   }, [dispatch])
 
   useEffect(() => {
-    console.log(resetForm)
     resetForm && reset()
   }, [resetForm, reset])
   
