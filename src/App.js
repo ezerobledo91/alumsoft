@@ -9,6 +9,7 @@ import Clientes from './pages/Clientes';
 import Perfiles from './pages/Perfiles';
 import Piezas from './pages/Piezas';
 import Aberturas from './pages/Aberturas';
+import PresupuestosList from './pages/PresupuestosList';
 
 function App() {
   return (
@@ -22,6 +23,8 @@ function App() {
            <Route path="/piezas" element={<Piezas/>} />
           <Route path="/aberturas" element={<Aberturas/>} />
           <Route path="/presupuestos/nuevo" element={<Presupuestos />} />
+          <Route path="/presupuestos/" element={<PresupuestosList/>} />
+
 
         </Routes>
       </BrowserRouter>

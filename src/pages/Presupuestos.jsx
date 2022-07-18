@@ -114,7 +114,7 @@ const Presupuestos = () => {
     
     if(data.aberturas.length === 0) {
       toast({
-        title: `Error Presupuesto Vacio.`,
+        title: `Error Presupuesto vacio.`,
         status: 'error',
         isClosable: true,
       })
@@ -133,6 +133,7 @@ const Presupuestos = () => {
     setReset(true)
     setTimeout(()=> setReset(false), 1000)
     setCliente('Consumidor Final')
+    setObservacion('')
     }
 
   useEffect(() => {
@@ -163,7 +164,7 @@ const Presupuestos = () => {
           </WrapperTop>
           <Divider />
           <Wrapper>
-            <TableContainer overflowY='auto' height='450px'>
+            <TableContainer overflowY='auto' height='440px'>
               <Table variant='simple' size='sm'>
                 <Thead position='sticky' top={0} bgColor='white'>
                   <Tr>
