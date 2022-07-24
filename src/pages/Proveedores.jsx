@@ -1,5 +1,5 @@
 import { NotAllowedIcon } from '@chakra-ui/icons'
-import React, { useEffect } from 'react'
+import React, { useEffect} from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
 import EditProveedor from '../components/Forms/Proveedores/EditProveedor'

@@ -82,7 +82,7 @@ let month = date.getMonth() + 1
 let year = date.getFullYear()
 let currentDate = `${day}-${month}-${year}`
 
-const Presupuestos = () => {
+const EditPresupuestos = () => {
   const data_preview = useSelector((state) => state.UiSlice.previewPres.data) // Los items de Presupuestos.
   const presupuestos = useSelector((state) => state.DataTables.presupuestos)
 
@@ -202,4 +202,4 @@ const Presupuestos = () => {
     </>
   )
 }
-export default Presupuestos
+export default EditPresupuestos
