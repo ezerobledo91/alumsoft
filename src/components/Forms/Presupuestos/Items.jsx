@@ -20,7 +20,7 @@ const RemoveLine = styled.span`
   margin: 0 auto;
 `
 
-const Items = ({data, index}) => {
+const Items = ({data, index, remove=true}) => {
 const dispatch = useDispatch()
 
   return (
@@ -30,7 +30,7 @@ const dispatch = useDispatch()
         <Td  textAlign="center">{data.cantidad}</Td>
         <Td  textAlign="center">${data.precio_total.toFixed(2)}</Td>
         <Td  textAlign="center">${(data.precio_total * data.cantidad).toFixed(2)}</Td>
-        <Td ><RemoveLine onClick={() => dispatch(removeDataPreview(data))}><DeleteIcon /></RemoveLine></Td>
+        {remove && <Td ><RemoveLine onClick={() => dispatch(removeDataPreview(data))}><DeleteIcon /></RemoveLine></Td>}
    </Tr>
   )
 }

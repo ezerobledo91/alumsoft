@@ -1,8 +1,10 @@
 import { DeleteIcon, EditIcon, ViewIcon } from '@chakra-ui/icons'
 import { Table, Tbody, Td, Tfoot, Th, Thead, Tooltip, Tr } from '@chakra-ui/react'
 import React from 'react'
+import { useState } from 'react'
 import { FaPrint } from 'react-icons/fa'
 import styled from 'styled-components'
+import ModalPresupuestosViewer from '../ModalPresupuestosViewer'
 
 const Container = styled.div`
   margin: 10px 20px;
@@ -21,6 +23,8 @@ const IconWrapper = styled.div`
 `
 
 const TablaPresupuestos = ({ data }) => {
+  const [open, setOpen] = useState(false)
+  const [data_view, setData] = useState()
   return (
     <Container>
       <Table size='sm'>
@@ -56,40 +60,42 @@ const TablaPresupuestos = ({ data }) => {
               <Td> {item.fecha}</Td>
               <Td>
                 <IconWrapper>
-                    <ViewIcon/>
+                  <Tooltip label={'Ver e Imprimir'} fontSize='xs'>
+                    <ViewIcon
+                      focusable='true'
+                      cursor={'pointer'}
+                      onClick={() => {
+                        setOpen(true)
+                        setData(item)
+                      }}
+                    />
+                  </Tooltip>
                   <Tooltip label={'Editar'} fontSize='xs'>
                     <EditIcon
                       focusable='true'
                       cursor={'pointer'}
                       onClick={() => {
-                       console.log(item._id)
+                        console.log(item._id)
                       }}
                     />
                   </Tooltip>
                   <Tooltip label={'Borrar'} fontSize='xs'>
-                    < DeleteIcon
+                    <DeleteIcon
                       focusable='true'
                       cursor={'pointer'}
                       onClick={() => {
-                       console.log(item._id)
+                        console.log(item._id)
                       }}
                     />
                   </Tooltip>
-                
-                    <FaPrint
-                      focusable='true'
-                      cursor={'pointer'}
-                      onClick={() => {
-                       console.log(item._id)
-                      }}
-                    />
-                    </IconWrapper>
+                </IconWrapper>
               </Td>
             </Tr>
           ))}
         </Tbody>
         <Tfoot></Tfoot>
       </Table>
+      <ModalPresupuestosViewer data={data_view} open={open} setOpen={setOpen} />
     </Container>
   )
 }
