@@ -13,13 +13,13 @@ export const UiSlice = createSlice({
         modalAux: {
             open: false,
             data_info: [],
-            data_selected:[],
+            data_selected: [],
             select: false,
         },
         previewPres: {
-            data:[],
-            
-        }
+            data: [],
+        },
+        editPresupuesto: {}
 
     },
     reducers: {
@@ -33,7 +33,7 @@ export const UiSlice = createSlice({
 
         },
         setDataInfo: (state, action) => {
-            const { open, data_info ,select=false } = action.payload
+            const { open, data_info, select = false } = action.payload
             state.modalAux.data_info = data_info
             state.modalAux.select = select
             state.modalAux.open = open
@@ -48,24 +48,34 @@ export const UiSlice = createSlice({
             state.modalAux.data_selected.push(item);
         },
         removeAllSelected: (state, action) => {
-            state.modalAux.data_selected= [];
+            state.modalAux.data_selected = [];
         },
         setDataPreview: (state, action) => {
-          state.previewPres.data.push( action.payload );
+            state.previewPres.data.push(action.payload);
         },
         removeDataPreview: (state, action) => {
-          const {_id} = action.payload   
-          const index = state.previewPres.data.findIndex((item) => item._id === _id);
-          state.previewPres.data.splice(index, 1);; 
+            const { _id } = action.payload
+            const index = state.previewPres.data.findIndex((item) => item._id === _id);
+            state.previewPres.data.splice(index, 1);
         },
         removeAllDataPreview: (state, action) => {
             state.previewPres.data = [];
-          }
-
+        },
+        setDataEditPresupuesto: (state, action) => {
+            state.editPresupuesto = action.payload ;
+          },
+        removeDataEditPresupuesto: (state, action) => {
+            const { _id } = action.payload
+            const index = state.editPresupuesto.aberturas.findIndex((item) => item._id === _id);
+            state.editPresupuesto.aberturas.splice(index, 1);
+        },  
+        setDataEditPresupuestoItem: (state, action) => {
+            state.editPresupuesto.aberturas.push(action.payload);
+        },
     }
 
 })
 
 
-export const { removeAllSelected,updateStateModal, setEditModal,setDataSelected, setEditObject, setDataInfo, removeDataSelected,setDataPreview, removeDataPreview, removeAllDataPreview } = UiSlice.actions
+export const { removeAllSelected, updateStateModal, setEditModal, setDataSelected, setEditObject, setDataInfo, removeDataSelected, setDataPreview, removeDataPreview, removeAllDataPreview, setDataEditPresupuesto, removeDataEditPresupuesto,setDataEditPresupuestoItem } = UiSlice.actions
 export default UiSlice.reducer

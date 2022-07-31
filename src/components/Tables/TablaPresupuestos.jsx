@@ -1,9 +1,12 @@
 import { DeleteIcon, EditIcon, ViewIcon } from '@chakra-ui/icons'
-import { Table, Tbody, Td, Tfoot, Th, Thead, Tooltip, Tr } from '@chakra-ui/react'
+import { Table, Tbody, Td, Tfoot, Th, Thead, Tooltip, Tr, useToast } from '@chakra-ui/react'
 import React from 'react'
 import { useState } from 'react'
-import { FaPrint } from 'react-icons/fa'
+import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
+import { removeDataPresupuesto } from '../../reducer/DataTablesSlice'
+import { setDataEditPresupuesto } from '../../reducer/UiSlice'
+import ModalPresupuestosEdit from '../ModalPresupuestosEdit'
 import ModalPresupuestosViewer from '../ModalPresupuestosViewer'
 
 const Container = styled.div`
@@ -24,7 +27,26 @@ const IconWrapper = styled.div`
 
 const TablaPresupuestos = ({ data }) => {
   const [open, setOpen] = useState(false)
+  const [openEdit, setOpenEdit] = useState(false)
+
   const [data_view, setData] = useState()
+  const dispatch = useDispatch()
+  const toast = useToast()
+  const deletePresupuesto  = (id)=>{
+    dispatch(removeDataPresupuesto(id))
+      toast({
+      title: `Presupuesto Borrado Correctamente`,
+      status: 'success',
+      isClosable: true,
+    })
+  }
+  
+ const editPresupuesto = pres =>{
+      dispatch(setDataEditPresupuesto(pres))
+      setOpenEdit(true)
+ }
+
+
   return (
     <Container>
       <Table size='sm'>
@@ -75,7 +97,7 @@ const TablaPresupuestos = ({ data }) => {
                       focusable='true'
                       cursor={'pointer'}
                       onClick={() => {
-                        console.log(item._id)
+                        editPresupuesto(item)
                       }}
                     />
                   </Tooltip>
@@ -84,7 +106,7 @@ const TablaPresupuestos = ({ data }) => {
                       focusable='true'
                       cursor={'pointer'}
                       onClick={() => {
-                        console.log(item._id)
+                        deletePresupuesto(item._id)
                       }}
                     />
                   </Tooltip>
@@ -96,6 +118,7 @@ const TablaPresupuestos = ({ data }) => {
         <Tfoot></Tfoot>
       </Table>
       <ModalPresupuestosViewer data={data_view} open={open} setOpen={setOpen} />
+      <ModalPresupuestosEdit open={openEdit} setOpen={setOpenEdit} />
     </Container>
   )
 }

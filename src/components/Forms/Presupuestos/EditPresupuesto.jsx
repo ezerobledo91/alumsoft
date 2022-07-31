@@ -17,12 +17,11 @@ import React, { useEffect } from 'react'
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
-import Items from '../components/Forms/Presupuestos/Items'
-import NewPresupuesto from '../components/Forms/Presupuestos/NewPresupuesto'
-import Navbar from '../components/Navbar'
 import { FaFileInvoiceDollar, FaRegSave } from 'react-icons/fa'
-import { getDataPresupuesto, saveDataPresupuesto } from '../reducer/DataTablesSlice'
-import { removeAllDataPreview } from '../reducer/UiSlice'
+import { getDataPresupuesto, updateDataPresupuesto } from '../../../reducer/DataTablesSlice'
+import ItemEdit from './ItemEdit'
+import NewItemEditPresupuesto from './NewItemEditPresupuesto'
+
 
 const Wrapper = styled.div`
   padding: 10px 20px;
@@ -75,46 +74,28 @@ const WrapperFooter = styled.div`
   justify-content: space-between;
   align-items: center;
 `
-
-const date = new Date()
-let day = date.getDate()
-let month = date.getMonth() + 1
-let year = date.getFullYear()
-let currentDate = `${day}-${month}-${year}`
-
 const EditPresupuestos = () => {
-  const data_preview = useSelector((state) => state.UiSlice.previewPres.data) // Los items de Presupuestos.
-  const presupuestos = useSelector((state) => state.DataTables.presupuestos)
-
-  // Cliente
-  const [cliente, setCliente] = useState('Consumidor Final')
-  // Observaciones
-  let [textObservacion, setObservacion] = useState('')
-  // Reset Form
-  const [reset, setReset] = useState(false)
+  const data_preview = useSelector((state) => state.UiSlice.editPresupuesto) // Los items de Presupuestos.
+  const [observacion, setObservacion] = useState('')
+  const [reset,setReset] = useState(false)
+  const dispatch = useDispatch()
+  const toast = useToast()
+  useEffect(() => {
+    dispatch(getDataPresupuesto())
+   setObservacion(data_preview.observaciones)
+  }, [dispatch])
 
   let precio = 0 // precio total de los items.
-  let numero = presupuestos.length + 1 // numero de presupuestos.
-  data_preview.forEach((item) => {
+  data_preview.aberturas.forEach((item) => {
     precio = precio + item.precio_total * item.cantidad // Precio total.
   })
 
-  // GUARDAR PRESUPUESTO
-  const [isLoading, setLoading] = useState(false)
-  const toast = useToast()
-  const dispatch = useDispatch()
-  // On Submit Presupuesto. 
-  const onSubmit = async () => {
-    const data = {
-      precio: Math.round(precio * 100) / 100,
-      aberturas: data_preview,
-      observaciones: textObservacion,
-      cliente: cliente,
-      numero: numero,
-      fecha:currentDate,
-    }
-    
-    if(data.aberturas.length === 0) {
+  const onSubmit = () =>{
+    const new_data  = {...data_preview}
+    new_data.observaciones = observacion
+    new_data.precio = Math.round(precio * 100) / 100
+    // NO VACIO
+    if(new_data.aberturas.length === 0) {
       toast({
         title: `Error Presupuesto vacio.`,
         status: 'error',
@@ -122,46 +103,42 @@ const EditPresupuestos = () => {
       })
       return
     }
+  
+    dispatch(updateDataPresupuesto(new_data))
 
-    setLoading(true)
-    await dispatch(saveDataPresupuesto(data))
-    setLoading(false)
     toast({
-      title: `Prespuesto Guardado Correctamente`,
+      title: `Prespuesto Actualizado Correctamente`,
       status: 'success',
       isClosable: true,
     })
-    dispatch(removeAllDataPreview())
     setReset(true)
     setTimeout(()=> setReset(false), 1000)
-    setCliente('Consumidor Final')
-    setObservacion('')
-    }
+    setTimeout(()=>dispatch(getDataPresupuesto()), 500)
+    
 
-  useEffect(() => {
-    dispatch(getDataPresupuesto())
-  }, [dispatch])
+  }
+
+  
 
   return (
     <>
-      <Navbar />
       <Wrapper>
         <Title>
-          <FaFileInvoiceDollar /> Nuevo Presupuesto
+          <FaFileInvoiceDollar /> Editar Presupuesto
         </Title>
       </Wrapper>
       <Divider />
       <Container>
         <ContainerForm>
-          <NewPresupuesto setCliente={setCliente} setObservacion={setObservacion} resetForm={reset} />
+          <NewItemEditPresupuesto ID={data_preview.aberturas.length} observacion={observacion} setObservacion={setObservacion} resetForm={reset}/>
         </ContainerForm>
         <ContainerPre>
           <Title>Previsualizacion</Title>
           <WrapperTop>
-            <div>Cliente: {cliente === '' ? 'Consumidor Final' : cliente} </div>
-            <Stat style={{ flex: 'none', textAlign:'right' }}>
-              <StatHelpText>Presupuesto N°: {numero}</StatHelpText>
-              <StatHelpText>Fecha: {currentDate}</StatHelpText>
+            <div>Cliente: {data_preview.cliente} </div>
+            <Stat style={{ flex: 'none', textAlign: 'right' }}>
+              <StatHelpText>Presupuesto N°: {data_preview.numero}</StatHelpText>
+              <StatHelpText>Fecha: {data_preview.fecha}</StatHelpText>
             </Stat>
           </WrapperTop>
           <Divider />
@@ -179,8 +156,8 @@ const EditPresupuestos = () => {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {data_preview.map((data, index) => (
-                    <Items data={data} index={index}></Items>
+                  {data_preview.aberturas.map((data, index) => (
+                    <ItemEdit data={data} index={index}></ItemEdit>
                   ))}
                 </Tbody>
               </Table>
@@ -191,9 +168,9 @@ const EditPresupuestos = () => {
             <Stat style={{ flex: 'none', marginTop: '10px' }}>
               <StatLabel>Total</StatLabel>
               <StatNumber>$ {Math.round(precio * 100) / 100}</StatNumber>
-              <FooterTextObs>{textObservacion}</FooterTextObs>
+              <FooterTextObs>{observacion}</FooterTextObs>
             </Stat>
-            <Button onClick={onSubmit} isLoading={isLoading}>
+            <Button onClick={onSubmit}>
               <FaRegSave />
             </Button>
           </WrapperFooter>

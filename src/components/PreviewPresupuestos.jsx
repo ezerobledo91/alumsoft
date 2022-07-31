@@ -85,7 +85,7 @@ const PreviewPresupuestos = React.forwardRef((props, ref) => {
             </Thead>
             <Tbody>
                 {aberturas.map((data, index) => (
-                    <Items remove={false} data={data} index={index}></Items>
+                    <Items key={index} remove={false} data={data} index={index}></Items>
                 ))}
             </Tbody>
           </Table>

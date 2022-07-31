@@ -22,30 +22,30 @@ const savePresupuesto = async (data) => {
     return result
 }
 
-// Eliminar Grupo
-// const deleteGrupo = async (id) => {
-//     let response = await fetch(`http://localhost:5000/api/grupo/${id}`, {
-//         method: 'DELETE',
-//     })
+// Eliminar Presupuesto
+const deletePresupuesto = async (id) => {
+    let response = await fetch(`http://localhost:5000/api/presupuesto/${id}`, {
+        method: 'DELETE',
+    })
 
-//     let result = await response.json()
-//     return result
-// }
+    let result = await response.json()
+    return result
+}
 
-// // Actualizar Grupo
-// const updateGrupo = async (entidad) => {
-//     const { _id, ...others } = entidad
-//     // console.log(entidad)
-//     let response = await fetch(`http://localhost:5000/api/grupo/${_id}`, {
-//         method: 'PUT',
-//         headers: {
-//             'Content-Type': 'application/json;charset=utf-8',
-//         },
-//         body: JSON.stringify(others),
-//     })
+// Actualizar Presupuesto
+const updatePresupuesto = async (entidad) => {
+    const { _id, ...others } = entidad
+    // console.log(entidad)
+    let response = await fetch(`http://localhost:5000/api/presupuesto/${_id}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8',
+        },
+        body: JSON.stringify(others),
+    })
 
-//     let result = await response.json()
-//     return result
-// }
+    let result = await response.json()
+    return result
+}
 
-export { savePresupuesto, getAllPresupuestos}
+export { savePresupuesto, getAllPresupuestos, deletePresupuesto, updatePresupuesto}

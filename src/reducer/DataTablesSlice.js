@@ -3,7 +3,7 @@ import { deleteCliente, getAllClientes, saveCliente, updateCliente } from '../se
 import { deleteGrupo, getAllGrupos, saveGrupo, updateGrupo } from '../services/grupos'
 import { deletePerfil, getAllPerfiles, savePerfil, updatePerfil } from '../services/perfiles'
 import { deletePieza, getAllPiezas, savePieza, updatePieza } from '../services/piezas'
-import { getAllPresupuestos, savePresupuesto } from '../services/presupuestos'
+import { deletePresupuesto, getAllPresupuestos, savePresupuesto, updatePresupuesto } from '../services/presupuestos'
 import { deleteProveedor, getAllProveedores, saveProveedor, updateProveedor } from '../services/proveedores'
 
 // PROVEEDORES
@@ -209,7 +209,23 @@ export const getDataPresupuesto = createAsyncThunk(
 
 )
 
+export const removeDataPresupuesto = createAsyncThunk(
+    'DataTables/removeDataPresupuesto',
+    async (payload) => {
+        const response = await deletePresupuesto(payload)
+        return response.id
+    }
 
+)
+
+export const updateDataPresupuesto = createAsyncThunk(
+    'DataTables/updateDataPresupuesto',
+    async (payload) => {
+        const response = await updatePresupuesto(payload)
+        return response
+    }
+
+)
 
 
 
@@ -323,6 +339,14 @@ export const DataTableSlice = createSlice({
                 ...state,
                 presupuestos: action.payload
             }
+        },
+        [removeDataPresupuesto.fulfilled]: (state, action) => {
+            const id = action.payload;
+            const index = state.presupuestos.findIndex((item) => item._id === id);
+            state.presupuestos.splice(index, 1);
+        },
+        [updateDataPresupuesto.fulfilled]: (state, action) => {
+            return state
         },
     }
 
