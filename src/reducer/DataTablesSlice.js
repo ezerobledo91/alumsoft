@@ -5,6 +5,7 @@ import { deletePerfil, getAllPerfiles, savePerfil, updatePerfil } from '../servi
 import { deletePieza, getAllPiezas, savePieza, updatePieza } from '../services/piezas'
 import { deletePresupuesto, getAllPresupuestos, savePresupuesto, updatePresupuesto } from '../services/presupuestos'
 import { deleteProveedor, getAllProveedores, saveProveedor, updateProveedor } from '../services/proveedores'
+import  { saveVidrio, getAllVidrios, deleteVidrio, updateVidrio} from '../services/vidrios'
 
 // PROVEEDORES
 export const getDataProveedor = createAsyncThunk(
@@ -227,6 +228,43 @@ export const updateDataPresupuesto = createAsyncThunk(
 
 )
 
+// Vidrios
+export const saveDataVidrio = createAsyncThunk(
+    'DataTables/saveDataVidrio',
+    async (payload) => {
+        const response = await saveVidrio(payload)
+        return response
+    }
+
+)
+
+export const getDataVidrio = createAsyncThunk(
+    'DataTables/getDataVidrio',
+    async () => {
+        const response = await getAllVidrios()
+        return response
+    }
+
+)
+
+export const removeDataVidrio = createAsyncThunk(
+    'DataTables/removeDataVidrio',
+    async (payload) => {
+        const response = await deleteVidrio(payload)
+        return response.id
+    }
+
+)
+
+export const updateDataVidrio = createAsyncThunk(
+    'DataTables/updateDataVidrio',
+    async (payload) => {
+        const response = await updateVidrio(payload)
+        return response
+    }
+
+)
+
 
 
 export const DataTableSlice = createSlice({
@@ -238,6 +276,7 @@ export const DataTableSlice = createSlice({
         piezas: [],
         grupos: [],
         presupuestos:[],
+        vidrios:[]
 
     },
     reducers: {
@@ -346,6 +385,23 @@ export const DataTableSlice = createSlice({
             state.presupuestos.splice(index, 1);
         },
         [updateDataPresupuesto.fulfilled]: (state, action) => {
+            return state
+        },
+        [saveDataVidrio.fulfilled]: (state, action) => {
+            state.vidrios.push(action.payload)
+        },
+        [getDataVidrio.fulfilled]: (state, action) => {
+            return {
+                ...state,
+                vidrios: action.payload
+            }
+        },
+        [removeDataVidrio.fulfilled]: (state, action) => {
+            const id = action.payload;
+            const index = state.vidrios.findIndex((item) => item._id === id);
+            state.vidrios.splice(index, 1);
+        },
+        [updateDataVidrio.fulfilled]: (state, action) => {
             return state
         },
     }

@@ -83,7 +83,7 @@ const EditPresupuestos = () => {
   useEffect(() => {
     dispatch(getDataPresupuesto())
    setObservacion(data_preview.observaciones)
-  }, [dispatch])
+  }, [dispatch, data_preview.observaciones])
 
   let precio = 0 // precio total de los items.
   data_preview.aberturas.forEach((item) => {
@@ -157,7 +157,7 @@ const EditPresupuestos = () => {
                 </Thead>
                 <Tbody>
                   {data_preview.aberturas.map((data, index) => (
-                    <ItemEdit data={data} index={index}></ItemEdit>
+                    <ItemEdit data={data} index={index} key={index}></ItemEdit>
                   ))}
                 </Tbody>
               </Table>

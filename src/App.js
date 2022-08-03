@@ -10,6 +10,7 @@ import Perfiles from './pages/Perfiles';
 import Piezas from './pages/Piezas';
 import Aberturas from './pages/Aberturas';
 import PresupuestosList from './pages/PresupuestosList';
+import Vidrios from './pages/Vidrios';
 
 function App() {
   return (
@@ -24,6 +25,8 @@ function App() {
           <Route path="/aberturas" element={<Aberturas/>} />
           <Route path="/presupuestos/nuevo" element={<Presupuestos />} />
           <Route path="/presupuestos/" element={<PresupuestosList/>} />
+          <Route path="/vidrios/" element={<Vidrios/>} />
+
 
 
         </Routes>

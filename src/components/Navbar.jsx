@@ -62,7 +62,9 @@ function Navbar() {
               <Link to='/perfiles'>
                 <MenuItem>Perfiles</MenuItem>
               </Link>
+              <Link to='/vidrios'>
               <MenuItem>Vidrios</MenuItem>
+              </Link>
               <MenuItem>Accesorios</MenuItem>
             </MenuGroup>
             <MenuDivider />

@@ -8,6 +8,7 @@ import { useState } from 'react'
 const IconWrapper = styled.div`
   display: flex;
   gap: 5px;
+  justify-content: center;
 `
 
 const Wrapper = styled.div`
@@ -87,7 +88,7 @@ useEffect(() => {
         {/* Panel de Edicion */}
         {edit ? (
           <IconWrapper>
-            <Tooltip label={'Editar'} fontSize='xs'>
+            <Tooltip label={'Editar'} fontSize='xs' >
               <EditIcon
                 focusable='true'
                 cursor={'pointer'}
