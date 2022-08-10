@@ -1,4 +1,14 @@
-import { Box, Button, FormControl, FormHelperText, FormLabel, Input, SimpleGrid, useToast } from '@chakra-ui/react'
+import {
+  Box,
+  Button,
+  FormControl,
+  FormHelperText,
+  FormLabel,
+  Input,
+  Select,
+  SimpleGrid,
+  useToast,
+} from '@chakra-ui/react'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
@@ -12,7 +22,7 @@ const Container = styled.form`
   gap: 10px;
 `
 
-const NewPerfil = () => {
+const NewPerfil = ({proveedores}) => {
   //React Hook form
   const { register, handleSubmit } = useForm()
   const [isLoading, setLoading] = useState(false)
@@ -21,6 +31,7 @@ const NewPerfil = () => {
 
   //Guardar Perfil Nuevo
   const onSubmit = async (data) => {
+    console.log(data)
     setLoading(true)
     await dispatch(saveDataPerfil(data))
     setLoading(false)
@@ -34,7 +45,7 @@ const NewPerfil = () => {
 
   return (
     <Container onSubmit={handleSubmit(onSubmit)}>
-     <SimpleGrid columns={2} spacing={10}>
+      <SimpleGrid columns={2} spacing={10}>
         <Box>
           <FormControl isRequired>
             <FormLabel htmlFor='codigo'>Codigo</FormLabel>
@@ -53,19 +64,49 @@ const NewPerfil = () => {
           </FormControl>
           <FormControl isRequired>
             <FormLabel htmlFor='categoria'>Categoria</FormLabel>
-            <Input id='categoria' type='text' size='sm' {...register('categoria')} />
-            <FormHelperText>Ingrese la Categoria del Perfil</FormHelperText>
+            <Select
+              placeholder='Seleccione una categoria'
+              defaultValue=''
+              id='categoria'
+              size='sm'
+              {...register('categoria')}
+            >
+              <option value=''>Sin Categoria</option>
+              <option value='puertas'>Puertas</option>
+              <option value='ventanas'>Ventanas</option>
+              <option value='marcos'>Marcos</option>
+              <option value='otro'>Otro</option>
+            </Select>
           </FormControl>
           <FormControl isRequired>
             <FormLabel htmlFor='linea'>Linea</FormLabel>
-            <Input id='linea' type='text' size='sm' {...register('linea')} />
-            <FormHelperText>Ingrese la Linea del Perfil</FormHelperText>
+            <Select
+              placeholder='Seleccione una Linea'
+              defaultValue=''
+              id='linea'
+              size='sm'
+              {...register('linea')}
+            >
+              <option value=''>Sin Linea</option>
+              <option value='herrero'>Herrero</option>
+              <option value='herrero pesado'>Herrero Pesado</option>
+              <option value='modena'>Modena</option>
+              <option value='otro'>Otro</option>
+            </Select>
           </FormControl>
           <FormControl>
-            <FormLabel htmlFor='proveedor'>Proveedor</FormLabel>
-            <Input id='proveedor' type='text' size='sm' {...register('proveedor')} />
-            <FormHelperText>Ingrese el Proveedor del Perfil</FormHelperText>
-          </FormControl>
+          <FormLabel htmlFor='proveedor'>Proveedor</FormLabel>
+          <Select
+            placeholder='Seleccione un Proveedor'
+            defaultValue=''
+            id='proveedor'
+            size='sm'
+            {...register('proveedor')}
+          >
+            <option value=''>Sin Proveedor</option>
+            {proveedores.map((proveedor,i)=> <option  key={i} value={proveedor.nombre}>{proveedor.nombre}</option>)}
+          </Select>
+        </FormControl>
         </Box>
         <Box>
           <FormControl>

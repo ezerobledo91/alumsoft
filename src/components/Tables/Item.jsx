@@ -34,7 +34,7 @@ const Item = ({ item, claves, edit = true}) => {
     dispatch(updateStateModal(true))
   }
 
-  const checkObject = (variable) => {
+  const checkObject = (variable, view) => {
     if (typeof variable === 'object' && !Array.isArray(variable) && variable !== null) {
       return (
         select ? variable.nombre :   <Wrapper onClick={() => dispatch(setDataInfo({ data_info: variable, open: true }))}>
@@ -49,7 +49,7 @@ const Item = ({ item, claves, edit = true}) => {
           <Wrapper direction='column'>
             {variable.map((item, index) => <span key={index}>{item.nombre}</span>)}
           </Wrapper>
-        {select ? '' : <ViewIcon onClick={() => dispatch(setDataInfo({ data_info: variable, open: true }))} /> }
+        {view ? '' : select ? '' : <ViewIcon onClick={() => dispatch(setDataInfo({ data_info: variable, open: true }))} /> }
         </Wrapper>
       )
     }
@@ -81,7 +81,7 @@ useEffect(() => {
     {select ? <Td><Checkbox value={item}  isChecked={check} onChange={(e)=>{setChecked(e)}}></Checkbox></Td> : '' }
       
       {claves.map((clave, index) => (
-        <Td key={index}>{checkObject(item[clave])}</Td>
+        <Td key={index}>{checkObject(item[clave], clave === 'accesorios' && true)}</Td>
       ))}
 
       <Td>

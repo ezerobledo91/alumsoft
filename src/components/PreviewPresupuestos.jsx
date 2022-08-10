@@ -77,8 +77,10 @@ const PreviewPresupuestos = React.forwardRef((props, ref) => {
               <Tr>
                 <Th textAlign='center'>Abertura</Th>
                 <Th textAlign='center'>Medidas</Th>
-                <Th textAlign='center'>Cantidad</Th>
+                <Th textAlign='center'>Vidrio</Th>
+                <Th textAlign='center'>M2</Th>
                 <Th textAlign='center'>P.Unitario</Th>
+                <Th textAlign='center'>Cantidad</Th>
                 <Th textAlign='center'>P.Total</Th>
                 <Th></Th>
               </Tr>

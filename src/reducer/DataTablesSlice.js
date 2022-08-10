@@ -1,10 +1,11 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import { deleteAccesorio, getAllAccesorios, saveAccesorio, updateAccesorio } from '../services/accesorios'
 import { deleteCliente, getAllClientes, saveCliente, updateCliente } from '../services/clientes'
 import { deleteGrupo, getAllGrupos, saveGrupo, updateGrupo } from '../services/grupos'
 import { deletePerfil, getAllPerfiles, savePerfil, updatePerfil } from '../services/perfiles'
 import { deletePieza, getAllPiezas, savePieza, updatePieza } from '../services/piezas'
 import { deletePresupuesto, getAllPresupuestos, savePresupuesto, updatePresupuesto } from '../services/presupuestos'
-import { deleteProveedor, getAllProveedores, saveProveedor, updateProveedor } from '../services/proveedores'
+import { deleteProveedor, getAllProveedores, getByCategoria, saveProveedor, updateProveedor } from '../services/proveedores'
 import  { saveVidrio, getAllVidrios, deleteVidrio, updateVidrio} from '../services/vidrios'
 
 // PROVEEDORES
@@ -12,6 +13,15 @@ export const getDataProveedor = createAsyncThunk(
     'DataTables/getDataProveedor',
     async () => {
         const response = await getAllProveedores()
+        return response
+    }
+
+)
+
+export const getProveedorByCategoria = createAsyncThunk(
+    'DataTables/getProveedorByCategoria',
+    async (payload) => {
+        const response = await getByCategoria(payload)
         return response
     }
 
@@ -265,6 +275,43 @@ export const updateDataVidrio = createAsyncThunk(
 
 )
 
+// Accesorios
+export const saveDataAccesorio = createAsyncThunk(
+    'DataTables/saveDataAccesorio',
+    async (payload) => {
+        const response = await saveAccesorio(payload)
+        return response
+    }
+
+)
+
+export const getDataAccesorio = createAsyncThunk(
+    'DataTables/getDataAccesorio',
+    async () => {
+        const response = await getAllAccesorios()
+        return response
+    }
+
+)
+
+export const removeDataAccesorio = createAsyncThunk(
+    'DataTables/removeDataAccesorio',
+    async (payload) => {
+        const response = await deleteAccesorio(payload)
+        return response.id
+    }
+
+)
+
+export const updateDataAccesorio = createAsyncThunk(
+    'DataTables/updateDataAccesorio',
+    async (payload) => {
+        const response = await updateAccesorio(payload)
+        return response
+    }
+
+)
+
 
 
 export const DataTableSlice = createSlice({
@@ -276,7 +323,8 @@ export const DataTableSlice = createSlice({
         piezas: [],
         grupos: [],
         presupuestos:[],
-        vidrios:[]
+        vidrios:[],
+        accesorios: []
 
     },
     reducers: {
@@ -284,6 +332,12 @@ export const DataTableSlice = createSlice({
     },
     extraReducers: {
         [getDataProveedor.fulfilled]: (state, action) => {
+            return {
+                ...state,
+                proveedores: action.payload
+            }
+        },
+        [getProveedorByCategoria.fulfilled]: (state, action) => {
             return {
                 ...state,
                 proveedores: action.payload
@@ -402,6 +456,23 @@ export const DataTableSlice = createSlice({
             state.vidrios.splice(index, 1);
         },
         [updateDataVidrio.fulfilled]: (state, action) => {
+            return state
+        },
+        [saveDataAccesorio.fulfilled]: (state, action) => {
+            state.accesorios.push(action.payload)
+        },
+        [getDataAccesorio.fulfilled]: (state, action) => {
+            return {
+                ...state,
+                accesorios: action.payload
+            }
+        },
+        [removeDataAccesorio.fulfilled]: (state, action) => {
+            const id = action.payload;
+            const index = state.accesorios.findIndex((item) => item._id === id);
+            state.accesorios.splice(index, 1);
+        },
+        [updateDataAccesorio.fulfilled]: (state, action) => {
             return state
         },
     }

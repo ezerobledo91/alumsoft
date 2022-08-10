@@ -1,9 +1,9 @@
-import { Button, FormControl, FormHelperText, FormLabel, Input, Select, SimpleGrid, useToast } from '@chakra-ui/react'
+import {Button, FormControl, FormHelperText, FormLabel, Input, Select, SimpleGrid, useToast } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
-import { removeDataVidrio, updateDataVidrio } from '../../../reducer/DataTablesSlice'
+import { removeDataAccesorio, updateDataAccesorio } from '../../../reducer/DataTablesSlice'
 import { setEditModal, updateStateModal } from '../../../reducer/UiSlice'
 
 const Container = styled.form`
@@ -16,7 +16,7 @@ const WrapperButton = styled.div`
   justify-content: space-between;
 `
 
-const EditVidrio = ({ proveedores }) => {
+const EditAccesorio = ({proveedores}) => {
   //React Hook form
   const { register, handleSubmit } = useForm()
   const [isLoading, setLoading] = useState(false)
@@ -28,12 +28,12 @@ const EditVidrio = ({ proveedores }) => {
   const onSubmit = async (data) => {
     data._id = edit_object._id
     setLoading(true)
-    dispatch(updateDataVidrio(data)) // Update call
+    dispatch(updateDataAccesorio(data)) // Update call
     setLoading(false)
     dispatch(updateStateModal(false)) // Close Modal
     dispatch(setEditModal({ edit: false, edit_object: {} }))
     toast({
-      title: `Vidrio Actualizado Correctamente`,
+      title: `Accesorio Actualizado Correctamente`,
       status: 'success',
       isClosable: true,
     })
@@ -41,11 +41,11 @@ const EditVidrio = ({ proveedores }) => {
 
   const deleteAction = (e) => {
     e.preventDefault()
-    dispatch(removeDataVidrio(edit_object._id))
+    dispatch(removeDataAccesorio(edit_object._id))
     dispatch(updateStateModal(false)) // Close Modal
     dispatch(setEditModal({ edit: false, edit_object: {} }))
     toast({
-      title: `Vidrio Borrado Correctamente`,
+      title: `Accesorio Borrado Correctamente`,
       status: 'success',
       isClosable: true,
     })
@@ -54,22 +54,20 @@ const EditVidrio = ({ proveedores }) => {
   return (
     <Container onSubmit={handleSubmit(onSubmit)}>
       <SimpleGrid columns={2} spacing={10}>
-        <FormControl isRequired>
-          <FormLabel htmlFor='nombre'>Nombre</FormLabel>
-          <Input id='nombre' type='text' size='sm' defaultValue={edit_object['nombre']} {...register('nombre')} />
-          <FormHelperText>Ingrese el Nombre del Vidrio</FormHelperText>
+      <FormControl isRequired>
+          <FormLabel htmlFor='codigo'>Codigo</FormLabel>
+          <Input id='codigo' type='text' size='sm' {...register('codigo')} defaultValue={edit_object['codigo']} />
+          <FormHelperText>Ingrese el codigo del Accesorio</FormHelperText>
         </FormControl>
         <FormControl isRequired>
-          <FormLabel htmlFor='espesor'>Espesor en mm</FormLabel>
-          <Input
-            id='espesor'
-            type='number'
-            step='any'
-            size='sm'
-            defaultValue={edit_object['espesor']}
-            {...register('espesor')}
-          />
-          <FormHelperText>Ingrese el espesor del Vidrio</FormHelperText>
+          <FormLabel htmlFor='nombre'>Nombre</FormLabel>
+          <Input id='nombre' type='text' size='sm' {...register('nombre')} defaultValue={edit_object['nombre']}/>
+          <FormHelperText>Ingrese el Nombre del Accesorio</FormHelperText>
+        </FormControl>
+        <FormControl>
+          <FormLabel htmlFor='descripcion'>Descripcion</FormLabel>
+          <Input id='descripcion' type='text' size='sm' {...register('descripcion')} defaultValue={edit_object['descripcion']}/>
+          <FormHelperText>Ingrese el descripcion del Accesorio</FormHelperText>
         </FormControl>
         <FormControl isRequired>
           <FormLabel htmlFor='categoria'>Categoria</FormLabel>
@@ -81,14 +79,28 @@ const EditVidrio = ({ proveedores }) => {
             {...register('categoria')}
           >
             <option value=''>Sin Categoria</option>
-            <option value='float'>Float</option>
-            <option value='catedral'>Catedral</option>
-            <option value='espejos'>Espejos</option>
-            <option value='reflectivos'>Reflectivos</option>
-            <option value='blindex'>Blindex</option>
-            <option value='solar'>Solar</option>
-            <option value='otro'>Otro</option>
+            <option value='burlete'>Burletes</option>
+            <option value='felpa'>Felpas</option>
+            <option value='herraje'>Herrajes</option>
+            <option value='buloneria'>Buloneria</option>
+            <option value='cerradura'>Cerraduras</option>
           </Select>
+        </FormControl>
+        <FormControl isRequired>
+          <FormLabel htmlFor='unidad'>Unidad</FormLabel>
+          <Select
+            placeholder='Seleccione una unidad de Medida'
+            defaultValue={edit_object['unidad']}
+            id='unidad'
+            size='sm'
+            {...register('unidad')}
+          >
+            <option value='unidades'>Por unidad</option>
+            <option value='metro'>Por Metro Lineal</option>
+          </Select>
+          <FormHelperText>
+            Seleccione una opción con relación al uso. (Ej: Felpa / Burletes unidad por metro lineal)
+          </FormHelperText>
         </FormControl>
         <FormControl>
           <FormLabel htmlFor='proveedor'>Proveedor</FormLabel>
@@ -100,26 +112,15 @@ const EditVidrio = ({ proveedores }) => {
             {...register('proveedor')}
           >
             <option value=''>Sin Proveedor</option>
-            {proveedores.map((proveedor, i) => (
-              <option key={i} value={proveedor.nombre}>
-                {proveedor.nombre}
-              </option>
-            ))}
+            {proveedores.map((proveedor,i)=> <option  key={i} value={proveedor.nombre}>{proveedor.nombre}</option>)}
           </Select>
         </FormControl>
         <FormControl isRequired>
-          <FormLabel htmlFor='precio_u'>Precio x m2</FormLabel>
-          <Input
-            id='precio_u'
-            type='number'
-            step='any'
-            size='sm'
-            defaultValue={edit_object['precio']}
-            {...register('precio')}
-          />
-          <FormHelperText>Ingrese precio por m2</FormHelperText>
+          <FormLabel htmlFor='precio_u'>Precio unitario</FormLabel>
+          <Input id='precio_u' type='number' step='any' size='sm' {...register('precio')} defaultValue={edit_object['precio']}/>
+          <FormHelperText>Ingrese precio unitario</FormHelperText>
         </FormControl>
-      </SimpleGrid>
+       </SimpleGrid>
       <WrapperButton>
         <Button
           colorScheme='red'
@@ -138,4 +139,4 @@ const EditVidrio = ({ proveedores }) => {
   )
 }
 
-export default EditVidrio
+export default EditAccesorio

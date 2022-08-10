@@ -64,15 +64,37 @@ const NewPieza = () => {
         <FormHelperText>Ingrese una descripcion de la Pieza</FormHelperText>
       </FormControl>
       <FormControl isRequired>
-        <FormLabel htmlFor='categoria'>Categoria</FormLabel>
-        <Input id='categoria' type='text' size='sm' {...register('categoria')} />
-        <FormHelperText>Ingrese Categoria</FormHelperText>
-      </FormControl>
-      <FormControl isRequired>
-        <FormLabel htmlFor='modelo'>Modelo</FormLabel>
-        <Input id='modelo' type='text' size='sm' {...register('modelo')} />
-        <FormHelperText>Ingrese un Modelo para la Pieza</FormHelperText>
-      </FormControl>
+            <FormLabel htmlFor='categoria'>Categoria</FormLabel>
+            <Select
+              placeholder='Seleccione una categoria'
+              defaultValue=''
+              id='categoria'
+              size='sm'
+              {...register('categoria')}
+            >
+              <option value=''>Sin Categoria</option>
+              <option value='puertas'>Puertas</option>
+              <option value='ventanas'>Ventanas</option>
+              <option value='marcos'>Marcos</option>
+              <option value='otro'>Otro</option>
+            </Select>
+          </FormControl>
+          <FormControl isRequired>
+            <FormLabel htmlFor='linea'>Linea</FormLabel>
+            <Select
+              placeholder='Seleccione una Linea'
+              defaultValue=''
+              id='linea'
+              size='sm'
+              {...register('linea')}
+            >
+              <option value=''>Sin Linea</option>
+              <option value='herrero'>Herrero</option>
+              <option value='herrero pesado'>Herrero Pesado</option>
+              <option value='modena'>Modena</option>
+              <option value='otro'>Otro</option>
+            </Select>
+          </FormControl>
       <FormControl isRequired>
         <FormLabel htmlFor='variable'>Variable</FormLabel>
         <Select placeholder='Select option' id='variable' size='sm' {...register('variable')}>
@@ -80,7 +102,6 @@ const NewPieza = () => {
           <option value='alto'>Alto</option>
           <option value='marco'>2 Alto + Ancho (Marcos)</option>
           <option value='fija'>Unidades Fijas</option>
-          <option value='superficie'>Superficies</option>
         </Select>
         <FormHelperText>Seleccione una variable de medida</FormHelperText>
       </FormControl>

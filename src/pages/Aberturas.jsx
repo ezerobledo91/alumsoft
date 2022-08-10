@@ -9,14 +9,14 @@ import ModalComponent from '../components/Modal'
 import ModalComponentAuxiliar from '../components/ModalAuxiliar'
 import Navbar from '../components/Navbar'
 import Tabla from '../components/Tables/Tabla'
-import { getDataGrupo } from '../reducer/DataTablesSlice'
+import { getDataAccesorio, getDataGrupo } from '../reducer/DataTablesSlice'
 
 const NoData = styled.div`
   padding: 10px 20px;
 `
 
-let data_titles = ['nombre', 'piezas', 'categoria', 'modelo', 'accesorios', 'revestimiento', 'adicionales']
-let data_titles_aux = ['nombre', 'perfil', 'descripcion', 'categoria', 'modelo', 'variable', 'constante_m', 'cortes']
+let data_titles = ['nombre', 'piezas', 'categoria', 'linea', 'accesorios']
+let data_titles_aux = ['nombre', 'perfil', 'descripcion', 'categoria', 'linea', 'variable', 'constante_m', 'cortes']
 
 const Aberturas = () => {
   const data = useSelector((state) => state.DataTables) //Estado de la app en todo momento
@@ -27,6 +27,7 @@ const Aberturas = () => {
 
   useEffect(() => {
     dispatch(getDataGrupo())
+    dispatch(getDataAccesorio())
   }, [dispatch,dataUi])
 
   return (
@@ -36,7 +37,7 @@ const Aberturas = () => {
 
       {/* Nuevo Pieza FORM  */}
 
-      <ModalComponent title='aberturas'>{dataUi.edit ? <EditAberturas/> : <NewAbertura />}</ModalComponent>
+      <ModalComponent title='aberturas'>{dataUi.edit ? <EditAberturas accesorios={data.accesorios}/> : <NewAbertura accesorios={data.accesorios}/>}</ModalComponent>
 
       {data.grupos.length > 0 ? (
         <Tabla header={data_titles} data={data.grupos} title={'aberturas'}/>

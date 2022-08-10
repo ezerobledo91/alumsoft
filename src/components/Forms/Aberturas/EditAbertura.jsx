@@ -1,5 +1,5 @@
 import { SearchIcon } from '@chakra-ui/icons'
-import {  Button, FormControl, FormHelperText, FormLabel, Input,  useToast } from '@chakra-ui/react'
+import {  Button, FormControl, FormHelperText, FormLabel, Input,  Select,  useToast } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
@@ -7,6 +7,8 @@ import styled from 'styled-components'
 import { getDataPieza, removeDataGrupo, updateDataGrupo } from '../../../reducer/DataTablesSlice'
 import { removeAllSelected, setDataInfo, setDataSelected, setEditModal, updateStateModal } from '../../../reducer/UiSlice'
 import TagSelected from '../../TagSelected'
+import AccesoriosAdd from './AccesoriosAdd'
+
 
 const Container = styled.form`
   display: flex;
@@ -18,10 +20,11 @@ const WrapperButton = styled.div`
   justify-content: space-between;
 `
 
-const EditAberturas = () => {
+const EditAberturas = ({accesorios}) => {
   //React Hook form
   const { register, handleSubmit } = useForm()
   const [isLoading, setLoading] = useState(false)
+  const [arrayAccesorios, setArrayAccesorios] = useState([])
   const toast = useToast()
   const dispatch = useDispatch()
   const { edit_object } = useSelector((state) => state.UiSlice.modalState)
@@ -31,6 +34,7 @@ const EditAberturas = () => {
   const onSubmit = async (data) => {
     data._id = edit_object._id
     data.piezas = data_selected
+    data.accesorios = arrayAccesorios
     setLoading(true)
     dispatch(updateDataGrupo(data)) // Update call
     setLoading(false)
@@ -68,6 +72,11 @@ const EditAberturas = () => {
   }, [dispatch,edit_object.piezas])
 
 
+  useEffect(()=>{
+    setArrayAccesorios(edit_object?.accesorios)
+  },[edit_object])
+
+
 
   return (
     <Container onSubmit={handleSubmit(onSubmit)}>
@@ -85,16 +94,40 @@ const EditAberturas = () => {
       <FormControl>
         <TagSelected />
       </FormControl>
+       {/* ACCESORIOS */}
+       <AccesoriosAdd accesorios={accesorios}   arrayAccesorios={arrayAccesorios} setArrayAccesorios={setArrayAccesorios} />
       <FormControl isRequired>
-        <FormLabel htmlFor='categoria'>Categoria</FormLabel>
-        <Input id='categoria' type='text' size='sm' defaultValue={edit_object['categoria']} {...register('categoria')} />
-        <FormHelperText>Ingrese la categoria  de la Abertura</FormHelperText>
-      </FormControl>
-      <FormControl isRequired>
-        <FormLabel htmlFor='modelo'>Modelo</FormLabel>
-        <Input id='modelo' type='text' size='sm' defaultValue={edit_object['modelo']} {...register('modelo')} />
-        <FormHelperText>Ingrese el modelo  de la Abertura</FormHelperText>
-      </FormControl>
+            <FormLabel htmlFor='categoria'>Categoria</FormLabel>
+            <Select
+              placeholder='Seleccione una categoria'
+              defaultValue={edit_object['categoria']}
+              id='categoria'
+              size='sm'
+              {...register('categoria')}
+            >
+              <option value=''>Sin Categoria</option>
+              <option value='puertas'>Puertas</option>
+              <option value='ventanas'>Ventanas</option>
+              <option value='marcos'>Marcos</option>
+              <option value='otro'>Otro</option>
+            </Select>
+          </FormControl>
+          <FormControl isRequired>
+            <FormLabel htmlFor='linea'>Linea</FormLabel>
+            <Select
+              placeholder='Seleccione una Linea'
+              defaultValue={edit_object['linea']}
+              id='linea'
+              size='sm'
+              {...register('linea')}
+            >
+              <option value=''>Sin Linea</option>
+              <option value='herrero'>Herrero</option>
+              <option value='herrero pesado'>Herrero Pesado</option>
+              <option value='modena'>Modena</option>
+              <option value='otro'>Otro</option>
+            </Select>
+          </FormControl>
       <WrapperButton>
         <Button
           colorScheme='red'

@@ -8,6 +8,17 @@ const getAllProveedores = async () => {
     return result
 }
 
+// Get Proveedor By Categoria
+const getByCategoria = async (categoria) => {
+    let response = await fetch(`http://localhost:5000/api/proveedor/?categoria=${categoria}`, {
+        method: 'GET',
+    })
+
+    let result = await response.json()
+    return result
+}
+
+
 // Guardar Proveedor
 const saveProveedor = async (data) => {
     let response = await fetch("http://localhost:5000/api/proveedor/", {
@@ -47,4 +58,4 @@ const updateProveedor = async (entidad) => {
     return result
 }
 
-export { saveProveedor, getAllProveedores, deleteProveedor, updateProveedor }
+export { saveProveedor, getAllProveedores, deleteProveedor, updateProveedor,getByCategoria }

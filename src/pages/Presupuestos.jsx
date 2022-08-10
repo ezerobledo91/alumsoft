@@ -96,8 +96,10 @@ const Presupuestos = () => {
   let precio = 0 // precio total de los items.
   let numero = presupuestos.length + 1 // numero de presupuestos.
   data_preview.forEach((item) => {
-    precio = precio + item.precio_total * item.cantidad // Precio total.
-  })
+    precio = precio + ( item.precio_total * item.cantidad ) + item.precio_vidrio // Precio total.
+    })
+
+  
 
   // GUARDAR PRESUPUESTO
   const [isLoading, setLoading] = useState(false)
@@ -156,7 +158,7 @@ const Presupuestos = () => {
           <NewPresupuesto setCliente={setCliente} setObservacion={setObservacion} resetForm={reset} />
         </ContainerForm>
         <ContainerPre>
-          <Title>Previsualizacion</Title>
+          <Title>Previsualización</Title>
           <WrapperTop>
             <div>Cliente: {cliente === '' ? 'Consumidor Final' : cliente} </div>
             <Stat style={{ flex: 'none', textAlign:'right' }}>
@@ -172,15 +174,17 @@ const Presupuestos = () => {
                   <Tr>
                     <Th textAlign='center'>Abertura</Th>
                     <Th textAlign='center'>Medidas</Th>
-                    <Th textAlign='center'>Cantidad</Th>
+                    <Th textAlign='center'>Vidrio</Th>
+                    <Th textAlign='center'>M2</Th>
                     <Th textAlign='center'>P.Unitario</Th>
+                    <Th textAlign='center'>Cantidad</Th>
                     <Th textAlign='center'>P.Total</Th>
                     <Th></Th>
                   </Tr>
                 </Thead>
                 <Tbody>
                   {data_preview.map((data, index) => (
-                    <Items data={data} index={index}></Items>
+                    <Items data={data} index={index} key={index}></Items>
                   ))}
                 </Tbody>
               </Table>

@@ -15,7 +15,7 @@ const NoData = styled.div`
   padding: 10px 20px;
 `
 
-let data_titles = ['nombre', 'perfil', 'descripcion', 'categoria', 'modelo', 'variable', 'constante_m', 'cortes']
+let data_titles = ['nombre', 'perfil', 'descripcion', 'categoria', 'linea', 'variable', 'constante_m', 'cortes']
 let data_titles_aux= ['codigo', 'nombre', 'descripcion', 'categoria', 'linea','proveedor','alto','ancho','peso','largo_std','costo_u','precio_u']
 
 const Piezas = () => {

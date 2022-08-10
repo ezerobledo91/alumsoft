@@ -63,9 +63,11 @@ function Navbar() {
                 <MenuItem>Perfiles</MenuItem>
               </Link>
               <Link to='/vidrios'>
-              <MenuItem>Vidrios</MenuItem>
+                <MenuItem>Vidrios</MenuItem>
               </Link>
-              <MenuItem>Accesorios</MenuItem>
+              <Link to='/accesorios'>
+                <MenuItem>Accesorios</MenuItem>
+              </Link>
             </MenuGroup>
             <MenuDivider />
             <MenuGroup title='Cuenta' textAlign={'left'}>

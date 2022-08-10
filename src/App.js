@@ -11,6 +11,7 @@ import Piezas from './pages/Piezas';
 import Aberturas from './pages/Aberturas';
 import PresupuestosList from './pages/PresupuestosList';
 import Vidrios from './pages/Vidrios';
+import Accesorios from './pages/Accesorio';
 
 function App() {
   return (
@@ -20,15 +21,13 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/proveedores" element={<Proveedores />} />
           <Route path="/clientes" element={<Clientes />} />
-          <Route path="/perfiles" element={<Perfiles />}/>
-           <Route path="/piezas" element={<Piezas/>} />
-          <Route path="/aberturas" element={<Aberturas/>} />
+          <Route path="/perfiles" element={<Perfiles />} />
+          <Route path="/piezas" element={<Piezas />} />
+          <Route path="/aberturas" element={<Aberturas />} />
           <Route path="/presupuestos/nuevo" element={<Presupuestos />} />
-          <Route path="/presupuestos/" element={<PresupuestosList/>} />
-          <Route path="/vidrios/" element={<Vidrios/>} />
-
-
-
+          <Route path="/presupuestos/" element={<PresupuestosList />} />
+          <Route path="/vidrios/" element={<Vidrios />} />
+          <Route path="/accesorios/" element={<Accesorios />} />
         </Routes>
       </BrowserRouter>
     </ChakraProvider>

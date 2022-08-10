@@ -1,9 +1,9 @@
-import {  Button, FormControl, FormHelperText, FormLabel, Input,  Select,  useToast } from '@chakra-ui/react'
+import { Button, FormControl, FormHelperText, FormLabel, Input, Select, useToast } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
-import { getDataPerfil,  removeDataPieza,  updateDataPieza } from '../../../reducer/DataTablesSlice'
+import { getDataPerfil, removeDataPieza, updateDataPieza } from '../../../reducer/DataTablesSlice'
 import { setEditModal, updateStateModal } from '../../../reducer/UiSlice'
 
 const Container = styled.form`
@@ -51,24 +51,28 @@ const EditPieza = () => {
     })
   }
 
-
-    // GET DATA FROM PERFILES
-    const newDataPerfil = useSelector((state) => state.DataTables.perfiles)
-    useEffect(() => {
-      dispatch(getDataPerfil())
-    }, [dispatch])
-
+  // GET DATA FROM PERFILES
+  const newDataPerfil = useSelector((state) => state.DataTables.perfiles)
+  useEffect(() => {
+    dispatch(getDataPerfil())
+  }, [dispatch])
 
   return (
     <Container onSubmit={handleSubmit(onSubmit)}>
-     <FormControl isRequired>
+      <FormControl isRequired>
         <FormLabel htmlFor='nombre'>Nombre</FormLabel>
-        <Input id='nombre' type='text' size='sm'  defaultValue={edit_object['nombre']}  {...register('nombre')} />
+        <Input id='nombre' type='text' size='sm' defaultValue={edit_object['nombre']} {...register('nombre')} />
         <FormHelperText>Ingrese el nombre de la Pieza</FormHelperText>
       </FormControl>
       <FormControl isRequired>
         <FormLabel htmlFor='perfil'>Perfil</FormLabel>
-        <Select placeholder='Select option' id='perfil' size='sm'  defaultValue={edit_object['perfil']._id}  {...register('perfil')}>
+        <Select
+          placeholder='Select option'
+          id='perfil'
+          size='sm'
+          defaultValue={edit_object['perfil']._id}
+          {...register('perfil')}
+        >
           {newDataPerfil.map((item) => {
             return (
               <option key={item._id} value={item._id}>
@@ -81,22 +85,56 @@ const EditPieza = () => {
       </FormControl>
       <FormControl>
         <FormLabel htmlFor='descripcion'>Descripcion</FormLabel>
-        <Input id='descripcion' type='text' size='sm'  defaultValue={edit_object['descripcion']}  {...register('descripcion')} />
+        <Input
+          id='descripcion'
+          type='text'
+          size='sm'
+          defaultValue={edit_object['descripcion']}
+          {...register('descripcion')}
+        />
         <FormHelperText>Ingrese una descripcion de la Pieza</FormHelperText>
       </FormControl>
       <FormControl isRequired>
         <FormLabel htmlFor='categoria'>Categoria</FormLabel>
-        <Input id='categoria' type='text' size='sm'  defaultValue={edit_object['categoria']}  {...register('categoria')} />
-        <FormHelperText>Ingrese Categoria</FormHelperText>
+        <Select
+          placeholder='Seleccione una categoria'
+          defaultValue={edit_object['categoria']}
+          id='categoria'
+          size='sm'
+          {...register('categoria')}
+        >
+          <option value=''>Sin Categoria</option>
+          <option value='puertas'>Puertas</option>
+          <option value='ventanas'>Ventanas</option>
+          <option value='marcos'>Marcos</option>
+          <option value='otro'>Otro</option>
+        </Select>
       </FormControl>
       <FormControl isRequired>
-        <FormLabel htmlFor='modelo'>Modelo</FormLabel>
-        <Input id='modelo' type='text' size='sm'  defaultValue={edit_object['modelo']}  {...register('modelo')} />
-        <FormHelperText>Ingrese un Modelo para la Pieza</FormHelperText>
+        <FormLabel htmlFor='linea'>Linea</FormLabel>
+        <Select
+          placeholder='Seleccione una Linea'
+          defaultValue={edit_object['linea']}
+          id='linea'
+          size='sm'
+          {...register('linea')}
+        >
+          <option value=''>Sin Linea</option>
+          <option value='herrero'>Herrero</option>
+          <option value='herrero pesado'>Herrero Pesado</option>
+          <option value='modena'>Modena</option>
+          <option value='otro'>Otro</option>
+        </Select>
       </FormControl>
       <FormControl isRequired>
         <FormLabel htmlFor='variable'>Variable</FormLabel>
-        <Select placeholder='Select option' id='variable' size='sm'  defaultValue={edit_object['variable']}  {...register('variable')}>
+        <Select
+          placeholder='Select option'
+          id='variable'
+          size='sm'
+          defaultValue={edit_object['variable']}
+          {...register('variable')}
+        >
           <option value='ancho'>Ancho</option>
           <option value='alto'>Alto</option>
           <option value='marco'>2 Alto + Ancho (Marcos)</option>
@@ -107,12 +145,19 @@ const EditPieza = () => {
       </FormControl>
       <FormControl isRequired>
         <FormLabel htmlFor='constante'>Constante</FormLabel>
-        <Input id='constante' type='number' size='sm' step='0.01'  defaultValue={edit_object['constante_m']}  {...register('constante_m')} />
+        <Input
+          id='constante'
+          type='number'
+          size='sm'
+          step='0.01'
+          defaultValue={edit_object['constante_m']}
+          {...register('constante_m')}
+        />
         <FormHelperText>Ingrese un constante para la Pieza (unidad x medida 1 x 1)</FormHelperText>
       </FormControl>
       <FormControl isRequired>
         <FormLabel htmlFor='cortes'>Cortes Necesarios</FormLabel>
-        <Input id='cortes' type='number' size='sm'  defaultValue={edit_object['cortes']}  {...register('cortes')} />
+        <Input id='cortes' type='number' size='sm' defaultValue={edit_object['cortes']} {...register('cortes')} />
         <FormHelperText>Ingrese la cantidad de cortes necesarios.</FormHelperText>
       </FormControl>
       <WrapperButton>

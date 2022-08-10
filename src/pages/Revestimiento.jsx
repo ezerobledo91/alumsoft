@@ -8,7 +8,7 @@ import Header from '../components/Header'
 import ModalComponent from '../components/Modal'
 import Navbar from '../components/Navbar'
 import Tabla from '../components/Tables/Tabla'
-import { getDataVidrio, getProveedorByCategoria } from '../reducer/DataTablesSlice'
+import { getDataVidrio } from '../reducer/DataTablesSlice'
 
 const NoData = styled.div`
   padding: 10px 20px;
@@ -25,7 +25,6 @@ const Vidrios = () => {
   const dispatch = useDispatch() // Set state redux toolkit
 
   useEffect(() => {
-    dispatch(getProveedorByCategoria('vidrios'))
     dispatch(getDataVidrio())
     //Hago la consul  ta a la DB y actualizo el estado de los vidrios
   }, [dispatch, modalState.edit_object])
@@ -36,7 +35,7 @@ const Vidrios = () => {
 
       {/* Nuevo Proveedor FORM  */}
 
-      <ModalComponent title='Vidrios'>{modalState.edit ? <EditVidrio proveedores={data.proveedores}/> : <NewVidrio proveedores={data.proveedores}/>}</ModalComponent>
+      <ModalComponent title='Vidrios'>{modalState.edit ? <EditVidrio/> : <NewVidrio/>}</ModalComponent>
 
       {data.vidrios.length > 0 ? (
         <Tabla header={data_titles} data={data.vidrios} title={'Vidrios'} />

@@ -8,7 +8,7 @@ import Header from '../components/Header'
 import ModalComponent from '../components/Modal'
 import Navbar from '../components/Navbar'
 import Tabla from '../components/Tables/Tabla'
-import { getDataPerfil } from '../reducer/DataTablesSlice'
+import { getDataPerfil, getProveedorByCategoria } from '../reducer/DataTablesSlice'
 
 const NoData = styled.div`
   padding: 10px 20px;
@@ -26,6 +26,8 @@ const Perfiles = () => {
 
   useEffect(() => {
     dispatch(getDataPerfil())
+    dispatch(getProveedorByCategoria('perfiles'))
+
     //Hago la consul  ta a la DB y actualizo el estado de los proveedores
   }, [dispatch, modalState.edit_object])
   return (
@@ -35,7 +37,7 @@ const Perfiles = () => {
 
       {/* Nuevo Proveedor FORM  */}
 
-      <ModalComponent title='Perfiles'>{modalState.edit ? <EditPerfil/> : <NewPerfil/>}</ModalComponent>
+      <ModalComponent title='Perfiles'>{modalState.edit ? <EditPerfil proveedores={data.proveedores}/> : <NewPerfil  proveedores={data.proveedores}/>}</ModalComponent>
 
       {data.perfiles.length > 0 ? (
         <Tabla header={data_titles} data={data.perfiles} title={'perfiles'} />

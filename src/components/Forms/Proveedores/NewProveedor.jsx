@@ -1,4 +1,4 @@
-import { Button, FormControl, FormHelperText, FormLabel, Input, useToast } from '@chakra-ui/react'
+import { Button, FormControl, FormHelperText, FormLabel, Input, Select, useToast } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
@@ -46,8 +46,19 @@ const NewProveedor = () => {
       </FormControl>
       <FormControl isRequired>
         <FormLabel htmlFor='categoria'>Categoria</FormLabel>
-        <Input id='categoria' type='text' size='sm' {...register('categoria')} />
-        <FormHelperText>Seleccione una categoria</FormHelperText>
+        <Select
+          placeholder='Seleccione una categoria'
+          defaultValue=''
+          id='categoria'
+          size='sm'
+          {...register('categoria')}
+        >
+          <option value=''>Sin Categoria</option>
+          <option value='perfiles'>Perfiles</option>
+          <option value='vidrios'>Vidrios</option>
+          <option value='accesorios'>Accesorios</option>
+          <option value='otro'>Otro</option>
+        </Select>
       </FormControl>
       <FormControl>
         <FormLabel htmlFor='telefono'>Telefono</FormLabel>
