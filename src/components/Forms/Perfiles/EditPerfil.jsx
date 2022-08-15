@@ -24,7 +24,6 @@ const EditPerfil = ({proveedores}) => {
   const dispatch = useDispatch()
   const { edit_object } = useSelector((state) => state.UiSlice.modalState)
 
-  //Editar Grupo
   const onSubmit = async (data) => {
     data._id = edit_object._id
     setLoading(true)

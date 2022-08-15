@@ -97,7 +97,7 @@ const NewPieza = () => {
           </FormControl>
       <FormControl isRequired>
         <FormLabel htmlFor='variable'>Variable</FormLabel>
-        <Select placeholder='Select option' id='variable' size='sm' {...register('variable')}>
+        <Select placeholder='Seleccione un Varible' id='variable' size='sm' {...register('variable')}>
           <option value='ancho'>Ancho</option>
           <option value='alto'>Alto</option>
           <option value='marco'>2 Alto + Ancho (Marcos)</option>

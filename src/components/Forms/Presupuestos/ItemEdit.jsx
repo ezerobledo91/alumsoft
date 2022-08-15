@@ -28,11 +28,13 @@ const dispatch = useDispatch()
 
   return (
     <Tr key={index} >
-    <Td  textAlign="center" >{data.abertura}</Td>
-    <Td  textAlign="center"> ancho: {data.medidas.ancho}m alto: {data.medidas.alto} m </Td>
-    <Td  textAlign="center">{data.cantidad}</Td>
-    <Td  textAlign="center">${data.precio_total.toFixed(2)}</Td>
-    <Td  textAlign="center">${(data.precio_total * data.cantidad).toFixed(2)}</Td>
+     <Td  textAlign="center" >{data.abertura}</Td>
+        <Td  textAlign="center"> ancho: {data.medidas.ancho}m alto: {data.medidas.alto} m </Td>
+        <Td  textAlign="center">{data.vidrio}</Td>
+        <Td  textAlign="center">{data.vidrio_mt} m2</Td>
+        <Td  textAlign="center">${(data.precio_total + data.precio_vidrio + data.precio_accesorios).toFixed(2)}</Td>
+        <Td  textAlign="center">{data.cantidad}</Td>
+        <Td  textAlign="center">${((data.precio_total + data.precio_vidrio + data.precio_accesorios) * data.cantidad).toFixed(2)}</Td>
     {remove && <Td ><RemoveLine onClick={() => dispatch(removeDataEditPresupuesto(data))}><DeleteIcon /></RemoveLine></Td>}
     </Tr>   
   )

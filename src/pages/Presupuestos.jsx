@@ -85,7 +85,6 @@ let currentDate = `${day}-${month}-${year}`
 const Presupuestos = () => {
   const data_preview = useSelector((state) => state.UiSlice.previewPres.data) // Los items de Presupuestos.
   const presupuestos = useSelector((state) => state.DataTables.presupuestos)
-
   // Cliente
   const [cliente, setCliente] = useState('Consumidor Final')
   // Observaciones
@@ -94,9 +93,9 @@ const Presupuestos = () => {
   const [reset, setReset] = useState(false)
 
   let precio = 0 // precio total de los items.
-  let numero = presupuestos.length + 1 // numero de presupuestos.
+  let numero = presupuestos.at(-1)?.numero + 1 // numero de presupuestos.
   data_preview.forEach((item) => {
-    precio = precio + ( item.precio_total * item.cantidad ) + item.precio_vidrio // Precio total.
+    precio = precio + ( item.precio_total * item.cantidad ) + item.precio_vidrio + item.precio_accesorios // Precio total.
     })
 
   

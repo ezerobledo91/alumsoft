@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
-import { getDataPieza, removeDataGrupo, updateDataGrupo } from '../../../reducer/DataTablesSlice'
+import { getDataPieza, removeDataAbertura, updateDataAbertura } from '../../../reducer/DataTablesSlice'
 import { removeAllSelected, setDataInfo, setDataSelected, setEditModal, updateStateModal } from '../../../reducer/UiSlice'
 import TagSelected from '../../TagSelected'
 import AccesoriosAdd from './AccesoriosAdd'
@@ -30,13 +30,13 @@ const EditAberturas = ({accesorios}) => {
   const { edit_object } = useSelector((state) => state.UiSlice.modalState)
   const data_selected = useSelector(state=> state.UiSlice.modalAux.data_selected)
 
-  //Editar Grupo
+  //Editar Abertura
   const onSubmit = async (data) => {
     data._id = edit_object._id
     data.piezas = data_selected
     data.accesorios = arrayAccesorios
     setLoading(true)
-    dispatch(updateDataGrupo(data)) // Update call
+    dispatch(updateDataAbertura(data)) // Update call
     setLoading(false)
     dispatch(updateStateModal(false)) // Close Modal
     dispatch(setEditModal({ edit: false, edit_object: {} }))
@@ -50,7 +50,7 @@ const EditAberturas = ({accesorios}) => {
 
   const deleteAction = (e) => {
     e.preventDefault()
-    dispatch(removeDataGrupo(edit_object._id))
+    dispatch(removeDataAbertura(edit_object._id))
     dispatch(updateStateModal(false)) // Close Modal
     dispatch(setEditModal({ edit: false, edit_object: {} }))
     dispatch(removeAllSelected())// Borrar piezas Seleccionadas

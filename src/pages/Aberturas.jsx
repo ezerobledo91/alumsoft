@@ -9,7 +9,7 @@ import ModalComponent from '../components/Modal'
 import ModalComponentAuxiliar from '../components/ModalAuxiliar'
 import Navbar from '../components/Navbar'
 import Tabla from '../components/Tables/Tabla'
-import { getDataAccesorio, getDataGrupo } from '../reducer/DataTablesSlice'
+import { getDataAccesorio, getDataAbertura } from '../reducer/DataTablesSlice'
 
 const NoData = styled.div`
   padding: 10px 20px;
@@ -24,9 +24,8 @@ const Aberturas = () => {
   const dataModalAux = useSelector((state) => state.UiSlice.modalAux.data_info) //Estado de la app en todo momento
 
   const dispatch = useDispatch() // Set state redux toolkit
-
   useEffect(() => {
-    dispatch(getDataGrupo())
+    dispatch(getDataAbertura())
     dispatch(getDataAccesorio())
   }, [dispatch,dataUi])
 
@@ -39,8 +38,8 @@ const Aberturas = () => {
 
       <ModalComponent title='aberturas'>{dataUi.edit ? <EditAberturas accesorios={data.accesorios}/> : <NewAbertura accesorios={data.accesorios}/>}</ModalComponent>
 
-      {data.grupos.length > 0 ? (
-        <Tabla header={data_titles} data={data.grupos} title={'aberturas'}/>
+      {data.aberturas.length > 0 ? (
+        <Tabla header={data_titles} data={data.aberturas} title={'aberturas'}/>
       ) : (
         <NoData>
           <NotAllowedIcon /> No existen Datos

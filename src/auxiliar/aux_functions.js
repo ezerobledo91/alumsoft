@@ -1,8 +1,9 @@
-export const createPresupuestoItem = (values, data_aberturas, data_perfiles, data_vidrio, ID) => {
+export const createPresupuestoItem = (values, data_aberturas, data_perfiles, data_vidrio, data_accesorios, ID) => {
     const abertura = data_aberturas.find((item) => item._id === values.abertura) // Busco en las aberturas el objeto que corresponde a la seleccion
     const vidrio = data_vidrio.find((item) => item._id === values.vidrio)
     const piezas = abertura.piezas  // Guardo las piezas
     const calculated = []
+    const accesorios = abertura?.accesorios
 
     // PESO TOTAL EN ALUMINIO (NO REVESTIMIENTO)
     let peso_total = 0
@@ -19,7 +20,15 @@ export const createPresupuestoItem = (values, data_aberturas, data_perfiles, dat
         })
     })
 
-    const precio_total = Math.round(peso_total * values.precio * (1 + (values.porcentaje / 100)) *100)/100
+    let precio_accesorios = 0
+    if (accesorios) {
+        accesorios.forEach(acc => {
+            let accesorio = data_accesorios.find((item) => item.nombre === acc.nombre)
+            precio_accesorios = precio_accesorios + (accesorio.precio * acc.cantidad)
+        })
+    }
+
+    const precio_total = Math.round(peso_total * values.precio * (1 + (values.porcentaje / 100)) * 100) / 100
 
     // Creo un item con todos los datos, el data de las piezas y sus pesos y longitudes el nombre de la abertura, peso total, precio total
     const new_item = {
@@ -29,6 +38,7 @@ export const createPresupuestoItem = (values, data_aberturas, data_perfiles, dat
         peso_total: peso_total,
         precio_total: precio_total,
         precio_aluminio: +values.precio,
+        precio_accesorios: precio_accesorios,
         porcentaje_aplicado: +values.porcentaje,
         medidas: {
             alto: +values.alto,
@@ -60,4 +70,31 @@ const longitud_calculada = (values, pieza) => {
         default:
             break;
     }
+}
+
+
+
+
+
+// RETURN OPTION GROUP TO SELECT IN FORM
+
+export const generateOptionGroups = (originalArray, groupTo, toValue, toShow) => {
+    const newArray = [...new Set(originalArray.map((a) => a[groupTo]))].map((groupName) => {
+        return {
+            [groupTo]: groupName,
+            items: originalArray.filter((i) => i[groupTo] === groupName),
+        }
+    })
+    return newArray.map((group, i) => {
+        return (
+            <optgroup key={i} label={group[groupTo]} style={{ textTransform: 'capitalize' }}>
+                {group.items.map((item, index) => (
+                    <option key={index} value={item[toValue]}>
+                        {item[toShow]}
+                    </option>
+                ))}
+            </optgroup>
+        )
+    })
+
 }

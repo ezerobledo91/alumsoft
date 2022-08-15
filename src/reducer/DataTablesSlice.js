@@ -1,12 +1,12 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { deleteAccesorio, getAllAccesorios, saveAccesorio, updateAccesorio } from '../services/accesorios'
 import { deleteCliente, getAllClientes, saveCliente, updateCliente } from '../services/clientes'
-import { deleteGrupo, getAllGrupos, saveGrupo, updateGrupo } from '../services/grupos'
+import { deleteAbertura, getAllAberturas, saveAbertura, updateAbertura } from '../services/aberturas'
 import { deletePerfil, getAllPerfiles, savePerfil, updatePerfil } from '../services/perfiles'
 import { deletePieza, getAllPiezas, savePieza, updatePieza } from '../services/piezas'
 import { deletePresupuesto, getAllPresupuestos, savePresupuesto, updatePresupuesto } from '../services/presupuestos'
 import { deleteProveedor, getAllProveedores, getByCategoria, saveProveedor, updateProveedor } from '../services/proveedores'
-import  { saveVidrio, getAllVidrios, deleteVidrio, updateVidrio} from '../services/vidrios'
+import { saveVidrio, getAllVidrios, deleteVidrio, updateVidrio } from '../services/vidrios'
 
 // PROVEEDORES
 export const getDataProveedor = createAsyncThunk(
@@ -164,38 +164,38 @@ export const updateDataPieza = createAsyncThunk(
     }
 
 )
-// Grupos / Aberturas
-export const getDataGrupo = createAsyncThunk(
-    'DataTables/getDataGrupo',
+// Aberturas / Aberturas
+export const getDataAbertura = createAsyncThunk(
+    'DataTables/getDataAbertura',
     async () => {
-        const response = await getAllGrupos()
+        const response = await getAllAberturas()
         return response
     }
 
 )
 
-export const saveDataGrupo = createAsyncThunk(
-    'DataTables/saveDataGrupo',
+export const saveDataAbertura = createAsyncThunk(
+    'DataTables/saveDataAbertura',
     async (payload) => {
-        const response = await saveGrupo(payload)
+        const response = await saveAbertura(payload)
         return response
     }
 
 )
 
-export const removeDataGrupo = createAsyncThunk(
-    'DataTables/removeDataGrupo',
+export const removeDataAbertura = createAsyncThunk(
+    'DataTables/removeDataAbertura',
     async (payload) => {
-        const response = await deleteGrupo(payload)
+        const response = await deleteAbertura(payload)
         return response.id
     }
 
 )
 
-export const updateDataGrupo = createAsyncThunk(
-    'DataTables/updateDataGrupo',
+export const updateDataAbertura = createAsyncThunk(
+    'DataTables/updateDataAbertura',
     async (payload) => {
-        const response = await updateGrupo(payload)
+        const response = await updateAbertura(payload)
         return response
     }
 
@@ -321,13 +321,22 @@ export const DataTableSlice = createSlice({
         clientes: [],
         perfiles: [],
         piezas: [],
-        grupos: [],
-        presupuestos:[],
-        vidrios:[],
+        aberturas: [],
+        presupuestos: [],
+        vidrios: [],
         accesorios: []
 
     },
     reducers: {
+        filterPresupuesto: (state, action) => {
+            const busqueda  = action.payload
+            console.log(busqueda)
+            // state.presupuestos.filter((presupuesto) => presupuesto.numero === busqueda)
+            // if(resultado){
+                //     return resultado
+                // }
+                // return []
+        },
 
     },
     extraReducers: {
@@ -407,21 +416,21 @@ export const DataTableSlice = createSlice({
         [updateDataPieza.fulfilled]: (state, action) => {
             return state
         },
-        [getDataGrupo.fulfilled]: (state, action) => {
+        [getDataAbertura.fulfilled]: (state, action) => {
             return {
                 ...state,
-                grupos: action.payload
+                aberturas: action.payload
             }
         },
-        [saveDataGrupo.fulfilled]: (state, action) => {
-            state.grupos.push(action.payload)
+        [saveDataAbertura.fulfilled]: (state, action) => {
+            state.aberturas.push(action.payload)
         },
-        [removeDataGrupo.fulfilled]: (state, action) => {
+        [removeDataAbertura.fulfilled]: (state, action) => {
             const id = action.payload;
-            const index = state.grupos.findIndex((item) => item._id === id);
-            state.grupos.splice(index, 1);
+            const index = state.aberturas.findIndex((item) => item._id === id);
+            state.aberturas.splice(index, 1);
         },
-        [updateDataGrupo.fulfilled]: (state, action) => {
+        [updateDataAbertura.fulfilled]: (state, action) => {
             return state
         },
         [saveDataPresupuesto.fulfilled]: (state, action) => {
@@ -478,5 +487,7 @@ export const DataTableSlice = createSlice({
     }
 
 })
+
+export const {filterPresupuesto  } = DataTableSlice.actions
 
 export default DataTableSlice.reducer

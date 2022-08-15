@@ -32,20 +32,19 @@ const TablaPresupuestos = ({ data }) => {
   const [data_view, setData] = useState()
   const dispatch = useDispatch()
   const toast = useToast()
-  const deletePresupuesto  = (id)=>{
+  const deletePresupuesto = (id) => {
     dispatch(removeDataPresupuesto(id))
-      toast({
+    toast({
       title: `Presupuesto Borrado Correctamente`,
       status: 'success',
       isClosable: true,
     })
   }
-  
- const editPresupuesto = pres =>{
-      dispatch(setDataEditPresupuesto(pres))
-      setOpenEdit(true)
- }
 
+  const editPresupuesto = (pres) => {
+    dispatch(setDataEditPresupuesto(pres))
+    setOpenEdit(true)
+  }
 
   return (
     <Container>
@@ -74,7 +73,7 @@ const TablaPresupuestos = ({ data }) => {
         </Thead>
         <Tbody>
           {data.map((item, index) => (
-            <Tr key={index}>
+            item.visible && <Tr key={index}>
               <Td>{item.numero}</Td>
               <Td>{item.cliente}</Td>
               <Td>{item.observaciones}</Td>

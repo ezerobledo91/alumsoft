@@ -1,6 +1,6 @@
-// Traer Grupos
-const getAllGrupos = async () => {
-    let response = await fetch("http://localhost:5000/api/grupo/", {
+// Traer Aberturas
+const getAllAberturas = async () => {
+    let response = await fetch("http://localhost:5000/api/abertura/", {
         method: 'GET',
     })
 
@@ -8,9 +8,9 @@ const getAllGrupos = async () => {
     return result
 }
 
-// Guardar Grupo
-const saveGrupo = async (data) => {
-    let response = await fetch("http://localhost:5000/api/grupo/", {
+// Guardar Abertura
+const saveAbertura = async (data) => {
+    let response = await fetch("http://localhost:5000/api/abertura/", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json;charset=utf-8',
@@ -22,9 +22,9 @@ const saveGrupo = async (data) => {
     return result
 }
 
-// Eliminar Grupo
-const deleteGrupo = async (id) => {
-    let response = await fetch(`http://localhost:5000/api/grupo/${id}`, {
+// Eliminar Abertura
+const deleteAbertura = async (id) => {
+    let response = await fetch(`http://localhost:5000/api/abertura/${id}`, {
         method: 'DELETE',
     })
 
@@ -32,11 +32,11 @@ const deleteGrupo = async (id) => {
     return result
 }
 
-// Actualizar Grupo
-const updateGrupo = async (entidad) => {
+// Actualizar Abertura
+const updateAbertura = async (entidad) => {
     const { _id, ...others } = entidad
     // console.log(entidad)
-    let response = await fetch(`http://localhost:5000/api/grupo/${_id}`, {
+    let response = await fetch(`http://localhost:5000/api/abertura/${_id}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json;charset=utf-8',
@@ -48,4 +48,4 @@ const updateGrupo = async (entidad) => {
     return result
 }
 
-export { saveGrupo, getAllGrupos, deleteGrupo, updateGrupo }
+export { saveAbertura, getAllAberturas, deleteAbertura, updateAbertura }

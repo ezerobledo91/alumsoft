@@ -87,9 +87,10 @@ const EditPresupuestos = () => {
 
   let precio = 0 // precio total de los items.
   data_preview.aberturas.forEach((item) => {
-    precio = precio + item.precio_total * item.cantidad // Precio total.
+    precio = precio + ( item.precio_total * item.cantidad ) + item.precio_vidrio + item.precio_accesorios // Precio total.
+    // Precio total.
   })
-
+  console.log(data_preview)
   const onSubmit = () =>{
     const new_data  = {...data_preview}
     new_data.observaciones = observacion
@@ -147,10 +148,12 @@ const EditPresupuestos = () => {
               <Table variant='simple' size='sm'>
                 <Thead position='sticky' top={0} bgColor='white'>
                   <Tr>
-                    <Th textAlign='center'>Abertura</Th>
+                  <Th textAlign='center'>Abertura</Th>
                     <Th textAlign='center'>Medidas</Th>
-                    <Th textAlign='center'>Cantidad</Th>
+                    <Th textAlign='center'>Vidrio</Th>
+                    <Th textAlign='center'>M2</Th>
                     <Th textAlign='center'>P.Unitario</Th>
+                    <Th textAlign='center'>Cantidad</Th>
                     <Th textAlign='center'>P.Total</Th>
                     <Th></Th>
                   </Tr>

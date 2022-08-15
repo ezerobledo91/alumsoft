@@ -4,50 +4,55 @@ import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
-import { getDataPieza, saveDataAbertura } from '../../../reducer/DataTablesSlice'
-import { removeAllSelected, setDataInfo, updateStateModal } from '../../../reducer/UiSlice'
+import { getDataAccesorio, getDataPerfil, saveDataAbertura } from '../../../reducer/DataTablesSlice'
 import TagSelected from '../../TagSelected'
 import AccesoriosAdd from './AccesoriosAdd'
+import PerfilesAdd from './PerfilesAdd'
+
+
 
 const Container = styled.form`
   display: flex;
   flex-direction: column;
   gap: 10px;
+  padding: 50px;
 `
 
-const NewAbertura = ({ accesorios }) => {
-  //React Hook form
-  const { register, handleSubmit } = useForm()
-  const [isLoading, setLoading] = useState(false)
-  const [arrayAccesorios, setArrayAccesorios] = useState([])
-  const toast = useToast()
-  const dispatch = useDispatch()
+const NewAberturaRefactor = () => {
+    const { register, handleSubmit } = useForm()
+    const [isLoading, setLoading] = useState(false)
+    const [arrayAccesorios, setArrayAccesorios] = useState([])
+    const [arrayPerfiles, setArrayPerfiles] = useState([])
+    const toast = useToast()
 
-  const data_selected = useSelector((state) => state.UiSlice.modalAux.data_selected)
+    // GET DATA FROM REDUX 
+     const dispatch = useDispatch()
+     const data = useSelector((state) => state.DataTables)
+     const accesorios = data.accesorios
+     const perfiles = data.perfiles
 
-  //Guardar Perfil Nuevo
-  const onSubmit = async (data) => {
-    setLoading(true)
-    data.piezas = data_selected
-    data.accesorios = arrayAccesorios
-    await dispatch(saveDataAbertura(data))
-    setLoading(false)
-    dispatch(updateStateModal(false)) // Close Modal
-    dispatch(removeAllSelected()) // Borrar piezas Seleccionadas
-    toast({
-      title: `Abertura Guardada Correctamente`,
-      status: 'success',
-      isClosable: true,
-    })
-  }
+    useEffect(() => {
+    dispatch(getDataPerfil())
+    dispatch(getDataAccesorio())
 
-  // GET DATA FROM PIEZAS
-  const data_piezas = useSelector((state) => state.DataTables.piezas)
-  useEffect(() => {
-    dispatch(getDataPieza())
-  }, [dispatch])
+    }, [dispatch])
+
+    const onSubmit = async (data) => {
+         data.piezas = arrayPerfiles
+        data.accesorios = arrayAccesorios
+        setLoading(true)
+        await dispatch(saveDataAbertura(data))
+        setLoading(false)
+        toast({
+          title: `Abertura Guardada Correctamente`,
+          status: 'success',
+          isClosable: true,
+        })
+      }
+ 
 
   return (
+
     <Container onSubmit={handleSubmit(onSubmit)}>
       <FormControl isRequired>
         <FormLabel htmlFor='nombre'>Nombre</FormLabel>
@@ -55,23 +60,17 @@ const NewAbertura = ({ accesorios }) => {
         <FormHelperText>Ingrese el nombre de la Abertura</FormHelperText>
       </FormControl>
       <FormControl isRequired>
-        <Button
-          leftIcon={<SearchIcon />}
-          colorScheme='teal'
-          variant='solid'
-          onClick={() => {
-            dispatch(setDataInfo({ open: true, data_info: data_piezas, select: true }))
-          }}
-        >
-          Buscar Piezas
-        </Button>
-        <FormHelperText>Seleccione Piezas para esta Abertura</FormHelperText>
       </FormControl>
       <FormControl>
         <TagSelected />
       </FormControl>
       {/* ACCESORIOS */}
-      <AccesoriosAdd accesorios={accesorios}   arrayAccesorios={arrayAccesorios} setArrayAccesorios={setArrayAccesorios}/>
+      <AccesoriosAdd
+        accesorios={accesorios}
+        arrayAccesorios={arrayAccesorios}
+        setArrayAccesorios={setArrayAccesorios}
+      />
+      <PerfilesAdd perfiles={perfiles} arrayPerfiles={arrayPerfiles} setArrayPerfiles={setArrayPerfiles}/>
       <FormControl isRequired>
         <FormLabel htmlFor='categoria'>Categoria</FormLabel>
         <Select
@@ -98,11 +97,11 @@ const NewAbertura = ({ accesorios }) => {
           <option value='otro'>Otro</option>
         </Select>
       </FormControl>
-      <Button type='submit' isLoading={isLoading}>
+      <Button type='submit'  isLoading={isLoading}>
         Guardar Cambios
       </Button>
     </Container>
   )
 }
 
-export default NewAbertura
+export default NewAberturaRefactor

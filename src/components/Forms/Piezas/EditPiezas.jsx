@@ -24,7 +24,6 @@ const EditPieza = () => {
   const dispatch = useDispatch()
   const { edit_object } = useSelector((state) => state.UiSlice.modalState)
 
-  //Editar Grupo
   const onSubmit = async (data) => {
     data._id = edit_object._id
     setLoading(true)
@@ -129,7 +128,7 @@ const EditPieza = () => {
       <FormControl isRequired>
         <FormLabel htmlFor='variable'>Variable</FormLabel>
         <Select
-          placeholder='Select option'
+          placeholder='Seleccione una Variable'
           id='variable'
           size='sm'
           defaultValue={edit_object['variable']}
