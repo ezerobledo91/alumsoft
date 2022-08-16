@@ -1,39 +1,38 @@
 import { AddIcon, DeleteIcon } from '@chakra-ui/icons'
 import { FormControl, FormHelperText, FormLabel, Input, Select } from '@chakra-ui/react'
-import React from 'react'
+import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import styled from 'styled-components'
 import { generateOptionGroups } from '../../../auxiliar/aux_functions'
-import {MutedText, AreaAdds, ButtonAdd, ButtonRemove} from '../../Styled/StyledFormsAdds'
-
-const WrapperSelect = styled.div`
-  display: flex;
-  justify-content: space-between;
-  gap: 20px;
-  align-items: center;
-  font-size: 14px;
-`
-const WrapperItem = styled.span`
-  display: flex;
-  justify-content: space-between;
-  gap: 20px;
-  align-items: center;
-  font-size: 14px;
-  border: solid lightgray 1px;
-  padding: 10px;
-`
+import {
+  MutedText,
+  AreaAdds,
+  ButtonAdd,
+  ButtonRemove,
+  TitleGroupInput,
+  RequiredAsterisk,
+  WrapperItem,
+  ErrorMsg,
+} from '../../Styled/StyledFormsAdds'
+import { WrapperFlexRow } from '../../Styled/StyledGenericLayout'
 
 const PerfilesAdd = ({ perfiles, setArrayPerfiles, arrayPerfiles }) => {
-  const { register, getValues } = useForm()
+  const { register, getValues, resetField } = useForm()
+  const [error, setError] = useState('')
 
   const addPerfil = () => {
     const newPerfil = getValues()
-    if (newPerfil.cortes === '' || newPerfil.codigo === '' || newPerfil.descuento === '' || newPerfil.variable === '')
+    if ( newPerfil.cortes === '' || newPerfil.codigo === '' || newPerfil.descuento === '' || newPerfil.variable === '') {
+      setError('Falta completar un campo.')
       return
+    }
     const found = perfiles.find((perfil) => perfil.codigo === +newPerfil.codigo)
     newPerfil.nombre = found.nombre
     newPerfil._id = found._id
     setArrayPerfiles([...arrayPerfiles, newPerfil])
+    resetField('codigo')
+    resetField('cortes')
+    resetField('descuento')
+    resetField('variable')
   }
 
   const deleteFunction = (_id) => {
@@ -42,10 +41,12 @@ const PerfilesAdd = ({ perfiles, setArrayPerfiles, arrayPerfiles }) => {
 
   return (
     <>
-      <WrapperSelect>
+      <TitleGroupInput>Listado de perfiles a utilizar </TitleGroupInput>
+      <WrapperFlexRow>
         <FormControl>
-          <FormLabel htmlFor='nombre'>Perfiles </FormLabel>
-
+          <FormLabel htmlFor='nombre'>
+            Perfiles <RequiredAsterisk>*</RequiredAsterisk>
+          </FormLabel>
           <Select
             placeholder='Seleccione un Perfil'
             defaultValue=''
@@ -58,18 +59,24 @@ const PerfilesAdd = ({ perfiles, setArrayPerfiles, arrayPerfiles }) => {
           </Select>
           <FormHelperText>Perfil que vamos a utilizar</FormHelperText>
         </FormControl>
-        <FormControl isRequired>
-          <FormLabel htmlFor='nombre'>Cortes</FormLabel>
+        <FormControl>
+          <FormLabel htmlFor='cortes'>
+            Cortes <RequiredAsterisk>*</RequiredAsterisk>
+          </FormLabel>
           <Input id='alto' type='number' size='sm' {...register('cortes')} />
           <FormHelperText>Cantidad de Cortes</FormHelperText>
         </FormControl>
-        <FormControl isRequired>
-          <FormLabel htmlFor='nombre'>Descuento</FormLabel>
+        <FormControl>
+          <FormLabel htmlFor='descuento'>
+            Descuento <RequiredAsterisk>*</RequiredAsterisk>
+          </FormLabel>
           <Input id='alto' type='number' size='sm' step='any' {...register('descuento')} />
           <FormHelperText>Descuento en mm aplicado total por corte</FormHelperText>
         </FormControl>
-        <FormControl isRequired>
-          <FormLabel htmlFor='variable'>Variable</FormLabel>
+        <FormControl>
+          <FormLabel htmlFor='variable'>
+            Variable <RequiredAsterisk>*</RequiredAsterisk>
+          </FormLabel>
           <Select placeholder='Seleccione un Varible' id='variable' size='sm' {...register('variable')}>
             <option value='ancho'>Ancho</option>
             <option value='alto'>Alto</option>
@@ -81,8 +88,8 @@ const PerfilesAdd = ({ perfiles, setArrayPerfiles, arrayPerfiles }) => {
         <ButtonAdd onClick={addPerfil}>
           <AddIcon />
         </ButtonAdd>
-      </WrapperSelect>
-      Listado de Perfiles a Utilizar
+      </WrapperFlexRow>
+      <ErrorMsg>{error}</ErrorMsg>
       <AreaAdds>
         {arrayPerfiles.length === 0 ? (
           <MutedText>Seleccione perfiles para esta Abertura</MutedText>

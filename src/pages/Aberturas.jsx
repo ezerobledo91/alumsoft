@@ -1,13 +1,13 @@
 import { NotAllowedIcon } from '@chakra-ui/icons'
+import { Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react'
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
-import EditAberturas from '../components/Forms/Aberturas/EditAbertura'
-import NewAbertura from '../components/Forms/Aberturas/NewAbertura'
+import NewAberturaRefactor from '../components/Forms/Aberturas/NewAberturaRefactor'
 import Header from '../components/Header'
-import ModalComponent from '../components/Modal'
 import ModalComponentAuxiliar from '../components/ModalAuxiliar'
 import Navbar from '../components/Navbar'
+import { Container } from '../components/Styled/StyledGenericLayout'
 import Tabla from '../components/Tables/Tabla'
 import { getDataAccesorio, getDataAbertura } from '../reducer/DataTablesSlice'
 
@@ -27,25 +27,38 @@ const Aberturas = () => {
   useEffect(() => {
     dispatch(getDataAbertura())
     dispatch(getDataAccesorio())
-  }, [dispatch,dataUi])
+  }, [dispatch, dataUi])
 
   return (
     <>
       <Navbar />
-      <Header title='aberturas' />
-
-      {/* Nuevo Pieza FORM  */}
-
-      <ModalComponent title='aberturas'>{dataUi.edit ? <EditAberturas accesorios={data.accesorios}/> : <NewAbertura accesorios={data.accesorios}/>}</ModalComponent>
-
-      {data.aberturas.length > 0 ? (
-        <Tabla header={data_titles} data={data.aberturas} title={'aberturas'}/>
-      ) : (
-        <NoData>
-          <NotAllowedIcon /> No existen Datos
-        </NoData>
-      )}
-
+      <Container>
+        <Tabs>
+          <TabList>
+            <Tab _selected={{ color: '#319795', borderColor: '#319795' }} _focus={{ boxShadow: 'none' }}>
+              Aberturas
+            </Tab>
+            <Tab _selected={{ color: '#319795', borderColor: '#319795' }} _focus={{ boxShadow: 'none' }}>
+              Nueva
+            </Tab>
+          </TabList>
+          <TabPanels>
+            <TabPanel>
+              <Header title='aberturas' />
+              {data.aberturas.length > 0 ? (
+                <Tabla header={data_titles} data={data.aberturas} title={'aberturas'} />
+              ) : (
+                <NoData>
+                  <NotAllowedIcon /> No existen Datos
+                </NoData>
+              )}
+            </TabPanel>
+            <TabPanel>
+              <NewAberturaRefactor />
+            </TabPanel>
+          </TabPanels>
+        </Tabs>
+      </Container>
       {/* Modal Auxiliar  para mostrar perfiles dentro de la tabla   */}
       <ModalComponentAuxiliar title='Piezas'>
         <Tabla header={data_titles_aux} data={dataModalAux} title={'piezas'} edit={false} />
