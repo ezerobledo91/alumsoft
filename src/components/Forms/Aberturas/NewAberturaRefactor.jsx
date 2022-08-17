@@ -3,17 +3,18 @@ import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { getDataAccesorio, getDataPerfil, saveDataAbertura } from '../../../reducer/DataTablesSlice'
-import { TitleGroupInput, Container } from '../../Styled/StyledFormsAdds'
+import { TitleGroupInput, Container, ErrorMsg } from '../../Styled/StyledFormsAdds'
 import { WrapperFlexRow } from '../../Styled/StyledGenericLayout'
 import AccesoriosAdd from './AccesoriosAdd'
 import PerfilesAdd from './PerfilesAdd'
 
 const NewAberturaRefactor = () => {
-  const { register, handleSubmit } = useForm()
+  const { register, handleSubmit, reset } = useForm()
   const [isLoading, setLoading] = useState(false)
   const [arrayAccesorios, setArrayAccesorios] = useState([])
   const [arrayPerfiles, setArrayPerfiles] = useState([])
   const toast = useToast()
+  const [error, setError] = useState('')
 
   // GET DATA FROM REDUX
   const dispatch = useDispatch()
@@ -27,6 +28,11 @@ const NewAberturaRefactor = () => {
   }, [dispatch])
 
   const onSubmit = async (data) => {
+    if (arrayPerfiles.length === 0) {
+      setError('Debe añadir por lo menos un perfil como pieza de la Abertura.')
+      return
+    }
+  
     data.piezas = arrayPerfiles
     data.accesorios = arrayAccesorios
     setLoading(true)
@@ -37,6 +43,10 @@ const NewAberturaRefactor = () => {
       status: 'success',
       isClosable: true,
     })
+    reset()  
+    setArrayAccesorios([])
+    setArrayPerfiles([])
+    setError('')
   }
 
   return (
@@ -57,7 +67,6 @@ const NewAberturaRefactor = () => {
             size='sm'
             {...register('categoria')}
           >
-            <option value=''>Sin Categoria</option>
             <option value='puertas'>Puertas</option>
             <option value='ventanas'>Ventanas</option>
             <option value='marcos'>Marcos</option>
@@ -68,7 +77,6 @@ const NewAberturaRefactor = () => {
         <FormControl isRequired>
           <FormLabel htmlFor='linea'>Linea</FormLabel>
           <Select placeholder='Seleccione una Linea' defaultValue='' id='linea' size='sm' {...register('linea')}>
-            <option value=''>Sin Linea</option>
             <option value='herrero'>Herrero</option>
             <option value='herrero pesado'>Herrero Pesado</option>
             <option value='modena'>Modena</option>
@@ -79,13 +87,14 @@ const NewAberturaRefactor = () => {
       </WrapperFlexRow>
       {/* PERFILES */}
       <PerfilesAdd perfiles={perfiles} arrayPerfiles={arrayPerfiles} setArrayPerfiles={setArrayPerfiles} />
+      <ErrorMsg>{error}</ErrorMsg>
       {/* ACCESORIOS */}
       <AccesoriosAdd
         accesorios={accesorios}
         arrayAccesorios={arrayAccesorios}
         setArrayAccesorios={setArrayAccesorios}
       />
-
+  
       <Button type='submit' isLoading={isLoading}>
         Guardar Cambios
       </Button>

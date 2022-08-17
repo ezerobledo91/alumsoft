@@ -72,10 +72,6 @@ const longitud_calculada = (values, pieza) => {
     }
 }
 
-
-
-
-
 // RETURN OPTION GROUP TO SELECT IN FORM
 
 export const generateOptionGroups = (originalArray, groupTo, toValue, toShow) => {
@@ -96,5 +92,18 @@ export const generateOptionGroups = (originalArray, groupTo, toValue, toShow) =>
             </optgroup>
         )
     })
+}
 
+
+
+// INPUTS CONTROLS 
+export const controlInputsEmpty = (object,arrayKeys) =>{
+    for (let index = 0; index < arrayKeys.length; index++) {
+        const key = arrayKeys[index];
+        if(object[key] === '' || object[key] === undefined || object[key] === null){
+            return 'Falta completar un campo.'
+        }
+    }
+
+    return false
 }

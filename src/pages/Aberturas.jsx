@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
 import NewAberturaRefactor from '../components/Forms/Aberturas/NewAberturaRefactor'
 import Header from '../components/Header'
-import ModalComponentAuxiliar from '../components/ModalAuxiliar'
 import Navbar from '../components/Navbar'
 import { Container } from '../components/Styled/StyledGenericLayout'
 import Tabla from '../components/Tables/Tabla'
@@ -16,12 +15,10 @@ const NoData = styled.div`
 `
 
 let data_titles = ['nombre', 'piezas', 'categoria', 'linea', 'accesorios']
-let data_titles_aux = ['nombre', 'perfil', 'descripcion', 'categoria', 'linea', 'variable', 'constante_m', 'cortes']
 
 const Aberturas = () => {
   const data = useSelector((state) => state.DataTables) //Estado de la app en todo momento
   const dataUi = useSelector((state) => state.UiSlice.modalState) //Estado de la app en todo momento
-  const dataModalAux = useSelector((state) => state.UiSlice.modalAux.data_info) //Estado de la app en todo momento
 
   const dispatch = useDispatch() // Set state redux toolkit
   useEffect(() => {
@@ -40,6 +37,9 @@ const Aberturas = () => {
             </Tab>
             <Tab _selected={{ color: '#319795', borderColor: '#319795' }} _focus={{ boxShadow: 'none' }}>
               Nueva
+            </Tab>
+            <Tab _selected={{ color: '#319795', borderColor: '#319795' }} _focus={{ boxShadow: 'none' }}>
+              Editar
             </Tab>
           </TabList>
           <TabPanels>
@@ -60,9 +60,9 @@ const Aberturas = () => {
         </Tabs>
       </Container>
       {/* Modal Auxiliar  para mostrar perfiles dentro de la tabla   */}
-      <ModalComponentAuxiliar title='Piezas'>
-        <Tabla header={data_titles_aux} data={dataModalAux} title={'piezas'} edit={false} />
-      </ModalComponentAuxiliar>
+        {/* <ModalComponentAuxiliar title='Piezas'>
+          <Tabla header={data_titles_aux} data={dataModalAux} title={'piezas'} edit={false} />
+        </ModalComponentAuxiliar> */}
     </>
   )
 }
