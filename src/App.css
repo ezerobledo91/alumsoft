@@ -1,3 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;500;900&display=swap');
+
+*{
+  font-family: 'Roboto', sans-serif !important;
+}
+
+
 .App {
   text-align: center;
 }
@@ -35,4 +42,22 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+td{
+  font-weight: 300 ;
+}
+
+thead > tr > th{
+  color:#4a5568 !important;
+  background-color: #ffffff;
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
+  box-shadow: 0px 6px 8px -3px rgba(0,0,0,0.5) !important;
+  position: sticky !important;
+  top: 0 !important; /* Don't forget this, required for the stickiness */
+}
+tfoot > tr > th{
+  color:#4a5568 !important;
+  
 }

@@ -22,6 +22,7 @@ const NewAberturaRefactor = () => {
   const accesorios = data.accesorios
   const perfiles = data.perfiles
 
+  // GET PERFILES Y ACCESORIOS DE API 
   useEffect(() => {
     dispatch(getDataPerfil())
     dispatch(getDataAccesorio())
