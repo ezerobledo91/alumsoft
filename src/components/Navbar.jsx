@@ -56,9 +56,6 @@ function Navbar() {
               <Link to='/aberturas'>
                 <MenuItem>Aberturas</MenuItem>
               </Link>
-              <Link to='/piezas'>
-                <MenuItem>Piezas</MenuItem>
-              </Link>
               <Link to='/perfiles'>
                 <MenuItem>Perfiles</MenuItem>
               </Link>

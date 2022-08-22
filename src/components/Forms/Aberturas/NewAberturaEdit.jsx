@@ -1,15 +1,15 @@
-import { Button, FormControl, FormHelperText, FormLabel, Input, Select, useToast } from '@chakra-ui/react'
+import { Button, FormControl, FormHelperText, FormLabel, Input, Select, Stack, useToast } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
-import { getDataAccesorio, getDataPerfil, updateDataAbertura } from '../../../reducer/DataTablesSlice'
+import { getDataAccesorio, getDataPerfil, saveDataAbertura, updateDataAbertura } from '../../../reducer/DataTablesSlice'
 import { TitleGroupInput, Container, ErrorMsg } from '../../Styled/StyledFormsAdds'
 import { WrapperFlexRow } from '../../Styled/StyledGenericLayout'
 import AccesoriosAdd from './AccesoriosAdd'
 import PerfilesAdd from './PerfilesAdd'
 
 const NewAberturaEdit = ({data_edit, setDataEdit}) => {
-  const { register, handleSubmit, reset } = useForm()
+  const { register, handleSubmit, reset, getValues } = useForm()
   const [isLoading, setLoading] = useState(false)
   const [arrayAccesorios, setArrayAccesorios] = useState([])
   const [arrayPerfiles, setArrayPerfiles] = useState([])
@@ -59,6 +59,34 @@ const NewAberturaEdit = ({data_edit, setDataEdit}) => {
     setDataEdit(false)
   }
 
+
+  const guardarCopia = async (e) =>{
+     e.preventDefault() 
+     const data = getValues()
+     if (arrayPerfiles.length === 0) {
+      setError('Debe añadir por lo menos un perfil como pieza de la Abertura.')
+      return
+    }
+  
+    data.piezas = arrayPerfiles
+    data.accesorios = arrayAccesorios
+    data.nombre = data.nombre + ' COPIA'
+    setLoading(true)
+    await dispatch(saveDataAbertura(data))
+    setLoading(false)
+    toast({
+      title: `Abertura Copiada Correctamente`,
+      status: 'success',
+      isClosable: true,
+    })
+    reset()  
+    setArrayAccesorios([])
+    setArrayPerfiles([])
+    setError('')
+    setDataEdit(false)
+  }
+
+
   return (
     <Container onSubmit={handleSubmit(onSubmit)}>
       <TitleGroupInput>Editar Abertura </TitleGroupInput>
@@ -103,10 +131,14 @@ const NewAberturaEdit = ({data_edit, setDataEdit}) => {
         arrayAccesorios={arrayAccesorios}
         setArrayAccesorios={setArrayAccesorios}
       />
-  
-      <Button type='submit' isLoading={isLoading}>
+    <Stack direction='row' spacing={4} align='center'>
+      <Button type='submit' isLoading={isLoading} colorScheme='teal'>
         Guardar Cambios
       </Button>
+      <Button isLoading={isLoading} colorScheme='blue' onClick={(e)=>guardarCopia(e)}>
+        Guardar Copia
+      </Button>
+      </Stack>
     </Container>
   )
 }

@@ -96,8 +96,8 @@ const NewAberturaRefactor = () => {
         setArrayAccesorios={setArrayAccesorios}
       />
   
-      <Button type='submit' isLoading={isLoading}>
-        Guardar Cambios
+      <Button type='submit' isLoading={isLoading} colorScheme='teal'>
+        Guardar
       </Button>
     </Container>
   )

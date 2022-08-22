@@ -29,3 +29,9 @@ gap: 10px;
 padding: 10px 0px;
 margin-bottom: 20px;
 `
+
+export const ColumnFlexItems = styled.div`
+display:flex;
+flex-direction: column;
+gap:10px;
+`
