@@ -1,38 +1,52 @@
-import { Button, FormControl, FormHelperText, FormLabel, Input, Select, SimpleGrid, useToast } from '@chakra-ui/react'
-import React, { useState } from 'react'
+import { Button, FormControl, FormHelperText, FormLabel, Input, Select, useToast } from '@chakra-ui/react'
+import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useDispatch } from 'react-redux'
-import styled from 'styled-components'
-import { saveDataAccesorio } from '../../../reducer/DataTablesSlice'
-import { updateStateModal } from '../../../reducer/UiSlice'
+import { useDispatch, useSelector } from 'react-redux'
+import {saveDataAccesorio } from '../../../reducer/DataTablesSlice'
+import { ErrorMsg, TitleGroupInput, Container } from '../../Styled/StyledFormsAdds'
+import { UniqueFlexRow, WrapperFlexRow } from '../../Styled/StyledGenericLayout'
 
-const Container = styled.form`
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-`
-
-const NewAccesorio = ({proveedores}) => {
-  //React Hook form
-  const { register, handleSubmit } = useForm()
+const NewAccesorio = () => {
+  const { register, handleSubmit, reset } = useForm()
   const [isLoading, setLoading] = useState(false)
+
   const toast = useToast()
+  const [error, setError] = useState('')
   const dispatch = useDispatch()
- //Guardar Perfil Nuevo
+
+  const data = useSelector((state) => state.DataTables)
+  const proveedores = data.proveedores
+
+
+  //GUARDAR ACCESORIO
   const onSubmit = async (data) => {
+    data.iva = checkedIVA
     setLoading(true)
     await dispatch(saveDataAccesorio(data))
     setLoading(false)
-    dispatch(updateStateModal(false)) // Close Modal
     toast({
       title: `Accesorio Guardado Correctamente`,
       status: 'success',
       isClosable: true,
     })
+    reset()
+    setError('')
   }
+
+  // CALCULATED PRICE METHOD
+  const [checkedIVA, setCheckedIVA] = useState('1')
+  const [costo, setCosto] = useState(0)
+  const [porcentaje, setPorcentaje] = useState(0)
+  const [precio, setPrecio] = useState(0)
+
+  useEffect(() => {
+    setPrecio(Math.round(costo * (1 + porcentaje / 100) * +checkedIVA * 100 )/100)
+  }, [checkedIVA, costo, porcentaje])
+
   return (
     <Container onSubmit={handleSubmit(onSubmit)}>
-      <SimpleGrid columns={2} spacing={10}>
+      <TitleGroupInput>Nuevo Accesorio </TitleGroupInput>
+      <WrapperFlexRow>
         <FormControl isRequired>
           <FormLabel htmlFor='codigo'>Codigo</FormLabel>
           <Input id='codigo' type='text' size='sm' {...register('codigo')} />
@@ -46,8 +60,10 @@ const NewAccesorio = ({proveedores}) => {
         <FormControl>
           <FormLabel htmlFor='descripcion'>Descripcion</FormLabel>
           <Input id='descripcion' type='text' size='sm' {...register('descripcion')} />
-          <FormHelperText>Ingrese el descripcion del Accesorio</FormHelperText>
+          <FormHelperText>Ingrese una breve descripcion del Accesorio</FormHelperText>
         </FormControl>
+      </WrapperFlexRow>
+      <WrapperFlexRow>
         <FormControl isRequired>
           <FormLabel htmlFor='categoria'>Categoria</FormLabel>
           <Select
@@ -65,8 +81,27 @@ const NewAccesorio = ({proveedores}) => {
             <option value='cerradura'>Cerraduras</option>
           </Select>
         </FormControl>
+        <FormControl>
+          <FormLabel htmlFor='proveedor'>Proveedor</FormLabel>
+          <Select
+            placeholder='Seleccione un Proveedor'
+            defaultValue=''
+            id='proveedor'
+            size='sm'
+            {...register('proveedor')}
+          >
+            <option value=''>Sin Proveedor</option>
+            {proveedores.map((proveedor, i) => (
+              <option key={i} value={proveedor.nombre}>
+                {proveedor.nombre}
+              </option>
+            ))}
+          </Select>
+        </FormControl>
+      </WrapperFlexRow>
+      <UniqueFlexRow>
         <FormControl isRequired>
-          <FormLabel htmlFor='unidad'>Unidad</FormLabel>
+          <FormLabel htmlFor='unidad'>Unidad de Medida</FormLabel>
           <Select
             placeholder='Seleccione una unidad de Medida'
             defaultValue='unidades'
@@ -81,27 +116,51 @@ const NewAccesorio = ({proveedores}) => {
             Seleccione una opción con relación al uso. (Ej: Felpa / Burletes unidad por metro lineal)
           </FormHelperText>
         </FormControl>
-        <FormControl>
-          <FormLabel htmlFor='proveedor'>Proveedor</FormLabel>
-          <Select
-            placeholder='Seleccione un Proveedor'
-            defaultValue=''
-            id='proveedor'
-            size='sm'
-            {...register('proveedor')}
-          >
-            <option value=''>Sin Proveedor</option>
-            {proveedores.map((proveedor,i)=> <option  key={i} value={proveedor.nombre}>{proveedor.nombre}</option>)}
-          </Select>
-        </FormControl>
+      </UniqueFlexRow>
+
+      <WrapperFlexRow>
         <FormControl isRequired>
-          <FormLabel htmlFor='precio_u'>Precio unitario</FormLabel>
-          <Input id='precio_u' type='number' step='any' size='sm' {...register('precio')} />
+          <FormLabel htmlFor='costo_u'>Costo unitario</FormLabel>
+          <Input
+            id='costo_u'
+            type='number'
+            step='any'
+            size='sm'
+            {...register('costo')}
+            onChange={(e) => setCosto(e.target.value)}
+          />
           <FormHelperText>Ingrese precio unitario</FormHelperText>
         </FormControl>
-      </SimpleGrid>
-      <Button type='submit' isLoading={isLoading}>
-        Guardar Cambios
+        <FormControl>
+          <FormLabel htmlFor='IVA'>Incluir IVA</FormLabel>
+          <Select onChange={(e) => setCheckedIVA(e.target.value)}>
+            <option value='1'>Sin IVA</option>
+            <option value='1.21'>IVA 21%</option>
+          </Select>
+          <FormHelperText> Incluir IVA en el Precio</FormHelperText>
+        </FormControl>
+        <FormControl >
+          <FormLabel htmlFor='procentaje'>Porcentaje Precio</FormLabel>
+          <Input
+            id='procentaje'
+            type='number'
+            step='any'
+            size='sm'
+            {...register('porcentaje')}
+            onChange={(e) => setPorcentaje(e.target.value)}
+          />
+          <FormHelperText>Porcentaje sobre el costo.</FormHelperText>
+        </FormControl>
+        <FormControl>
+          <FormLabel htmlFor='precio_u'>Precio unitario</FormLabel>
+          <Input id='precio_u' type='number' step='any' size='sm' {...register('precio')} value={precio} />
+          <FormHelperText>Ingrese precio unitario</FormHelperText>
+        </FormControl>
+      </WrapperFlexRow>
+
+      <ErrorMsg>{error}</ErrorMsg>
+      <Button type='submit' isLoading={isLoading} colorScheme='teal'>
+        Guardar
       </Button>
     </Container>
   )

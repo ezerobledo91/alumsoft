@@ -28,6 +28,7 @@ const NewAberturaRefactor = () => {
     dispatch(getDataAccesorio())
   }, [dispatch])
 
+  // GUARDAR ABERTURA
   const onSubmit = async (data) => {
     if (arrayPerfiles.length === 0) {
       setError('Debe añadir por lo menos un perfil como pieza de la Abertura.')

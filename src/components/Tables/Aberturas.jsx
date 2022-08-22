@@ -22,6 +22,7 @@ import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { removeDataAbertura } from '../../reducer/DataTablesSlice'
 
+// TABLA ABERTURAS, FUNCIONES BORRAR, VER DETALLES, COPIAR. 
 const AberturasTable = ({ titles, data, setDataEdit }) => {
   const [detailModal, setDetailModal] = useState(false)
   const [deleteConfirm, setDeleteConfirm] = useState(false)
