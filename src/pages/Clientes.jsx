@@ -30,7 +30,7 @@ const Clientes = () => {
 
   }, [dispatch,data_edit])
 
-  // MOVIMIENTOS ENTRE TABAS CUANDO VAMOS A EDITAR
+  // MOVIMIENTOS ENTRE TABS CUANDO VAMOS A EDITAR
   useEffect(() => {
     if (data_edit){
       setTabIndex(2)

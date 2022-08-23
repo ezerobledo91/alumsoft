@@ -2,48 +2,50 @@ import { Button, FormControl, FormHelperText, FormLabel, Input, Select, useToast
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
-import styled from 'styled-components'
 import { saveDataProveedor } from '../../../reducer/DataTablesSlice'
-import { updateStateModal } from '../../../reducer/UiSlice'
+import { ErrorMsg, TitleGroupInput, Container } from '../../Styled/StyledFormsAdds'
+import { UniqueFlexRow } from '../../Styled/StyledGenericLayout'
 
-const Container = styled.form`
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-`
 
 const NewProveedor = () => {
-  //React Hook form
-  const { register, handleSubmit } = useForm()
+  const { register, handleSubmit, reset } = useForm()
   const [isLoading, setLoading] = useState(false)
+
   const toast = useToast()
+  const [error, setError] = useState('')
   const dispatch = useDispatch()
 
-  //Guardar Proveedor Nuevo
+  //GUARDAR CLIENTE
   const onSubmit = async (data) => {
     setLoading(true)
     await dispatch(saveDataProveedor(data))
     setLoading(false)
-    dispatch(updateStateModal(false)) // Close Modal
     toast({
       title: `Proveedor Guardado Correctamente`,
       status: 'success',
       isClosable: true,
     })
+    reset()
+    setError('')
   }
-
   return (
     <Container onSubmit={handleSubmit(onSubmit)}>
+      <TitleGroupInput>Nuevo Proveedor </TitleGroupInput>
+      <UniqueFlexRow>
       <FormControl isRequired>
         <FormLabel htmlFor='nombre'>Nombre</FormLabel>
         <Input id='nombre' type='text' size='sm' {...register('nombre')} />
         <FormHelperText>Ingrese el Nombre del Proveedor</FormHelperText>
       </FormControl>
+      </UniqueFlexRow>
+      <UniqueFlexRow>
       <FormControl isRequired>
         <FormLabel htmlFor='descripcion'>Descripcion</FormLabel>
         <Input id='descripcion' type='text' size='sm' {...register('descripcion')} />
         <FormHelperText>Ingrese una descripcion basica del Proveedor</FormHelperText>
       </FormControl>
+      </UniqueFlexRow>
+      <UniqueFlexRow>
       <FormControl isRequired>
         <FormLabel htmlFor='categoria'>Categoria</FormLabel>
         <Select
@@ -60,23 +62,31 @@ const NewProveedor = () => {
           <option value='otro'>Otro</option>
         </Select>
       </FormControl>
+      </UniqueFlexRow>
+      <UniqueFlexRow>
       <FormControl>
         <FormLabel htmlFor='telefono'>Telefono</FormLabel>
         <Input id='telefono' type='text' size='sm' {...register('telefono')} />
         <FormHelperText>Ingrese el Telefono del Proveedor</FormHelperText>
       </FormControl>
+      </UniqueFlexRow>
+      <UniqueFlexRow>
       <FormControl>
         <FormLabel htmlFor='email'>Email</FormLabel>
         <Input id='email' type='email' size='sm' {...register('email')} />
         <FormHelperText>Ingrese el Email del Proveedor</FormHelperText>
       </FormControl>
+      </UniqueFlexRow>
+      <UniqueFlexRow>
       <FormControl>
         <FormLabel htmlFor='web'>Web</FormLabel>
         <Input id='web' type='text' size='sm' {...register('web')} />
         <FormHelperText>Ingrese sitio Web del Proveedor</FormHelperText>
       </FormControl>
-      <Button type='submit' isLoading={isLoading}>
-        Guardar Cambios
+      </UniqueFlexRow>
+      <ErrorMsg>{error}</ErrorMsg>
+      <Button type='submit' isLoading={isLoading} colorScheme='teal'>
+        Guardar
       </Button>
     </Container>
   )
