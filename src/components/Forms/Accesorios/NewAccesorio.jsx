@@ -21,6 +21,7 @@ const NewAccesorio = () => {
   //GUARDAR ACCESORIO
   const onSubmit = async (data) => {
     data.iva = checkedIVA
+    data.precio = precio
     setLoading(true)
     await dispatch(saveDataAccesorio(data))
     setLoading(false)
@@ -30,6 +31,8 @@ const NewAccesorio = () => {
       isClosable: true,
     })
     reset()
+    setPrecio(0)
+    setPorcentaje(0)
     setError('')
   }
 

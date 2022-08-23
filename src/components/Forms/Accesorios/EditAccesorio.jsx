@@ -29,6 +29,8 @@ const EditAccesorio = ({ data_edit, setDataEdit }) => {
     setLoading(false)
     reset()
     setError('')
+    setPorcentaje(0)
+    setPrecio(0)
     setDataEdit(false)
     toast({
       title: `Accesorio Actualizado Correctamente`,
@@ -53,6 +55,8 @@ const EditAccesorio = ({ data_edit, setDataEdit }) => {
     })
     reset()
     setError('')
+    setPorcentaje(0)
+    setPrecio(0)
     setDataEdit(false)
   }
 

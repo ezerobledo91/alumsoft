@@ -53,7 +53,7 @@ const EditProveedor = ({ data_edit, setDataEdit }) => {
 
   return (
     <Container onSubmit={handleSubmit(onSubmit)}>
-      <TitleGroupInput> Edit Proveedor </TitleGroupInput>
+      <TitleGroupInput> Editar Proveedor </TitleGroupInput>
       <UniqueFlexRow>
       <FormControl isRequired>
         <FormLabel htmlFor='nombre'>Nombre</FormLabel>
