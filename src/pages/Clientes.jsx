@@ -1,14 +1,15 @@
 import { NotAllowedIcon } from '@chakra-ui/icons'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
 import EditCliente from '../components/Forms/Clientes/EditCliente'
 import NewCliente from '../components/Forms/Clientes/NewCliente'
-import Header from '../components/Header'
-import ModalComponent from '../components/Modal'
 import Navbar from '../components/Navbar'
-import Tabla from '../components/Tables/Tabla'
 import { getDataCliente } from '../reducer/DataTablesSlice'
+import { Container } from '../components/Styled/StyledGenericLayout'
+import { Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react'
+import FilterAndSearch from '../components/FilterAndSearch'
+import ClientesTable from '../components/Tables/Clientes'
 
 
 const NoData = styled.div`
@@ -19,33 +20,77 @@ let data_titles = ['nombre', 'descripcion', 'telefono', 'email', 'direccion']
 
 const Clientes = () => {
   const data = useSelector((state) => state.DataTables) //Estado de la app en todo momento
-  const dataUi = useSelector((state) => state.UiSlice) //Estado de la app en todo momento
-
-  const { modalState } = dataUi
+  const [tabIndex, setTabIndex] = useState(0)
+  const [data_edit, setDataEdit] = useState(false)
 
   const dispatch = useDispatch() // Set state redux toolkit
 
   useEffect(() => {
     dispatch(getDataCliente())
-    //Hago la consul  ta a la DB y actualizo el estado de los proveedores
-  }, [dispatch, modalState.edit_object])
+
+  }, [dispatch,data_edit])
+
+  // MOVIMIENTOS ENTRE TABAS CUANDO VAMOS A EDITAR
+  useEffect(() => {
+    if (data_edit){
+      setTabIndex(2)
+      return
+    }
+    setTabIndex(0)
+  
+  }, [data_edit])
+
+  // CONTROL DE TABS
+  const handleTabsChange = (index) => {
+    setTabIndex(index)
+  }
+
+
+
   return (
+
     <>
-      <Navbar />
-      <Header title='Clientes' />
-
-      {/* Nuevo Proveedor FORM  */}
-
-      <ModalComponent title='Clientes'>{modalState.edit ? <EditCliente/> : <NewCliente/> }</ModalComponent>
-
-      {data.clientes.length > 0 ? (
-        <Tabla header={data_titles} data={data.clientes} title={'cliente'} />
-      ) : (
-        <NoData>
-          <NotAllowedIcon /> No existen Datos
-        </NoData>
-      )}
-    </>
+    <Navbar />
+    <Container>
+      <Tabs index={tabIndex} onChange={handleTabsChange}>
+        <TabList>
+          <Tab _selected={{ color: '#319795', borderColor: '#319795' }} _focus={{ boxShadow: 'none' }}>
+          Clientes
+          </Tab>
+          <Tab _selected={{ color: '#319795', borderColor: '#319795' }} _focus={{ boxShadow: 'none' }}>
+            Nuevo
+          </Tab>
+          <Tab _selected={{ color: '#319795', borderColor: '#319795' }} _focus={{ boxShadow: 'none' }}>
+            Editar
+          </Tab>
+        </TabList>
+        <TabPanels>
+          <TabPanel>
+            <FilterAndSearch />
+            {data.clientes.length > 0 ? (
+              <ClientesTable data={data.clientes} titles={data_titles} setDataEdit={setDataEdit} />
+            ) : (
+              <NoData>
+                <NotAllowedIcon /> No existen Datos
+              </NoData>
+            )}
+          </TabPanel>
+          <TabPanel>
+            <NewCliente/>
+          </TabPanel>
+          <TabPanel>
+            {data_edit ? (
+              <EditCliente data_edit={data_edit} setDataEdit={setDataEdit}/>
+            ) : (
+              <NoData>
+                <NotAllowedIcon /> Seleccione un accesorio para editar.
+              </NoData>
+            )}
+          </TabPanel>
+        </TabPanels>
+      </Tabs>
+    </Container>
+  </>
   )
 }
 

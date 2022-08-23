@@ -19,7 +19,7 @@ const EditAccesorio = ({ data_edit, setDataEdit }) => {
     dispatch(getDataProveedor())
   }, [dispatch])
 
-  //Editar Abertura
+  
   const onSubmit = async (data) => {
     data._id = data_edit._id
     data.iva = checkedIVA
@@ -77,7 +77,7 @@ const EditAccesorio = ({ data_edit, setDataEdit }) => {
 
   return (
     <Container onSubmit={handleSubmit(onSubmit)}>
-      <TitleGroupInput>Nuevo Accesorio </TitleGroupInput>
+      <TitleGroupInput>Editar Accesorio </TitleGroupInput>
       <WrapperFlexRow>
         <FormControl isRequired>
           <FormLabel htmlFor='codigo'>Codigo</FormLabel>
