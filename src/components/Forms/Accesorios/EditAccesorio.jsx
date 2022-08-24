@@ -13,7 +13,8 @@ const EditAccesorio = ({ data_edit, setDataEdit }) => {
   const toast = useToast()
   const [error, setError] = useState('')
   const dispatch = useDispatch()
-  const proveedores = useSelector((state) => state.DataTables.proveedores)
+  const data = useSelector((state) => state.DataTables)
+  const proveedores = data.proveedores
 
   useEffect(() => {
     dispatch(getDataProveedor())

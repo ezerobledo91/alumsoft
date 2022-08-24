@@ -22,6 +22,7 @@ const AccesoriosAdd = ({ accesorios, arrayAccesorios, setArrayAccesorios }) => {
 
   const addAccesorio = () => {
     const newAccesorio = getValues()
+    console.log(newAccesorio)
     if (moreInputs) {
       let array = ['cantidad', 'codigo', 'colocacion']
       const isError = controlInputsEmpty(newAccesorio, array)

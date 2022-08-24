@@ -2,7 +2,7 @@ import { Button, FormControl, FormHelperText, FormLabel, Input, Select, useToast
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
-import {saveDataAccesorio } from '../../../reducer/DataTablesSlice'
+import {getDataProveedor, saveDataAccesorio } from '../../../reducer/DataTablesSlice'
 import { ErrorMsg, TitleGroupInput, Container } from '../../Styled/StyledFormsAdds'
 import { UniqueFlexRow, WrapperFlexRow } from '../../Styled/StyledGenericLayout'
 
@@ -16,6 +16,10 @@ const NewAccesorio = () => {
 
   const data = useSelector((state) => state.DataTables)
   const proveedores = data.proveedores
+
+  useEffect(() => {
+    dispatch(getDataProveedor())
+  }, [dispatch])
 
 
   //GUARDAR ACCESORIO

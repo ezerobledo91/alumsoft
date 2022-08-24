@@ -1,15 +1,15 @@
 export const createPresupuestoItem = (values, data_aberturas, data_perfiles, data_vidrio, data_accesorios, ID) => {
     const abertura = data_aberturas.find((item) => item._id === values.abertura) // Busco en las aberturas el objeto que corresponde a la seleccion
     const vidrio = data_vidrio.find((item) => item._id === values.vidrio)
+    const revestimiento_al = data_perfiles.find((item) => item._id === values.revestimiento_aluminio)
     const piezas = abertura.piezas  // Guardo las piezas
     const calculated = []
     const accesorios = abertura?.accesorios
-
     // PESO TOTAL EN ALUMINIO (NO REVESTIMIENTO)
     let peso_total = 0
 
     piezas.forEach((element) => {
-        const peso_perfil = data_perfiles.find((item) => item._id === element.perfil).peso // De las piezas correspondientes busco los perfiles y saco el peso
+        const peso_perfil = data_perfiles.find((item) => item._id === element._id).peso // De las piezas correspondientes busco los perfiles y saco el peso
         let longitud_variable = longitud_calculada(values, element)
         peso_total = Math.round((peso_total + (longitud_variable * peso_perfil)) * 100) / 100
         // Guardo en el array calculated todas las piezas con sus medidas y peso correspondientes.
@@ -24,7 +24,7 @@ export const createPresupuestoItem = (values, data_aberturas, data_perfiles, dat
     if (accesorios) {
         accesorios.forEach(acc => {
             let accesorio = data_accesorios.find((item) => item.nombre === acc.nombre)
-            precio_accesorios = precio_accesorios + (accesorio.precio * acc.cantidad)
+            precio_accesorios = precio_accesorios + (accesorio.precio * accesorio_calculado(values,acc))
         })
     }
 
@@ -47,7 +47,12 @@ export const createPresupuestoItem = (values, data_aberturas, data_perfiles, dat
         vidrio: vidrio ? vidrio.nombre : 'Sin Vidrio',
         vidrio_mt: vidrio ? +values.vidrio_mt2 : '',
         precio_vidrio: vidrio ? +values.vidrio_mt2 * vidrio.precio : 0,
-        cantidad: values.cantidad
+        cantidad: values.cantidad,
+        accesorios: accesorios ? accesorios : 'Sin Accesorios',
+        revestimiento_al: revestimiento_al ? revestimiento_al.nombre : 'Sin Revestimiento',
+        revestimiento_al_mt: revestimiento_al ? +values.r_aluminio_mt : '',
+        precio_revestimiento_al: revestimiento_al ? Math.round(+values.r_aluminio_mt * revestimiento_al.peso  * values.precio * (1 + (values.porcentaje / 100)) * 100) / 100 : 0,
+
 
     }
     console.log(new_item)
@@ -62,14 +67,38 @@ const longitud_calculada = (values, pieza) => {
         case 'marco':
             return (values.alto * 2) + (+values.ancho)
         case 'alto':
-            return pieza.constante_m * pieza.cortes * values.alto
+            return pieza.cortes * (values.alto - pieza.descuento)
         case 'ancho':
-            return pieza.constante_m * pieza.cortes * values.ancho
+            return pieza.cortes * (values.ancho - pieza.descuento)
         case 'fija':
-            return pieza.constante_m
+            return pieza.cantidad * pieza.medida
+        case 'perimetro':
+            return (values.alto * 2 * values.ancho * 2) - (pieza.cortes * pieza.descuento)
         default:
             break;
+    } 
+}
+
+const accesorio_calculado = (values, accesorio) => {
+    if (accesorio.colocacion) {
+        switch (accesorio.colocacion) {
+            case 'alto':
+                return values.alto  * accesorio.cantidad
+            case 'ancho':
+                return values.ancho  * accesorio.cantidad
+            case 'fija':
+                return accesorio.cantidad 
+            case 'perimetro':
+                return (values.alto * 2 * values.ancho * 2) * accesorio.cantidad
+            default:
+                break;
+        }
+    }else{
+
+        return accesorio.cantidad
+
     }
+
 }
 
 // RETURN OPTION GROUP TO SELECT IN FORM
@@ -97,10 +126,10 @@ export const generateOptionGroups = (originalArray, groupTo, toValue, toShow) =>
 
 
 // INPUTS CONTROLS 
-export const controlInputsEmpty = (object,arrayKeys) =>{
+export const controlInputsEmpty = (object, arrayKeys) => {
     for (let index = 0; index < arrayKeys.length; index++) {
         const key = arrayKeys[index];
-        if(object[key] === '' || object[key] === undefined || object[key] === null){
+        if (object[key] === '' || object[key] === undefined || object[key] === null) {
             return 'Falta completar un campo.'
         }
     }

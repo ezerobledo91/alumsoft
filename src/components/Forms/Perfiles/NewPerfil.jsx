@@ -67,6 +67,7 @@ const NewPerfil = () => {
             <option value='puertas'>Puertas</option>
             <option value='ventanas'>Ventanas</option>
             <option value='marcos'>Marcos</option>
+            <option value='revestimientos'>Reveestimientos</option>
             <option value='otro'>Otro</option>
           </Select>
         </FormControl>

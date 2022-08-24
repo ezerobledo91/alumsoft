@@ -1,4 +1,4 @@
-import { AddIcon, ArrowBackIcon, HamburgerIcon, ViewIcon } from '@chakra-ui/icons'
+import {  HamburgerIcon } from '@chakra-ui/icons'
 import { IconButton, Menu, MenuButton, MenuDivider, MenuGroup, MenuItem, MenuList } from '@chakra-ui/react'
 
 import React from 'react'
@@ -36,23 +36,19 @@ function Navbar() {
         <Menu>
           <MenuButton as={IconButton} aria-label='Options' icon={<HamburgerIcon />} />
           <MenuList>
-            <MenuGroup title='Presupuestos' textAlign={'left'}>
-              <Link to='/presupuestos/nuevo'>
-                <MenuItem icon={<AddIcon />}>Nuevo</MenuItem>
+            <MenuGroup title='Negocio' textAlign={'left'}>
+              <Link to='/presupuestos/'>
+                <MenuItem>Presupuestos</MenuItem>
               </Link>
-              <Link to='/presupuestos'>
-                <MenuItem icon={<ViewIcon />}>Ver Todos</MenuItem>
+              <Link to='/proveedores'>
+                <MenuItem>Proveedores</MenuItem>
               </Link>
+              <Link to='/clientes'>
+                <MenuItem>Clientes</MenuItem>
+              </Link>
+              <MenuDivider />
             </MenuGroup>
-            <MenuDivider />
-            <Link to='/proveedores'>
-              <MenuItem>Proveedores</MenuItem>
-            </Link>
-            <Link to='/clientes'>
-              <MenuItem>Clientes</MenuItem>
-            </Link>
-            <MenuDivider />
-            <MenuGroup title='Componentes' textAlign={'left'}>
+            <MenuGroup title='Fabrica' textAlign={'left'}>
               <Link to='/aberturas'>
                 <MenuItem>Aberturas</MenuItem>
               </Link>
@@ -67,9 +63,9 @@ function Navbar() {
               </Link>
             </MenuGroup>
             <MenuDivider />
-            <MenuGroup title='Cuenta' textAlign={'left'}>
+            {/* <MenuGroup title='Cuenta' textAlign={'left'}>
               <MenuItem icon={<ArrowBackIcon />}>Salir</MenuItem>
-            </MenuGroup>
+            </MenuGroup> */}
           </MenuList>
         </Menu>
       </Wrapper>

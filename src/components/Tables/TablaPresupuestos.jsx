@@ -1,39 +1,37 @@
-import { DeleteIcon, EditIcon, ViewIcon } from '@chakra-ui/icons'
-import { Table, Tbody, Td, Tfoot, Th, Thead, Tooltip, Tr, useToast } from '@chakra-ui/react'
+import { removeDataPresupuesto } from '../../reducer/DataTablesSlice'
+import ModalPresupuestosViewer from '../ModalPresupuestosViewer'
+import {
+  Table,
+  TableContainer,
+  Tbody,
+  Td,
+  Tfoot,
+  Th,
+  Thead,
+  Tr,
+  Tooltip,
+  Button,
+  useToast,
+} from '@chakra-ui/react'
 import React from 'react'
+import { DeleteIcon, EditIcon, ViewIcon } from '@chakra-ui/icons'
+import {  IconWrapper, WrapperFlexRow } from '../Styled/StyledGenericLayout'
+import ModalComponent from '../Modal'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import styled from 'styled-components'
-import { removeDataPresupuesto } from '../../reducer/DataTablesSlice'
-import { setDataEditPresupuesto } from '../../reducer/UiSlice'
-import ModalPresupuestosEdit from '../ModalPresupuestosEdit'
-import ModalPresupuestosViewer from '../ModalPresupuestosViewer'
 
-const Container = styled.div`
-  margin: 10px 20px;
-  border: solid 0.5px lightgray;
-  border-radius: 10px 10px;
-  padding: 10px;
-`
-const Wrapper = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 10px;
-`
-const IconWrapper = styled.div`
-  display: flex;
-  gap: 5px;
-`
-
-const TablaPresupuestos = ({ data }) => {
+const TablaPresupuestos = ({ titles, data, setDataEdit }) => {
   const [open, setOpen] = useState(false)
-  const [openEdit, setOpenEdit] = useState(false)
-
   const [data_view, setData] = useState()
+  const [deleteConfirm, setDeleteConfirm] = useState(false)
   const dispatch = useDispatch()
   const toast = useToast()
-  const deletePresupuesto = (id) => {
-    dispatch(removeDataPresupuesto(id))
+
+
+
+  const confirmDelete = (item) => {
+    setDeleteConfirm(false)
+    dispatch(removeDataPresupuesto(item.id))
     toast({
       title: `Presupuesto Borrado Correctamente`,
       status: 'success',
@@ -41,37 +39,26 @@ const TablaPresupuestos = ({ data }) => {
     })
   }
 
-  const editPresupuesto = (pres) => {
-    dispatch(setDataEditPresupuesto(pres))
-    setOpenEdit(true)
+  const borrarPresupuesto = (item) =>{
+    setDeleteConfirm(item)
+  }
+
+  const editFunction = (item) => {
+    setDataEdit(item)
   }
 
   return (
-    <Container>
-      <Table size='sm'>
-        <Thead>
-          <Tr>
-            <Th>
-              <Wrapper>Numero</Wrapper>
-            </Th>
-            <Th>
-              <Wrapper>Cliente</Wrapper>
-            </Th>
-            <Th>
-              <Wrapper>Observación</Wrapper>
-            </Th>
-            <Th>
-              <Wrapper>Precio</Wrapper>
-            </Th>
-            <Th>
-              <Wrapper>Fecha</Wrapper>
-            </Th>
-            <Th>
-              <Wrapper>Opciones</Wrapper>
-            </Th>
-          </Tr>
-        </Thead>
-        <Tbody>
+    <TableContainer display='block' maxHeight='60vh' overflowY='auto'>
+        <Table variant='striped' colorScheme='gray' size='sm'>
+          <Thead>
+            <Tr>
+              {titles.map((title, k) => (
+                <Th key={k}>{title}</Th>
+              ))}
+              <Th isNumeric>Acciones</Th>
+            </Tr>
+          </Thead>
+          <Tbody>
           {data.map((item, index) => (
             item.visible && <Tr key={index}>
               <Td>{item.numero}</Td>
@@ -96,7 +83,7 @@ const TablaPresupuestos = ({ data }) => {
                       focusable='true'
                       cursor={'pointer'}
                       onClick={() => {
-                        editPresupuesto(item)
+                        editFunction(item)
                       }}
                     />
                   </Tooltip>
@@ -105,7 +92,7 @@ const TablaPresupuestos = ({ data }) => {
                       focusable='true'
                       cursor={'pointer'}
                       onClick={() => {
-                        deletePresupuesto(item._id)
+                        borrarPresupuesto(item)
                       }}
                     />
                   </Tooltip>
@@ -117,8 +104,15 @@ const TablaPresupuestos = ({ data }) => {
         <Tfoot></Tfoot>
       </Table>
       <ModalPresupuestosViewer data={data_view} open={open} setOpen={setOpen} />
-      <ModalPresupuestosEdit open={openEdit} setOpen={setOpenEdit} />
-    </Container>
+      <ModalComponent title='Borrar Presupuesto' open={deleteConfirm} close={false} setState={setDeleteConfirm}>
+         <WrapperFlexRow>
+         <span>Numero: {deleteConfirm?.numero}</span>
+          <Button leftIcon={<DeleteIcon />} colorScheme='red' variant='solid' onClick={()=>confirmDelete(deleteConfirm)}>
+            Confirmar
+          </Button>
+          </WrapperFlexRow>
+      </ModalComponent>
+    </TableContainer>
   )
 }
 

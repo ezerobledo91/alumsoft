@@ -121,7 +121,7 @@ const PerfilesAdd = ({ perfiles, setArrayPerfiles, arrayPerfiles }) => {
                 Medida <RequiredAsterisk>*</RequiredAsterisk>
               </FormLabel>
               <Input id='alto' type='number' size='sm' step='any' {...register('medida')} />
-              <FormHelperText>Medida de cada pieza mm</FormHelperText>
+              <FormHelperText>Medida de cada pieza m</FormHelperText>
             </FormControl>
           </>
         ) : (
@@ -138,7 +138,7 @@ const PerfilesAdd = ({ perfiles, setArrayPerfiles, arrayPerfiles }) => {
                 Descuento <RequiredAsterisk>*</RequiredAsterisk>
               </FormLabel>
               <Input id='alto' type='number' size='sm' step='any' {...register('descuento')} />
-              <FormHelperText>Descuento en mm aplicado total por corte</FormHelperText>
+              <FormHelperText>Descuento en m aplicado total por corte</FormHelperText>
             </FormControl>
           </>
         )}
@@ -157,8 +157,8 @@ const PerfilesAdd = ({ perfiles, setArrayPerfiles, arrayPerfiles }) => {
               <WrapperItem key={i}>
                 Codigo: {perfil.codigo} | Nombre: {perfil.nombre} | Variable: {perfil.variable}
                 {perfil.variable === 'fija'
-                  ? ` | Cantidad: ${perfil.cantidad} u | Medida:  ${perfil.medida} mm`
-                  : ` | Cortes: ${perfil.cortes} u | Descuento: ${perfil.descuento} mm`}
+                  ? ` | Cantidad: ${perfil.cantidad} u | Medida:  ${perfil.medida} m`
+                  : ` | Cortes: ${perfil.cortes} u | Descuento: ${perfil.descuento} m`}
                 <ButtonRemove>
                   <DeleteIcon
                     onClick={() => {

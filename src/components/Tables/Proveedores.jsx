@@ -95,7 +95,7 @@ const ProveedoresTable = ({ titles, data, setDataEdit }) => {
           </Tfoot>
         </Table>
       </TableContainer>
-      <ModalComponent title='Borrar Proveedor' open={deleteConfirm} close={false}>
+      <ModalComponent title='Borrar Proveedor' open={deleteConfirm} close={false} setState={setDeleteConfirm}>
          <WrapperFlexRow>
          <span>{deleteConfirm?.nombre}</span>
           <Button leftIcon={<DeleteIcon />} colorScheme='red' variant='solid' onClick={()=>confirmDelete(deleteConfirm)}>

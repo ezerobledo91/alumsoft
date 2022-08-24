@@ -4,7 +4,7 @@ import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
-import { createPresupuestoItem } from '../../../auxiliar/aux_functions'
+import { createPresupuestoItem, generateOptionGroups } from '../../../auxiliar/aux_functions'
 import { getDataAccesorio, getDataCliente, getDataAbertura, getDataPerfil, getDataVidrio } from '../../../reducer/DataTablesSlice'
 import { setDataPreview } from '../../../reducer/UiSlice'
 
@@ -62,25 +62,6 @@ const NewPre = ({ setCliente, setObservacion, resetForm }) => {
   }, [resetForm, reset])
 
 
-  const generateGroups = () => {
-    const newArrayAberturas = [...new Set(data_aberturas.map((a) => a.categoria[0]))].map((group) => {
-      return {
-        categoria: group,
-        items: data_aberturas.filter((i) => i.categoria[0] === group),
-      }
-    })
-    return newArrayAberturas.map((aberturas, i) => {
-      return (
-        <optgroup key={aberturas.categoria + i} label={aberturas.categoria} style={{ textTransform: 'capitalize' }}>
-          {aberturas.items.map((abertura, index) => (
-            <option key={index} value={abertura._id}>
-              {abertura.nombre} | {abertura.linea}
-            </option>
-          ))}
-        </optgroup>
-      )
-    })
-  }
 
   return (
     <Container onSubmit={handleSubmit(onSubmit)}>
@@ -102,7 +83,7 @@ const NewPre = ({ setCliente, setObservacion, resetForm }) => {
           <FormLabel htmlFor='abertura'>Abertura</FormLabel>
           <Select placeholder='Seleccione una Abertura' id='abertura' size='sm' {...register('abertura')}>
             {
-              generateGroups()
+              generateOptionGroups(data_aberturas,'categoria','_id','nombre')
             }
           </Select>
           <FormHelperText>Seleccione Aberturas para este Presupuesto</FormHelperText>
@@ -165,11 +146,11 @@ const NewPre = ({ setCliente, setObservacion, resetForm }) => {
               <WrapperInput>
                 <FormControl>
                   <FormLabel htmlFor='Vidrio'>Aluminio</FormLabel>
-                  <Select placeholder='Seleccione un Perfil' id='vidrio' size='sm' {...register('revestimiento_aluminio')}>
-                    {data_vidrios.map((item) => {
+                  <Select placeholder='Seleccione un Perfil' id='perfil' size='sm' {...register('revestimiento_aluminio')}>
+                    {data_perfiles.filter(perfil=> perfil.categoria === 'revestimientos').map((item) => {
                       return (
                         <option key={item._id} value={item._id}>
-                          Nombre: {item.nombre} Espesor: {item.espesor}
+                        Codigo: {item.codigo}  Nombre: {item.nombre}
                         </option>
                       )
                     })}
@@ -178,8 +159,8 @@ const NewPre = ({ setCliente, setObservacion, resetForm }) => {
                 </FormControl>
                 <FormControl>
                   <FormLabel htmlFor='Vidrio'>Cantidad</FormLabel>
-                  <Input aria-required={true} id='mt2' type='number' step='0.01' size='sm' {...register('r_aluminio_mt2')} />
-                  <FormHelperText>Cantidad en m2</FormHelperText>
+                  <Input aria-required={true} id='mt2' type='number' step='0.01' size='sm' {...register('r_aluminio_mt')} />
+                  <FormHelperText>Cantidad en m lineales</FormHelperText>
                 </FormControl>
               </WrapperInput>
             </TabPanel>

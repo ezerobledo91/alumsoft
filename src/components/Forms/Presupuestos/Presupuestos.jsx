@@ -17,12 +17,13 @@ import React, { useEffect } from 'react'
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
-import Items from '../components/Forms/Presupuestos/Items'
-import NewPresupuesto from '../components/Forms/Presupuestos/NewPresupuesto'
-import Navbar from '../components/Navbar'
-import { FaFileInvoiceDollar, FaRegSave } from 'react-icons/fa'
-import { getDataPresupuesto, saveDataPresupuesto } from '../reducer/DataTablesSlice'
-import { removeAllDataPreview } from '../reducer/UiSlice'
+import Items from './Items'
+import NewPresupuesto from './NewPresupuesto'
+import { FaRegSave } from 'react-icons/fa'
+import { getDataPresupuesto, saveDataPresupuesto } from '../../../reducer/DataTablesSlice'
+import { removeAllDataPreview } from '../../../reducer/UiSlice'
+import ModalComponent from '../../Modal'
+import DetailModal from './DetailModal'
 
 const Wrapper = styled.div`
   padding: 10px 20px;
@@ -92,10 +93,13 @@ const Presupuestos = () => {
   // Reset Form
   const [reset, setReset] = useState(false)
 
+  // Modal Detalles 
+  const [detailModal, setDetailModal] = useState(false)
+
   let precio = 0 // precio total de los items.
   let numero = presupuestos.at(-1)?.numero + 1 // numero de presupuestos.
   data_preview.forEach((item) => {
-    precio = precio + ( item.precio_total * item.cantidad ) + item.precio_vidrio + item.precio_accesorios // Precio total.
+    precio = precio + ( item.precio_total + item.precio_vidrio + item.precio_accesorios + item.precio_revestimiento_al) * item.cantidad  // Precio total.
     })
 
   
@@ -142,16 +146,8 @@ const Presupuestos = () => {
   useEffect(() => {
     dispatch(getDataPresupuesto())
   }, [dispatch])
-
   return (
     <>
-      <Navbar />
-      <Wrapper>
-        <Title>
-          <FaFileInvoiceDollar /> Nuevo Presupuesto
-        </Title>
-      </Wrapper>
-      <Divider />
       <Container>
         <ContainerForm>
           <NewPresupuesto setCliente={setCliente} setObservacion={setObservacion} resetForm={reset} />
@@ -175,6 +171,8 @@ const Presupuestos = () => {
                     <Th textAlign='center'>Medidas</Th>
                     <Th textAlign='center'>Vidrio</Th>
                     <Th textAlign='center'>M2</Th>
+                    <Th textAlign='center'>Revestimiento Aluminio</Th>
+                    <Th textAlign='center'>M</Th>
                     <Th textAlign='center'>P.Unitario</Th>
                     <Th textAlign='center'>Cantidad</Th>
                     <Th textAlign='center'>P.Total</Th>
@@ -183,7 +181,7 @@ const Presupuestos = () => {
                 </Thead>
                 <Tbody>
                   {data_preview.map((data, index) => (
-                    <Items data={data} index={index} key={index}></Items>
+                    <Items data={data} index={index} key={index} setDetailModal={setDetailModal}></Items>
                   ))}
                 </Tbody>
               </Table>
@@ -202,6 +200,9 @@ const Presupuestos = () => {
           </WrapperFooter>
         </ContainerPre>
       </Container>
+      <ModalComponent title='Detalles' open={detailModal} setState={setDetailModal} >
+        {detailModal && <DetailModal detalles={detailModal} />}
+      </ModalComponent>
     </>
   )
 }

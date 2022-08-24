@@ -79,6 +79,8 @@ const PreviewPresupuestos = React.forwardRef((props, ref) => {
                 <Th textAlign='center'>Medidas</Th>
                 <Th textAlign='center'>Vidrio</Th>
                 <Th textAlign='center'>M2</Th>
+                <Th textAlign='center'>Revestimiento Aluminio</Th>
+                <Th textAlign='center'>M</Th>
                 <Th textAlign='center'>P.Unitario</Th>
                 <Th textAlign='center'>Cantidad</Th>
                 <Th textAlign='center'>P.Total</Th>

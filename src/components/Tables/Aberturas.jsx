@@ -112,10 +112,10 @@ const AberturasTable = ({ titles, data, setDataEdit }) => {
           </Tfoot>
         </Table>
       </TableContainer>
-      <ModalComponent title='Información' open={detailModal}>
+      <ModalComponent title='Información' open={detailModal} setState={setDetailModal}>
         {detailModal && <DetailContainer detalles={detailModal} />}
       </ModalComponent>
-      <ModalComponent title='Borrar Abertura' open={deleteConfirm} close={false}>
+      <ModalComponent title='Borrar Abertura' open={deleteConfirm} close={false} setState={setDeleteConfirm}>
          <WrapperFlexRow>
          <span>{deleteConfirm?.nombre}</span>
           <Button leftIcon={<DeleteIcon />} colorScheme='red' variant='solid' onClick={()=>confirmDelete(deleteConfirm)}>

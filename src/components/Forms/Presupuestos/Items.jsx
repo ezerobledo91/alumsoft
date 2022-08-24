@@ -1,4 +1,4 @@
-import { DeleteIcon } from '@chakra-ui/icons'
+import { DeleteIcon, ViewIcon } from '@chakra-ui/icons'
 import { Td, Tr } from '@chakra-ui/react'
 import React from 'react'
 import { useDispatch } from 'react-redux'
@@ -19,8 +19,15 @@ const RemoveLine = styled.span`
   cursor: pointer;
   margin: 0 auto;
 `
+const Wrapper= styled.div`
+display: flex;
+justify-content: space-between;
+align-items: center;
+gap: 10px;
+`
 
-const Items = ({data, index, remove=true}) => {
+
+const Items = ({data, index, remove=true,setDetailModal}) => {
 const dispatch = useDispatch()
 
   return (
@@ -29,10 +36,18 @@ const dispatch = useDispatch()
         <Td  textAlign="center"> ancho: {data.medidas.ancho}m alto: {data.medidas.alto} m </Td>
         <Td  textAlign="center">{data.vidrio}</Td>
         <Td  textAlign="center">{data.vidrio_mt} m2</Td>
-        <Td  textAlign="center">${(data.precio_total + data.precio_vidrio + data.precio_accesorios).toFixed(2)}</Td>
+        <Td  textAlign="center">{data.revestimiento_al}</Td>
+        <Td  textAlign="center">{data.revestimiento_al_mt} m</Td>
+        <Td  textAlign="center">${(data.precio_total + data.precio_vidrio + data.precio_accesorios + data.precio_revestimiento_al).toFixed(2)}</Td>
         <Td  textAlign="center">{data.cantidad}</Td>
-        <Td  textAlign="center">${((data.precio_total + data.precio_vidrio + data.precio_accesorios) * data.cantidad).toFixed(2)}</Td>
-        {remove && <Td ><RemoveLine onClick={() => dispatch(removeDataPreview(data))}><DeleteIcon /></RemoveLine></Td>}
+        <Td  textAlign="center">${((data.precio_total + data.precio_vidrio + data.precio_accesorios  + data.precio_revestimiento_al) * data.cantidad).toFixed(2)}</Td>
+        {remove && <Td >
+        <Wrapper>
+        <RemoveLine onClick={() => dispatch(removeDataPreview(data))}><DeleteIcon /></RemoveLine>
+        <RemoveLine onClick={() => setDetailModal(data)}><ViewIcon /></RemoveLine>
+        </Wrapper>
+        </Td>}
+        
    </Tr>
   )
 }

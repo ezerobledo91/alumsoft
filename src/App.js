@@ -2,8 +2,6 @@ import { ChakraProvider } from '@chakra-ui/react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
 import Home from './pages/Home'
-
-import Presupuestos from './pages/Presupuestos';
 import Proveedores from './pages/Proveedores';
 import Clientes from './pages/Clientes';
 import Perfiles from './pages/Perfiles';
@@ -22,7 +20,6 @@ function App() {
           <Route path="/clientes" element={<Clientes />} />
           <Route path="/perfiles" element={<Perfiles />} />
           <Route path="/aberturas" element={<Aberturas />} />
-          <Route path="/presupuestos/nuevo" element={<Presupuestos />} />
           <Route path="/presupuestos/" element={<PresupuestosList />} />
           <Route path="/vidrios/" element={<Vidrios />} />
           <Route path="/accesorios/" element={<Accesorios />} />

@@ -13,16 +13,21 @@ import {
 import { useEffect } from 'react'
 
 
-const ModalComponent = ({close=true, ...props}) => {
+const ModalComponent = ({close=true ,setState, ...props}) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   useEffect(() => {
-    props.open ? onOpen() : onClose()
+   if( props.open) {
+       onOpen()
+   }else{
+     onClose() 
+   }
+    
   }, [props.open, onOpen, onClose])
 
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size={'xl'}>
+    <Modal isOpen={isOpen} onClose={()=>setState(false)} size={'xl'}>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader> {props.title}</ModalHeader>

@@ -1,78 +1,89 @@
-import { NotAllowedIcon, SearchIcon } from '@chakra-ui/icons'
-import { Divider, Input, InputGroup, InputLeftElement } from '@chakra-ui/react'
+import { NotAllowedIcon } from '@chakra-ui/icons'
+import { Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
-import { FaFileInvoiceDollar } from 'react-icons/fa'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
 import Navbar from '../components/Navbar'
 import TablaPresupuestos from '../components/Tables/TablaPresupuestos'
-import { filterPresupuesto, getDataPresupuesto } from '../reducer/DataTablesSlice'
+import { getDataPresupuesto } from '../reducer/DataTablesSlice'
+import { Container } from '../components/Styled/StyledGenericLayout'
+import FilterAndSearch from '../components/FilterAndSearch'
+import Presupuestos from '../components/Forms/Presupuestos/Presupuestos'
 
-const Wrapper = styled.div`
-  padding: 10px 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: left;
-  height: -webkit-fill-available;
-`
-const Title = styled.h1`
-  text-align: left;
-  font-size: 1.2rem;
-  text-transform: capitalize;
-  display: flex;
-  gap: 10px;
-  align-items: center;
-`
 const NoData = styled.div`
   padding: 10px 20px;
 `
-const FiltersContainer = styled.div`
-  display: flex;
-  gap: 10px;
-  max-width: 50%;
-  padding: 10px 0px;
-`
+let data_titles = ['numero', 'cliente', 'observacion', 'precio', 'fecha']
 const PresupuestosList = () => {
-  const presupuestos = useSelector((state) => state.DataTables.presupuestos)
+  const data = useSelector((state) => state.DataTables)
   const dispatch = useDispatch()
-  // const [dataPresupuesto, setDataPresupuesto] = useState([])
-
-
+  const [data_edit, setDataEdit] = useState(false)
+  const [tabIndex, setTabIndex] = useState(0)
+  
+  // GET DATOS DE API Y SETEAR EL STATE REDUX
   useEffect(() => {
     dispatch(getDataPresupuesto())
-   }, [])
+  }, [dispatch, data_edit])
 
-   
+  // MOVIMIENTOS ENTRE TABAS CUANDO VAMOS A EDITAR
+  useEffect(() => {
+    if (data_edit){
+      setTabIndex(2)
+      return
+    }
+    setTabIndex(0)
+  
+  }, [data_edit])
 
-  const filterData = (busqueda) =>{
-      dispatch(filterPresupuesto(+busqueda))
-
+  // CONTROL DE TABS
+  const handleTabsChange = (index) => {
+    setTabIndex(index)
   }
 
+   
 
   return (
     <>
       <Navbar />
-      <Wrapper>
-        <Title>
-          <FaFileInvoiceDollar /> Presupuestos
-        </Title>
-        <FiltersContainer>
-          <InputGroup size='sm'>
-            <InputLeftElement pointerEvents='none' children={<SearchIcon color='gray.300' />} />
-            <Input type='search' placeholder='Buscar' onChange={(e)=>filterData(e.target.value)} />
-          </InputGroup>
-        </FiltersContainer>
-      </Wrapper>
-      <Divider />
-      {presupuestos.length > 0 ? (
-        <TablaPresupuestos data={presupuestos} />
-      ) : (
-        <NoData>
-          <NotAllowedIcon /> No existen Datos
-        </NoData>
-      )}
+      <Container>
+        <Tabs index={tabIndex} onChange={handleTabsChange}>
+          <TabList>
+            <Tab _selected={{ color: '#319795', borderColor: '#319795' }} _focus={{ boxShadow: 'none' }}>
+              Presupuestos
+            </Tab>
+            <Tab _selected={{ color: '#319795', borderColor: '#319795' }} _focus={{ boxShadow: 'none' }}>
+              Nuevo
+            </Tab>
+            <Tab _selected={{ color: '#319795', borderColor: '#319795' }} _focus={{ boxShadow: 'none' }}>
+              Editar
+            </Tab>
+          </TabList>
+          <TabPanels>
+            <TabPanel>
+              <FilterAndSearch />
+              {data.presupuestos.length > 0 ? (
+                <TablaPresupuestos data={data.presupuestos} titles={data_titles} setDataEdit={setDataEdit} />
+              ) : (
+                <NoData>
+                  <NotAllowedIcon /> No existen Datos
+                </NoData>
+              )}
+            </TabPanel>
+            <TabPanel>
+              <Presupuestos/>
+            </TabPanel>
+            <TabPanel>
+              {/* {data_edit ? (
+                <NewAberturaEdit data_edit={data_edit} setDataEdit={setDataEdit}/>
+              ) : (
+                <NoData>
+                  <NotAllowedIcon /> Seleccione una abertura para editar.
+                </NoData>
+              )} */}
+            </TabPanel>
+          </TabPanels>
+        </Tabs>
+      </Container>
     </>
   )
 }

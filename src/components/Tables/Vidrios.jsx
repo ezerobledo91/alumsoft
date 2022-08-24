@@ -95,7 +95,7 @@ const VidriosTable = ({ titles, data, setDataEdit }) => {
           </Tfoot>
         </Table>
       </TableContainer>
-      <ModalComponent title='Borrar Vidrio' open={deleteConfirm} close={false}>
+      <ModalComponent title='Borrar Vidrio' open={deleteConfirm} close={false} setState={setDeleteConfirm}>
          <WrapperFlexRow>
          <span>{deleteConfirm?.nombre}</span>
           <Button leftIcon={<DeleteIcon />} colorScheme='red' variant='solid' onClick={()=>confirmDelete(deleteConfirm)}>
