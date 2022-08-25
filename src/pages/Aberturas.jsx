@@ -1,14 +1,13 @@
 import { NotAllowedIcon } from '@chakra-ui/icons'
-import { Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react'
+import { FormControl, FormLabel, Select, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react'
 import React, { useEffect } from 'react'
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
-import FilterAndSearch from '../components/FilterAndSearch'
 import NewAberturaRefactor from '../components/Forms/Aberturas/NewAbertura'
 import NewAberturaEdit from '../components/Forms/Aberturas/NewAberturaEdit'
 import Navbar from '../components/Navbar'
-import { Container } from '../components/Styled/StyledGenericLayout'
+import { Container, WrapperFlexRowMin } from '../components/Styled/StyledGenericLayout'
 import AberturasTable from '../components/Tables/Aberturas'
 import { getDataAccesorio, getDataAbertura } from '../reducer/DataTablesSlice'
 
@@ -44,7 +43,16 @@ const Aberturas = () => {
   const handleTabsChange = (index) => {
     setTabIndex(index)
   }
-
+  // FILTROS
+  const [data_filtrada, setDataFiltrada] = useState([])
+  const setDataFiltro = (filtro, parametro) => {
+    if (filtro === '') {
+      setDataFiltrada([])
+    } else {
+      const datos = data.aberturas.filter((item) => item[parametro] === filtro)
+      setDataFiltrada(datos)
+    }
+  }
   return (
     <>
       <Navbar />
@@ -63,9 +71,44 @@ const Aberturas = () => {
           </TabList>
           <TabPanels>
             <TabPanel>
-              <FilterAndSearch />
+            <WrapperFlexRowMin>
+                <FormControl>
+                  <FormLabel htmlFor='categoria'>Filtro Categoria</FormLabel>
+                  <Select
+                    placeholder='Seleccione una Categoria'
+                    id='categoria'
+                    defaultValue={''}
+                    size='sm'
+                    onChange={(e) => {
+                      setDataFiltro(e.target.value, 'categoria')
+                    }}
+                  >
+                    <option value='puertas'>Puertas</option>
+                    <option value='ventanas'>Ventanas</option>
+                    <option value='marcos'>Marcos</option>
+                    <option value='otro'>Otro</option>
+                  </Select>
+                </FormControl>
+                <FormControl>
+                  <FormLabel htmlFor='categoria'>Filtro Linea</FormLabel>
+                  <Select
+                    placeholder='Seleccione una Linea'
+                    id='categoria'
+                    defaultValue={''}
+                    size='sm'
+                    onChange={(e) => {
+                      setDataFiltro(e.target.value, 'linea')
+                    }}
+                  >
+                    <option value='herrero'>Herrero</option>
+                    <option value='herrero pesado'>Herrero Pesado</option>
+                    <option value='modena'>Modena</option>
+                    <option value='otro'>Otro</option>
+                  </Select>
+                </FormControl>
+              </WrapperFlexRowMin>
               {data.aberturas.length > 0 ? (
-                <AberturasTable data={data.aberturas} titles={data_titles} setDataEdit={setDataEdit} />
+                <AberturasTable data={data_filtrada.length > 0 ? data_filtrada : data.aberturas} titles={data_titles} setDataEdit={setDataEdit} />
               ) : (
                 <NoData>
                   <NotAllowedIcon /> No existen Datos

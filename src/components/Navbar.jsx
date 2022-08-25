@@ -1,6 +1,6 @@
 import {  HamburgerIcon } from '@chakra-ui/icons'
 import { IconButton, Menu, MenuButton, MenuDivider, MenuGroup, MenuItem, MenuList } from '@chakra-ui/react'
-
+import { FaAtlassian } from "react-icons/fa";
 import React from 'react'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
@@ -24,6 +24,9 @@ const Wrapper = styled.div`
 `
 
 const Logo = styled.div`
+display: flex;
+gap: 10px;
+align-items: center;
   font-weight: 500;
   color: white;
 `
@@ -32,7 +35,7 @@ function Navbar() {
   return (
     <Container>
       <Wrapper>
-        <Logo>Alum Soft</Logo>
+      <Link to='/'> <Logo><FaAtlassian/>ALUMINIO SOFT</Logo>  </Link>
         <Menu>
           <MenuButton as={IconButton} aria-label='Options' icon={<HamburgerIcon />} />
           <MenuList>
@@ -62,7 +65,6 @@ function Navbar() {
                 <MenuItem>Accesorios</MenuItem>
               </Link>
             </MenuGroup>
-            <MenuDivider />
             {/* <MenuGroup title='Cuenta' textAlign={'left'}>
               <MenuItem icon={<ArrowBackIcon />}>Salir</MenuItem>
             </MenuGroup> */}

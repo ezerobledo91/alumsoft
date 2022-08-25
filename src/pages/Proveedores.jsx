@@ -6,7 +6,6 @@ import Navbar from '../components/Navbar'
 import { getDataProveedor } from '../reducer/DataTablesSlice'
 import { Container } from '../components/Styled/StyledGenericLayout'
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react'
-import FilterAndSearch from '../components/FilterAndSearch'
 import ProveedoresTable from '../components/Tables/Proveedores'
 import NewProveedor from '../components/Forms/Proveedores/NewProveedor'
 import EditProveedor from '../components/Forms/Proveedores/EditProveedor'
@@ -60,7 +59,6 @@ const Proveedores = () => {
           </TabList>
           <TabPanels>
             <TabPanel>
-              <FilterAndSearch />
               {data.proveedores.length > 0 ? (
                 <ProveedoresTable data={data.proveedores} titles={data_titles} setDataEdit={setDataEdit} />
               ) : (

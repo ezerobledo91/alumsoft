@@ -4,8 +4,8 @@ import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
-import { createPresupuestoItem } from '../../../auxiliar/aux_functions'
-import { getDataAccesorio, getDataAbertura, getDataPerfil, getDataVidrio } from '../../../reducer/DataTablesSlice'
+import { createPresupuestoItem, generateOptionGroups } from '../../../auxiliar/aux_functions'
+import { getDataAccesorio, getDataCliente, getDataAbertura, getDataPerfil, getDataVidrio } from '../../../reducer/DataTablesSlice'
 import { setDataEditPresupuestoItem } from '../../../reducer/UiSlice'
 
 const Container = styled.form`
@@ -25,69 +25,62 @@ const DividerAberturas = styled.div`
   gap: 10px;
   border-radius: 5px;
 `
-
-const NewItemEditPresupuesto = ({ ID, observacion, setObservacion, resetForm }) => {
-  //React Hook form
-  const { register, handleSubmit, reset } = useForm()
-  const dispatch = useDispatch()
-  const onSubmit = (values) => {
-    const new_item = createPresupuestoItem(values, data_aberturas, data_perfiles, data_vidrios,data_accesorios, ID)
-    dispatch(setDataEditPresupuestoItem(new_item)) // Guardo ese item en una variable global.
-  }
-
-  // GET DATA
-  const data_aberturas = useSelector((state) => state.DataTables.aberturas)
-  const data_perfiles = useSelector((state) => state.DataTables.perfiles)
-  const data_vidrios = useSelector((state) => state.DataTables.vidrios)
-  const data_accesorios = useSelector((state) => state.DataTables.accesorios)
-
-  useEffect(() => {
-    dispatch(getDataAbertura())
-    dispatch(getDataPerfil())
-    dispatch(getDataVidrio())
-    dispatch(getDataAccesorio())
-
-  }, [dispatch])
-
-  useEffect(() => {
-    resetForm && reset()
-  }, [resetForm, reset])
-
-
-  const generateGroups = () => {
-    const newArrayAberturas = [...new Set(data_aberturas.map((a) => a.categoria[0]))].map((group) => {
-      return {
-        categoria: group,
-        items: data_aberturas.filter((i) => i.categoria[0] === group),
-      }
-    })
-    return newArrayAberturas.map((aberturas, i) => {
-      return (
-        <optgroup key={aberturas.categoria + i} label={aberturas.categoria} style={{ textTransform: 'capitalize' }}>
-          {aberturas.items.map((abertura, index) => (
-            <option key={index} value={abertura._id}>
-              {abertura.nombre} | {abertura.linea}
-            </option>
-          ))}
-        </optgroup>
-      )
-    })
-  }
-
-
-
-
-
+// FORM!!!! 
+const NewItemEditPresupuesto = ({ data_edit, setCliente,setObservacion, resetForm }) => {
+   //React Hook form
+   const { register, handleSubmit, reset } = useForm()
+   const dispatch = useDispatch()
+ 
+   // GET DATA
+   const data_aberturas = useSelector((state) => state.DataTables.aberturas)
+   const data_clientes = useSelector((state) => state.DataTables.clientes)
+   const data_perfiles = useSelector((state) => state.DataTables.perfiles)
+   const data_vidrios = useSelector((state) => state.DataTables.vidrios)
+   const data_accesorios = useSelector((state) => state.DataTables.accesorios)
+ 
+ 
+   const data_preview = useSelector((state) => state.UiSlice.editPresupuesto.data)
+    const ID = data_preview.length
+ 
+   //Guardar Presupuesto Nuevo
+   const onSubmit = (values) => {
+     const new_item = createPresupuestoItem(values, data_aberturas, data_perfiles, data_vidrios,data_accesorios, ID)
+     dispatch(setDataEditPresupuestoItem(new_item)) // Guardo ese item en una variable global.
+   }
+ 
+   useEffect(() => {
+     dispatch(getDataAbertura())
+     dispatch(getDataCliente())
+     dispatch(getDataPerfil())
+     dispatch(getDataVidrio())
+     dispatch(getDataAccesorio())
+   }, [dispatch])
+ 
+   useEffect(() => {
+     resetForm && reset()
+   }, [resetForm, reset])
 
   return (
     <Container onSubmit={handleSubmit(onSubmit)}>
+      <FormControl>
+        <FormLabel htmlFor='nombre'>Cliente</FormLabel>
+        <Select placeholder='Seleccione un Cliente' id='cliente' size='sm' defaultValue={data_edit?.cliente} onChange={(e) => setCliente(e.target.value)}>
+          <option value="Consumidor Final">Consumidor Final</option>
+          {data_clientes.map((item) => {
+            return (
+              <option key={item._id} value={item.nombre}>
+                Nombre: {item.nombre}
+              </option>
+            )
+          })}
+        </Select>
+        <FormHelperText>Seleccione un Cliente</FormHelperText>
+      </FormControl>
       <DividerAberturas>
         <FormControl isRequired>
           <FormLabel htmlFor='abertura'>Abertura</FormLabel>
           <Select placeholder='Seleccione una Abertura' id='abertura' size='sm' {...register('abertura')}>
-          {
-              generateGroups()
-            }
+            {generateOptionGroups(data_aberturas, 'categoria', '_id', 'nombre')}
           </Select>
           <FormHelperText>Seleccione Aberturas para este Presupuesto</FormHelperText>
         </FormControl>
@@ -116,10 +109,14 @@ const NewItemEditPresupuesto = ({ ID, observacion, setObservacion, resetForm }) 
             </div>
           </WrapperInput>
         </FormControl>
-        <Tabs  >
+        <Tabs>
           <TabList>
-            <Tab   _selected={{ color: '#319795', borderColor: '#319795'}} _focus={{ boxShadow: "none", }}>Vidrio</Tab>
-            <Tab  _selected={{ color: '#319795', borderColor: '#319795'}} _focus={{ boxShadow: "none", }}>Revestimiento Aluminio</Tab>
+            <Tab _selected={{ color: '#319795', borderColor: '#319795' }} _focus={{ boxShadow: 'none' }}>
+              Vidrio
+            </Tab>
+            <Tab _selected={{ color: '#319795', borderColor: '#319795' }} _focus={{ boxShadow: 'none' }}>
+              Revestimiento Aluminio
+            </Tab>
           </TabList>
 
           <TabPanels>
@@ -127,7 +124,13 @@ const NewItemEditPresupuesto = ({ ID, observacion, setObservacion, resetForm }) 
               <WrapperInput>
                 <FormControl>
                   <FormLabel htmlFor='Vidrio'>Vidrio</FormLabel>
-                  <Select placeholder='Seleccione un Vidrio'  defaultValue='Sin Vidrio' id='vidrio' size='sm' {...register('vidrio')}>
+                  <Select
+                    placeholder='Seleccione un Vidrio'
+                    defaultValue='Sin Vidrio'
+                    id='vidrio'
+                    size='sm'
+                    {...register('vidrio')}
+                  >
                     {data_vidrios.map((item) => {
                       return (
                         <option key={item._id} value={item._id}>
@@ -140,7 +143,14 @@ const NewItemEditPresupuesto = ({ ID, observacion, setObservacion, resetForm }) 
                 </FormControl>
                 <FormControl>
                   <FormLabel htmlFor='Vidrio'>Cantidad</FormLabel>
-                  <Input aria-required={true} id='mt2' type='number' step='0.01' size='sm' {...register('vidrio_mt2')} />
+                  <Input
+                    aria-required={true}
+                    id='mt2'
+                    type='number'
+                    step='0.01'
+                    size='sm'
+                    {...register('vidrio_mt2')}
+                  />
                   <FormHelperText>Cantidad en m2</FormHelperText>
                 </FormControl>
               </WrapperInput>
@@ -149,21 +159,35 @@ const NewItemEditPresupuesto = ({ ID, observacion, setObservacion, resetForm }) 
               <WrapperInput>
                 <FormControl>
                   <FormLabel htmlFor='Vidrio'>Aluminio</FormLabel>
-                  <Select placeholder='Seleccione un Perfil' id='vidrio' size='sm' {...register('revestimiento_aluminio')}>
-                    {data_vidrios.map((item) => {
-                      return (
-                        <option key={item._id} value={item._id}>
-                          Nombre: {item.nombre} Espesor: {item.espesor}
-                        </option>
-                      )
-                    })}
+                  <Select
+                    placeholder='Seleccione un Perfil'
+                    id='perfil'
+                    size='sm'
+                    {...register('revestimiento_aluminio')}
+                  >
+                    {data_perfiles
+                      .filter((perfil) => perfil.categoria === 'revestimientos')
+                      .map((item) => {
+                        return (
+                          <option key={item._id} value={item._id}>
+                            Codigo: {item.codigo} Nombre: {item.nombre}
+                          </option>
+                        )
+                      })}
                   </Select>
                   <FormHelperText>Seleccione un revestimiento(opcional)</FormHelperText>
                 </FormControl>
                 <FormControl>
                   <FormLabel htmlFor='Vidrio'>Cantidad</FormLabel>
-                  <Input aria-required={true} id='mt2' type='number' step='0.01' size='sm' {...register('r_aluminio_mt2')} />
-                  <FormHelperText>Cantidad en m2</FormHelperText>
+                  <Input
+                    aria-required={true}
+                    id='mt2'
+                    type='number'
+                    step='0.01'
+                    size='sm'
+                    {...register('r_aluminio_mt')}
+                  />
+                  <FormHelperText>Cantidad en m lineales</FormHelperText>
                 </FormControl>
               </WrapperInput>
             </TabPanel>
@@ -172,12 +196,7 @@ const NewItemEditPresupuesto = ({ ID, observacion, setObservacion, resetForm }) 
       </DividerAberturas>
       <FormControl>
         <FormLabel htmlFor='observacion'>Observaciones</FormLabel>
-        <Textarea
-          onChange={(e) => setObservacion(e.target.value)}
-          placeholder='Observaciones'
-          value={observacion}
-          size='sm'
-        />
+        <Textarea onChange={(e) => setObservacion(e.target.value)} placeholder='Observaciones' size='sm' defaultValue={data_edit.observaciones}/>
         <FormHelperText>Detalle visible al pie del Presupuesto</FormHelperText>
       </FormControl>
       <Button leftIcon={<AddIcon />} colorScheme='teal' variant='solid' size='sm' type='submit'>

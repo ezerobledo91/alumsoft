@@ -11,6 +11,15 @@ gap: 20px;
 margin-bottom:20px;
 `
 
+export const WrapperFlexRowMin = styled.div`
+display: flex;
+justify-content: space-between;
+align-items: center;
+gap: 20px;
+margin-bottom:20px;
+max-width: 50%;
+`
+
 export const UniqueFlexRow = styled.div`
 display: flex;
 justify-content: space-between;

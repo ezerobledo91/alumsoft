@@ -27,11 +27,9 @@ const TablaPresupuestos = ({ titles, data, setDataEdit }) => {
   const dispatch = useDispatch()
   const toast = useToast()
 
-
-
   const confirmDelete = (item) => {
     setDeleteConfirm(false)
-    dispatch(removeDataPresupuesto(item.id))
+    dispatch(removeDataPresupuesto(item._id))
     toast({
       title: `Presupuesto Borrado Correctamente`,
       status: 'success',

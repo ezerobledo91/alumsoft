@@ -19,7 +19,9 @@ export const UiSlice = createSlice({
         previewPres: {
             data: [],
         },
-        editPresupuesto: {}
+        editPresupuesto: {
+            data:[]
+        }
 
     },
     reducers: {
@@ -62,15 +64,15 @@ export const UiSlice = createSlice({
             state.previewPres.data = [];
         },
         setDataEditPresupuesto: (state, action) => {
-            state.editPresupuesto = action.payload ;
+            state.editPresupuesto.data = action.payload ;
           },
         removeDataEditPresupuesto: (state, action) => {
             const { _id } = action.payload
-            const index = state.editPresupuesto.aberturas.findIndex((item) => item._id === _id);
-            state.editPresupuesto.aberturas.splice(index, 1);
+            const index = state.editPresupuesto.data.findIndex((item) => item._id === _id);
+            state.editPresupuesto.data.splice(index, 1);
         },  
         setDataEditPresupuestoItem: (state, action) => {
-            state.editPresupuesto.aberturas.push(action.payload);
+            state.editPresupuesto.data.push(action.payload);
         },
     }
 

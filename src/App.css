@@ -61,3 +61,20 @@ tfoot > tr > th{
   color:#4a5568 !important;
   
 }
+
+
+@media print{
+  thead > tr > th{
+    color:#000000 !important;
+    background-color: #ffffff;
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
+    box-shadow: none !important;
+    margin: 0 !important;
+    font-size: 12px !important;
+  }
+  tfoot > tr > th{
+    color:#4a5568 !important;
+    
+  }
+}

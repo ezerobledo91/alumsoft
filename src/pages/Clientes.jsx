@@ -8,7 +8,6 @@ import Navbar from '../components/Navbar'
 import { getDataCliente } from '../reducer/DataTablesSlice'
 import { Container } from '../components/Styled/StyledGenericLayout'
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react'
-import FilterAndSearch from '../components/FilterAndSearch'
 import ClientesTable from '../components/Tables/Clientes'
 
 
@@ -45,8 +44,6 @@ const Clientes = () => {
     setTabIndex(index)
   }
 
-
-
   return (
 
     <>
@@ -66,7 +63,6 @@ const Clientes = () => {
         </TabList>
         <TabPanels>
           <TabPanel>
-            <FilterAndSearch />
             {data.clientes.length > 0 ? (
               <ClientesTable data={data.clientes} titles={data_titles} setDataEdit={setDataEdit} />
             ) : (

@@ -3,7 +3,7 @@ import { Td, Tr } from '@chakra-ui/react'
 import React from 'react'
 import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
-import { removeDataPreview } from '../../../reducer/UiSlice'
+import { removeDataEditPresupuesto, removeDataPreview } from '../../../reducer/UiSlice'
 
 const RemoveLine = styled.span`
   display: flex;
@@ -27,7 +27,7 @@ gap: 10px;
 `
 
 
-const Items = ({data, index, remove=true,setDetailModal}) => {
+const Items = ({data, index, remove=true,setDetailModal, edit=false}) => {
 const dispatch = useDispatch()
 
   return (
@@ -43,7 +43,7 @@ const dispatch = useDispatch()
         <Td  textAlign="center">${((data.precio_total + data.precio_vidrio + data.precio_accesorios  + data.precio_revestimiento_al) * data.cantidad).toFixed(2)}</Td>
         {remove && <Td >
         <Wrapper>
-        <RemoveLine onClick={() => dispatch(removeDataPreview(data))}><DeleteIcon /></RemoveLine>
+        <RemoveLine onClick={() => dispatch(edit ? removeDataEditPresupuesto(data) : removeDataPreview(data))}><DeleteIcon /></RemoveLine>
         <RemoveLine onClick={() => setDetailModal(data)}><ViewIcon /></RemoveLine>
         </Wrapper>
         </Td>}
