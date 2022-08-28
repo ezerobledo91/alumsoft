@@ -79,7 +79,7 @@ const Clientes = () => {
               <EditCliente data_edit={data_edit} setDataEdit={setDataEdit}/>
             ) : (
               <NoData>
-                <NotAllowedIcon /> Seleccione un accesorio para editar.
+                <NotAllowedIcon /> Seleccione un Cliente para editar.
               </NoData>
             )}
           </TabPanel>

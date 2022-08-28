@@ -116,7 +116,7 @@ const PresupuestosList = () => {
                 <EditPresupuestos data_edit={data_edit} setDataEdit={setDataEdit} />
               ) : (
                 <NoData>
-                  <NotAllowedIcon /> Seleccione una abertura para editar.
+                  <NotAllowedIcon /> Seleccione un Presupuesto para editar.
                 </NoData>
               )}
             </TabPanel>

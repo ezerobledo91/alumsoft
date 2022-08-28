@@ -6,7 +6,7 @@ import EditAccesorio from '../components/Forms/Accesorios/EditAccesorio'
 import NewAccesorio from '../components/Forms/Accesorios/NewAccesorio'
 import Navbar from '../components/Navbar'
 import AccesoriosTable from '../components/Tables/Accesorios'
-import { getDataAccesorio, getProveedorByCategoria } from '../reducer/DataTablesSlice'
+import { getDataAccesorio, getDataProveedor} from '../reducer/DataTablesSlice'
 import { Container, UniqueFlexRow } from '../components/Styled/StyledGenericLayout'
 import { FormControl, FormLabel, Select, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react'
 
@@ -25,7 +25,7 @@ const Accesorios = () => {
 
   useEffect(() => {
     dispatch(getDataAccesorio())
-    dispatch(getProveedorByCategoria('accesorios'))
+    dispatch(getDataProveedor())
   }, [dispatch, data_edit])
 
   // MOVIMIENTOS ENTRE TABS CUANDO VAMOS A EDITAR

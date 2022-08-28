@@ -14,8 +14,8 @@ const NewAccesorio = () => {
   const [error, setError] = useState('')
   const dispatch = useDispatch()
 
-  const data = useSelector((state) => state.DataTables)
-  const proveedores = data.proveedores
+  const proveedores = useSelector((state) => state.DataTables.proveedores)
+
 
   useEffect(() => {
     dispatch(getDataProveedor())
@@ -23,11 +23,11 @@ const NewAccesorio = () => {
 
 
   //GUARDAR ACCESORIO
-  const onSubmit = async (data) => {
-    data.iva = checkedIVA
-    data.precio = precio
+  const onSubmit = async (datos) => {
+    datos.iva = checkedIVA
+    datos.precio = precio
     setLoading(true)
-    await dispatch(saveDataAccesorio(data))
+    await dispatch(saveDataAccesorio(datos))
     setLoading(false)
     toast({
       title: `Accesorio Guardado Correctamente`,

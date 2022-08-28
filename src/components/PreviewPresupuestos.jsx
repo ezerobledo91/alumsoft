@@ -91,10 +91,8 @@ const PrintableBodyWrapper = styled.div`
 
 
 const PreviewPresupuestos = React.forwardRef((props, ref) => {
-
-    const {cliente, fecha, numero, observaciones, precio, aberturas} = props.data
-    document.title=`Presupuesto ${numero} - Cliente ${cliente}`
-  return (
+const {cliente, fecha, numero, observaciones, precio, aberturas} = props.data
+ return (
     <Print ref={ref}>
       <ContainerPre>
         <WrapperTop>

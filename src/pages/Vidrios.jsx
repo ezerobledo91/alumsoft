@@ -110,7 +110,7 @@ const Vidrios = () => {
                 <EditVidrio data_edit={data_edit} setDataEdit={setDataEdit} />
               ) : (
                 <NoData>
-                  <NotAllowedIcon /> Seleccione un accesorio para editar.
+                  <NotAllowedIcon /> Seleccione un Vidrio para editar.
                 </NoData>
               )}
             </TabPanel>

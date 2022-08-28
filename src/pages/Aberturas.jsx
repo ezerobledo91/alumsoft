@@ -123,7 +123,7 @@ const Aberturas = () => {
                 <NewAberturaEdit data_edit={data_edit} setDataEdit={setDataEdit}/>
               ) : (
                 <NoData>
-                  <NotAllowedIcon /> Seleccione una abertura para editar.
+                  <NotAllowedIcon /> Seleccione una Abertura para editar.
                 </NoData>
               )}
             </TabPanel>

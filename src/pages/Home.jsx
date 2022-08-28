@@ -43,7 +43,6 @@ const Home = () => {
           <Grid templateColumns='repeat(5, 1fr)' gap={6}>
             <GridItem w='100%'>
               <Link to='/presupuestos/'>
-                {' '}
                 <BoxIcon>
                   <MdReceipt fontSize={70} />
                   Presupuestos

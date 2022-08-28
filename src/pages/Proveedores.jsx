@@ -75,7 +75,7 @@ const Proveedores = () => {
               <EditProveedor data_edit={data_edit} setDataEdit={setDataEdit}/>
             ) : (
               <NoData>
-                <NotAllowedIcon /> Seleccione un accesorio para editar.
+                <NotAllowedIcon /> Seleccione un Proveedor para editar.
               </NoData>
             )}
             </TabPanel>

@@ -2,7 +2,7 @@ import { Button, FormControl, FormHelperText, FormLabel, Input, Select, Stack, u
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
-import { getDataProveedor, saveDataAccesorio, updateDataAccesorio } from '../../../reducer/DataTablesSlice'
+import {saveDataAccesorio, updateDataAccesorio } from '../../../reducer/DataTablesSlice'
 import { ErrorMsg, TitleGroupInput, Container } from '../../Styled/StyledFormsAdds'
 import { UniqueFlexRow, WrapperFlexRow } from '../../Styled/StyledGenericLayout'
 
@@ -13,20 +13,14 @@ const EditAccesorio = ({ data_edit, setDataEdit }) => {
   const toast = useToast()
   const [error, setError] = useState('')
   const dispatch = useDispatch()
-  const data = useSelector((state) => state.DataTables)
-  const proveedores = data.proveedores
+  const proveedores = useSelector((state) => state.DataTables.proveedores)
 
-  useEffect(() => {
-    dispatch(getDataProveedor())
-  }, [dispatch])
-
-  
-  const onSubmit = async (data) => {
-    data._id = data_edit._id
-    data.iva = checkedIVA
-    data.precio = precio
+  const onSubmit = async (datos) => {
+    datos._id = data_edit._id
+    datos.iva = checkedIVA
+    datos.precio = precio
     setLoading(true)
-    dispatch(updateDataAccesorio(data)) // Update call
+    dispatch(updateDataAccesorio(datos)) // Update call
     setLoading(false)
     reset()
     setError('')
@@ -42,12 +36,12 @@ const EditAccesorio = ({ data_edit, setDataEdit }) => {
 
   const guardarCopia = async (e) => {
     e.preventDefault()
-    const data = getValues()
-    data.iva = checkedIVA
-    data.precio = precio
-    data.codigo = data.codigo + ' COPIA'
+    const data_val = getValues()
+    data_val.iva = checkedIVA
+    data_val.precio = precio
+    data_val.codigo = data_val.codigo + ' COPIA'
     setLoading(true)
-    await dispatch(saveDataAccesorio(data))
+    await dispatch(saveDataAccesorio(data_val))
     setLoading(false)
     toast({
       title: `Accesorio Copiado Correctamente`,

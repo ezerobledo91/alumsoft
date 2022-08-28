@@ -139,7 +139,7 @@ const Perfiles = () => {
                 <EditPerfil data_edit={data_edit} setDataEdit={setDataEdit} />
               ) : (
                 <NoData>
-                  <NotAllowedIcon /> Seleccione un accesorio para editar.
+                  <NotAllowedIcon /> Seleccione un Perfil para editar.
                 </NoData>
               )}
             </TabPanel>

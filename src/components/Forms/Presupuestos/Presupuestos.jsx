@@ -59,6 +59,7 @@ const ContainerPre = styled.div`
   flex-direction: column;
   justify-content: space-between;
   height: fit-content;
+  width:60%;
 `
 const WrapperTop = styled.div`
   display: flex;
@@ -97,7 +98,7 @@ const Presupuestos = () => {
   const [detailModal, setDetailModal] = useState(false)
 
   let precio = 0 // precio total de los items.
-  let numero = presupuestos.at(-1)?.numero + 1 // numero de presupuestos.
+  let numero = presupuestos.at(-1)?.numero === undefined ? 1 : presupuestos.at(-1)?.numero + 1 // numero de presupuestos.
   data_preview.forEach((item) => {
     precio = precio + ( item.precio_total + item.precio_vidrio + item.precio_accesorios + item.precio_revestimiento_al) * item.cantidad  // Precio total.
     })
@@ -163,7 +164,7 @@ const Presupuestos = () => {
           </WrapperTop>
           <Divider />
           <Wrapper>
-            <TableContainer overflowY='auto' height='440px'>
+            <TableContainer overflowY='auto' height='440px' width={'100%'} overflowX='auto'>
               <Table variant='simple' size='sm'>
                 <Thead position='sticky' top={0} bgColor='white'>
                   <Tr>
