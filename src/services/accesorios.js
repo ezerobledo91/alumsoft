@@ -48,4 +48,17 @@ const updateAccesorio= async (entidad) => {
     return result
 }
 
-export { saveAccesorio, getAllAccesorios, deleteAccesorio, updateAccesorio}
+
+// Actualizar Accesorio
+const updateAccesorioLote= async (porcentaje) => {
+    let response = await fetch(`http://localhost:5000/api/accesorio/updateall/${porcentaje}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8',
+        }
+    })
+
+    let result = await response.json()
+    return result
+}
+export { saveAccesorio, getAllAccesorios, deleteAccesorio, updateAccesorio,updateAccesorioLote}

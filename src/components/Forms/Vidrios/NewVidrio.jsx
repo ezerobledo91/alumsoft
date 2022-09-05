@@ -143,7 +143,7 @@ const NewVidrio = () => {
         </FormControl>
       </WrapperFlexRow>
       <ErrorMsg>{error}</ErrorMsg>
-      <Button type='submit' isLoading={isLoading}>
+      <Button type='submit' isLoading={isLoading} colorScheme='teal'>
         Guardar Cambios
       </Button>
     </Container>

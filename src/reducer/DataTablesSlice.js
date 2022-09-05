@@ -1,12 +1,12 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { deleteAccesorio, getAllAccesorios, saveAccesorio, updateAccesorio } from '../services/accesorios'
+import { deleteAccesorio, getAllAccesorios, saveAccesorio, updateAccesorio, updateAccesorioLote } from '../services/accesorios'
 import { deleteCliente, getAllClientes, saveCliente, updateCliente } from '../services/clientes'
 import { deleteAbertura, getAllAberturas, saveAbertura, updateAbertura } from '../services/aberturas'
 import { deletePerfil, getAllPerfiles, savePerfil, updatePerfil } from '../services/perfiles'
 import { deletePieza, getAllPiezas, savePieza, updatePieza } from '../services/piezas'
 import { deletePresupuesto, getAllPresupuestos, savePresupuesto, updatePresupuesto } from '../services/presupuestos'
 import { deleteProveedor, getAllProveedores, getByCategoria, saveProveedor, updateProveedor } from '../services/proveedores'
-import { saveVidrio, getAllVidrios, deleteVidrio, updateVidrio } from '../services/vidrios'
+import { saveVidrio, getAllVidrios, deleteVidrio, updateVidrio, updateVidrioLote } from '../services/vidrios'
 
 // PROVEEDORES
 export const getDataProveedor = createAsyncThunk(
@@ -274,6 +274,14 @@ export const updateDataVidrio = createAsyncThunk(
     }
 
 )
+export const updateDataVidrioAll = createAsyncThunk(
+    'DataTables/updateDataVidrioAll',
+    async (payload) => {
+        const response = await updateVidrioLote(payload)
+        return response
+    }
+
+)
 
 // Accesorios
 export const saveDataAccesorio = createAsyncThunk(
@@ -309,10 +317,16 @@ export const updateDataAccesorio = createAsyncThunk(
         const response = await updateAccesorio(payload)
         return response
     }
-
 )
 
 
+export const updateDataAccesorioAll = createAsyncThunk(
+    'DataTables/updateDataAccesorioAll',
+    async (payload) => {
+        const response = await updateAccesorioLote(payload)
+        return response
+    }
+)
 
 export const DataTableSlice = createSlice({
     name: 'DataTables',
@@ -467,6 +481,9 @@ export const DataTableSlice = createSlice({
         [updateDataVidrio.fulfilled]: (state, action) => {
             return state
         },
+        [updateDataVidrioAll.fulfilled]: (state, action) => {
+            return state
+        },
         [saveDataAccesorio.fulfilled]: (state, action) => {
             state.accesorios.push(action.payload)
         },
@@ -482,6 +499,9 @@ export const DataTableSlice = createSlice({
             state.accesorios.splice(index, 1);
         },
         [updateDataAccesorio.fulfilled]: (state, action) => {
+            return state
+        },
+        [updateDataAccesorioAll.fulfilled]: (state, action) => {
             return state
         },
     }

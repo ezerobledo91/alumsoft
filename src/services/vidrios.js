@@ -34,7 +34,6 @@ const deleteVidrio = async (id) => {
 
 // Actualizar Vidrio
 const updateVidrio= async (entidad) => {
-    console.log()
     const { _id, ...others } = entidad
     let response = await fetch(`http://localhost:5000/api/vidrio/${_id}`, {
         method: 'PUT',
@@ -48,4 +47,18 @@ const updateVidrio= async (entidad) => {
     return result
 }
 
-export { saveVidrio, getAllVidrios, deleteVidrio, updateVidrio}
+
+// Actualizar Vidrio
+const updateVidrioLote= async (porcentaje) => {
+    let response = await fetch(`http://localhost:5000/api/vidrio/updateall/${porcentaje}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8',
+        }
+    })
+
+    let result = await response.json()
+    return result
+}
+
+export { saveVidrio, getAllVidrios, deleteVidrio, updateVidrio,updateVidrioLote}

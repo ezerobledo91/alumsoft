@@ -9,6 +9,7 @@ import AccesoriosTable from '../components/Tables/Accesorios'
 import { getDataAccesorio, getDataProveedor} from '../reducer/DataTablesSlice'
 import { Container, UniqueFlexRow } from '../components/Styled/StyledGenericLayout'
 import { FormControl, FormLabel, Select, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react'
+import LoteEdit from '../components/Forms/Accesorios/LoteEdit'
 
 const NoData = styled.div`
   padding: 10px 20px;
@@ -68,6 +69,9 @@ const Accesorios = () => {
             <Tab _selected={{ color: '#319795', borderColor: '#319795' }} _focus={{ boxShadow: 'none' }}>
               Editar
             </Tab>
+            <Tab _selected={{ color: '#319795', borderColor: '#319795' }} _focus={{ boxShadow: 'none' }}>
+              Editor de Lotes
+            </Tab>
           </TabList>
           <TabPanels>
             <TabPanel>
@@ -115,6 +119,9 @@ const Accesorios = () => {
                   <NotAllowedIcon /> Seleccione un accesorio para editar.
                 </NoData>
               )}
+            </TabPanel>
+            <TabPanel>
+                  <LoteEdit/>
             </TabPanel>
           </TabPanels>
         </Tabs>

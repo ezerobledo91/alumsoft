@@ -61,7 +61,7 @@ const AccesoriosTable = ({ titles, data, setDataEdit }) => {
             {data.map((item) => (
               <Tr key={item._id}>
                  {titles.map((title, k) => (
-                  <Td key={k}> {item[title]} </Td>
+                  <Td key={k}>  {typeof item[title] === 'number' ? Math.round(item[title] *100)/100 :  item[title] } </Td>
                 ))}
                <Td isNumeric>
                   <IconWrapper>

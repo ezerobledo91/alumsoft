@@ -9,6 +9,7 @@ import { FormControl, FormLabel, Select, Tab, TabList, TabPanel, TabPanels, Tabs
 import VidriosTable from '../components/Tables/Vidrios'
 import NewVidrio from '../components/Forms/Vidrios/NewVidrio'
 import EditVidrio from '../components/Forms/Vidrios/EditVidrio'
+import LoteEdit from '../components/Forms/Vidrios/LoteEdit'
 
 const NoData = styled.div`
   padding: 10px 20px;
@@ -68,6 +69,9 @@ const Vidrios = () => {
             <Tab _selected={{ color: '#319795', borderColor: '#319795' }} _focus={{ boxShadow: 'none' }}>
               Editar
             </Tab>
+            <Tab _selected={{ color: '#319795', borderColor: '#319795' }} _focus={{ boxShadow: 'none' }}>
+              Editor de Lotes
+            </Tab>
           </TabList>
           <TabPanels>
             <TabPanel>
@@ -113,6 +117,9 @@ const Vidrios = () => {
                   <NotAllowedIcon /> Seleccione un Vidrio para editar.
                 </NoData>
               )}
+            </TabPanel>
+            <TabPanel>
+                <LoteEdit/>
             </TabPanel>
           </TabPanels>
         </Tabs>

@@ -59,6 +59,7 @@ const ContainerPre = styled.div`
   flex-direction: column;
   justify-content: space-between;
   height: fit-content;
+  width:60%;
 `
 const WrapperTop = styled.div`
   display: flex;
@@ -207,7 +208,7 @@ const EditPresupuestos = ({ data_edit, setDataEdit }) => {
           </WrapperTop>
           <Divider />
           <Wrapper>
-            <TableContainer overflowY='auto' height='440px'>
+            <TableContainer overflowY='auto' height='440px' overflowX='auto'>
               <Table variant='simple' size='sm'>
                 <Thead position='sticky' top={0} bgColor='white'>
                   <Tr>
