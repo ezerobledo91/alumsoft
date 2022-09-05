@@ -35,7 +35,6 @@ const ContainerPre = styled.div`
 const Print = styled.div`
 display: flex;
 flex-direction: column;
-justify-content: space-between;
   border: solid #979797 1px;
   padding: 10px;
   border-radius: 5px;
@@ -57,7 +56,7 @@ const FooterTextObs = styled.div`
 `
 const WrapperFooter = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
 `
 const WrapperData = styled.div`
@@ -98,7 +97,7 @@ const {cliente, fecha, numero, observaciones, precio, aberturas} = props.data
         <WrapperTop>
         <WrapperData>
             <TitleName>ABERTURAS RECONQUISTA</TitleName>
-            <p>de Bellaben Claudia Rosana</p>
+            <p>de Ballaben Claudia Rosana</p>
             <p>Rivadavia 1485 Reconquista Santa Fe 3560</p>
             <p>Tel: 3482-588659</p>
         </WrapperData>
@@ -141,7 +140,7 @@ const {cliente, fecha, numero, observaciones, precio, aberturas} = props.data
 
     </ContainerPre>   
        <WrapperFooter>
-        <Stat style={{ flex: 'none', marginTop: '10px' }}>
+        <Stat style={{ flex: 'none', marginTop: '10px', textAlign:'right' }}>
           <StatLabel>Total</StatLabel>
           <StatNumber>$ {precio}</StatNumber>
           <FooterTextObs>{observaciones}</FooterTextObs>
