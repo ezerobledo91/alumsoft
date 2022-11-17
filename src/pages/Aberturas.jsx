@@ -6,6 +6,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
 import NewAberturaRefactor from '../components/Forms/Aberturas/NewAbertura'
 import NewAberturaEdit from '../components/Forms/Aberturas/NewAberturaEdit'
+import NewAberturaStandart from '../components/Forms/Aberturas/NewAberturaStandart'
+import NewAberturaStandartEdit from '../components/Forms/Aberturas/NewAberturaStandartEdit'
 import Navbar from '../components/Navbar'
 import { Container, WrapperFlexRowMin } from '../components/Styled/StyledGenericLayout'
 import AberturasTable from '../components/Tables/Aberturas'
@@ -68,6 +70,9 @@ const Aberturas = () => {
             <Tab _selected={{ color: '#319795', borderColor: '#319795' }} _focus={{ boxShadow: 'none' }}>
               Editar
             </Tab>
+            <Tab _selected={{ color: '#319795', borderColor: '#319795' }} _focus={{ boxShadow: 'none' }}>
+             Nueva Estandar
+            </Tab>
           </TabList>
           <TabPanels>
             <TabPanel>
@@ -120,12 +125,15 @@ const Aberturas = () => {
             </TabPanel>
             <TabPanel>
               {data_edit ? (
-                <NewAberturaEdit data_edit={data_edit} setDataEdit={setDataEdit}/>
+               data_edit?.tipo === 'estandar' ? <NewAberturaStandartEdit data_edit={data_edit} setDataEdit={setDataEdit} /> : <NewAberturaEdit data_edit={data_edit} setDataEdit={setDataEdit}/>
               ) : (
                 <NoData>
                   <NotAllowedIcon /> Seleccione una Abertura para editar.
                 </NoData>
               )}
+            </TabPanel>
+            <TabPanel>
+                <NewAberturaStandart></NewAberturaStandart>
             </TabPanel>
           </TabPanels>
         </Tabs>

@@ -22,7 +22,7 @@ import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { removeDataAbertura } from '../../reducer/DataTablesSlice'
 
-// TABLA ABERTURAS, FUNCIONES BORRAR, VER DETALLES, COPIAR. 
+// TABLA ABERTURAS, FUNCIONES BORRAR, VER DETALLES, COPIAR.
 const AberturasTable = ({ titles, data, setDataEdit }) => {
   const [detailModal, setDetailModal] = useState(false)
   const [deleteConfirm, setDeleteConfirm] = useState(false)
@@ -38,7 +38,7 @@ const AberturasTable = ({ titles, data, setDataEdit }) => {
     setDetailModal(item)
   }
 
-  const borrarAbertura = (item) =>{
+  const borrarAbertura = (item) => {
     setDeleteConfirm(item)
   }
 
@@ -51,7 +51,6 @@ const AberturasTable = ({ titles, data, setDataEdit }) => {
       isClosable: true,
     })
   }
-
 
   return (
     <>
@@ -92,10 +91,13 @@ const AberturasTable = ({ titles, data, setDataEdit }) => {
                       />
                     </Tooltip>
                     <Tooltip label={'Borrar'} fontSize='xs'>
-                      <DeleteIcon  focusable='true'
-                        cursor={'pointer'}  onClick={() => {
+                      <DeleteIcon
+                        focusable='true'
+                        cursor={'pointer'}
+                        onClick={() => {
                           borrarAbertura(item)
-                        }}/>
+                        }}
+                      />
                     </Tooltip>
                   </IconWrapper>
                 </Td>
@@ -116,12 +118,17 @@ const AberturasTable = ({ titles, data, setDataEdit }) => {
         {detailModal && <DetailContainer detalles={detailModal} />}
       </ModalComponent>
       <ModalComponent title='Borrar Abertura' open={deleteConfirm} close={false} setState={setDeleteConfirm}>
-         <WrapperFlexRow>
-         <span>{deleteConfirm?.nombre}</span>
-          <Button leftIcon={<DeleteIcon />} colorScheme='red' variant='solid' onClick={()=>confirmDelete(deleteConfirm)}>
+        <WrapperFlexRow>
+          <span>{deleteConfirm?.nombre}</span>
+          <Button
+            leftIcon={<DeleteIcon />}
+            colorScheme='red'
+            variant='solid'
+            onClick={() => confirmDelete(deleteConfirm)}
+          >
             Confirmar
           </Button>
-          </WrapperFlexRow>
+        </WrapperFlexRow>
       </ModalComponent>
     </>
   )
@@ -130,7 +137,7 @@ export default AberturasTable
 
 const DetailContainer = ({ detalles }) => {
   return (
-    <UnorderedList style={{ fontWeight: '300', maxHeight: '500px', overflow: 'auto', fontSize:'14px' }}>
+    <UnorderedList style={{ fontWeight: '300', maxHeight: '500px', overflow: 'auto', fontSize: '14px' }}>
       <ListItem>
         <strong>Nombre:</strong> {detalles.nombre}
       </ListItem>
@@ -140,6 +147,28 @@ const DetailContainer = ({ detalles }) => {
       <ListItem>
         <strong>Linea:</strong> {detalles.linea}
       </ListItem>
+      {detalles.tipo === 'estandar' && (
+        <>
+          <ListItem>
+            <strong>Alto:</strong> {detalles.alto}
+          </ListItem>
+          <ListItem>
+            <strong>Ancho:</strong> {detalles.ancho}
+          </ListItem>
+          <ListItem>
+            <strong>Vidrio:</strong> {detalles.vidrio_cod}
+          </ListItem>
+          <ListItem>
+            <strong>Vidrio m2:</strong> {detalles.vidrio_m2}
+          </ListItem>
+          <ListItem>
+            <strong>Revestimiento:</strong> {detalles.revestimiento_cod}
+          </ListItem>
+          <ListItem>
+            <strong>Revestimiento ml:</strong> {detalles.revestimiento_ml}
+          </ListItem>
+        </>
+      )}
       <ListItem>
         <strong>Perfiles:</strong>
         <UnorderedList>
@@ -149,7 +178,9 @@ const DetailContainer = ({ detalles }) => {
                 <p>Codigo: {perfil.codigo}</p>
                 <p>Nombre: {perfil.nombre}</p>
                 <p>Variable: {perfil.variable}</p>
-                {perfil.variable === 'fija' ? (
+                {detalles.tipo === 'estandar' ? (
+                  <p>Largo: {perfil.largo}</p>
+                ) : perfil.variable === 'fija' ? (
                   <>
                     <p>Cantidad: {perfil.cantidad} u</p>
                     <p>Medida: {perfil.medida} mm</p>

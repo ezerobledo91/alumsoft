@@ -40,7 +40,6 @@ flex-direction: column;
   border-radius: 5px;
   @media print {
     margin: 20px;
-    height: calc(100vh - 40px);
     }
 `
 

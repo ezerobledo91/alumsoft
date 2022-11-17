@@ -114,7 +114,7 @@ const AccesoriosAdd = ({ accesorios, arrayAccesorios, setArrayAccesorios }) => {
                 Cantidad <RequiredAsterisk>*</RequiredAsterisk>
               </FormLabel>
               <Input id='alto' type='number' size='sm' step='any' {...register('cantidad')} />
-              <FormHelperText>Ingrese la cantidad en metros (Cantidad Fija) o repeción.</FormHelperText>
+              <FormHelperText>Ingrese la cantidad en metros (Cantidad Fija) o repetición.</FormHelperText>
             </FormControl>
           </>
         ) : (

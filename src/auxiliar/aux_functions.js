@@ -1,13 +1,49 @@
 export const createPresupuestoItem = (values, data_aberturas, data_perfiles, data_vidrio, data_accesorios, ID) => {
     const abertura = data_aberturas.find((item) => item._id === values.abertura) // Busco en las aberturas el objeto que corresponde a la seleccion
+    const accesorios = abertura?.accesorios
+
+    // ESTANDAR
+    if (abertura.tipo === 'estandar') {
+        const vidrio = data_vidrio.find((item) => item.nombre === abertura.vidrio_cod)
+        const revestimiento_al = data_perfiles.find((item) => item.codigo === +abertura.revestimiento_cod)
+        const calculated = abertura.piezas.map(p=> {return {
+            nombre_pieza: p.nombre,
+            total_aluminio_long: p.largo, // Math Round para redondear con dos decimales 
+            total_aluminio_peso: Math.round(p.peso * p.largo)}})
+        return ({
+            _id: ID + 1,
+            data: calculated,
+            abertura: abertura.nombre,
+            peso_total: 0,
+            precio_total: abertura.precio_total,
+            precio_aluminio: abertura.precio_kg,
+            precio_accesorios: abertura.accesorios.map(a=> a.precio * a.cantidad).reduce((a, b) => a + b, 0),
+            porcentaje_aplicado: abertura.porcentaje,
+            medidas: {
+                alto:abertura.alto,
+                ancho: abertura.ancho,
+            },
+            vidrio: vidrio ? vidrio.nombre : 'Sin Vidrio',
+            vidrio_mt: vidrio ? abertura.vidrio_m2 : '',
+            precio_vidrio: vidrio ? abertura.vidrio_m2 * vidrio.precio : 0,
+            cantidad: values.cantidad,
+            accesorios: accesorios ? accesorios : 'Sin Accesorios',
+            revestimiento_al: revestimiento_al ? revestimiento_al.nombre : 'Sin Revestimiento',
+            revestimiento_al_mt: revestimiento_al ? abertura.revestimiento_ml : '',
+            precio_revestimiento_al: revestimiento_al ? Math.round(abertura.revestimiento_ml * revestimiento_al.peso * abertura.precio_kg * (1 + (abertura.porcentaje / 100)) * 100) / 100 : 0,
+            
+
+        })
+    }
+    
     const vidrio = data_vidrio.find((item) => item._id === values.vidrio)
     const revestimiento_al = data_perfiles.find((item) => item._id === values.revestimiento_aluminio)
     const piezas = abertura.piezas  // Guardo las piezas
     const calculated = []
-    const accesorios = abertura?.accesorios
+
+
     // PESO TOTAL EN ALUMINIO (NO REVESTIMIENTO)
     let peso_total = 0
-
     piezas.forEach((element) => {
         const peso_perfil = data_perfiles.find((item) => item._id === element._id).peso // De las piezas correspondientes busco los perfiles y saco el peso
         let longitud_variable = longitud_calculada(values, element)
@@ -24,7 +60,7 @@ export const createPresupuestoItem = (values, data_aberturas, data_perfiles, dat
     if (accesorios) {
         accesorios.forEach(acc => {
             let accesorio = data_accesorios.find((item) => item.nombre === acc.nombre)
-            precio_accesorios = precio_accesorios + (accesorio.precio * accesorio_calculado(values,acc))
+            precio_accesorios = precio_accesorios + (accesorio.precio * accesorio_calculado(values, acc))
         })
     }
 
@@ -51,7 +87,7 @@ export const createPresupuestoItem = (values, data_aberturas, data_perfiles, dat
         accesorios: accesorios ? accesorios : 'Sin Accesorios',
         revestimiento_al: revestimiento_al ? revestimiento_al.nombre : 'Sin Revestimiento',
         revestimiento_al_mt: revestimiento_al ? +values.r_aluminio_mt : '',
-        precio_revestimiento_al: revestimiento_al ? Math.round(+values.r_aluminio_mt * revestimiento_al.peso  * values.precio * (1 + (values.porcentaje / 100)) * 100) / 100 : 0,
+        precio_revestimiento_al: revestimiento_al ? Math.round(+values.r_aluminio_mt * revestimiento_al.peso * values.precio * (1 + (values.porcentaje / 100)) * 100) / 100 : 0,
 
 
     }
@@ -60,7 +96,32 @@ export const createPresupuestoItem = (values, data_aberturas, data_perfiles, dat
 
 }
 
+// export const createPresupuestoItemEstandart = (abertura) =>{
+//     const new_item = {
+//         _id: ID + 1,
+//         data: calculated,
+//         abertura: abertura.nombre,
+//         peso_total: peso_total,
+//         precio_total: precio_total,
+//         precio_aluminio: +values.precio,
+//         precio_accesorios: precio_accesorios,
+//         porcentaje_aplicado: +values.porcentaje,
+//         medidas: {
+//             alto: +values.alto,
+//             ancho: +values.ancho,
+//         },
+//         vidrio: vidrio ? vidrio.nombre : 'Sin Vidrio',
+//         vidrio_mt: vidrio ? +values.vidrio_mt2 : '',
+//         precio_vidrio: vidrio ? +values.vidrio_mt2 * vidrio.precio : 0,
+//         cantidad: values.cantidad,
+//         accesorios: accesorios ? accesorios : 'Sin Accesorios',
+//         revestimiento_al: revestimiento_al ? revestimiento_al.nombre : 'Sin Revestimiento',
+//         revestimiento_al_mt: revestimiento_al ? +values.r_aluminio_mt : '',
+//         precio_revestimiento_al: revestimiento_al ? Math.round(+values.r_aluminio_mt * revestimiento_al.peso  * values.precio * (1 + (values.porcentaje / 100)) * 100) / 100 : 0,
 
+//     }
+//     return new_item
+// }
 
 const longitud_calculada = (values, pieza) => {
     switch (pieza.variable) {
@@ -76,24 +137,24 @@ const longitud_calculada = (values, pieza) => {
             return (values.alto * 2 * values.ancho * 2) - (pieza.cortes * pieza.descuento)
         default:
             break;
-    } 
+    }
 }
 
 const accesorio_calculado = (values, accesorio) => {
     if (accesorio.colocacion) {
         switch (accesorio.colocacion) {
             case 'alto':
-                return values.alto  * accesorio.cantidad
+                return values.alto * accesorio.cantidad
             case 'ancho':
-                return values.ancho  * accesorio.cantidad
+                return values.ancho * accesorio.cantidad
             case 'fija':
-                return accesorio.cantidad 
+                return accesorio.cantidad
             case 'perimetro':
                 return (values.alto * 2 * values.ancho * 2) * accesorio.cantidad
             default:
                 break;
         }
-    }else{
+    } else {
 
         return accesorio.cantidad
 
