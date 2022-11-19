@@ -34,7 +34,7 @@ const deletePieza = async (id) => {
 
 // Actualizar Pieza
 const updatePieza = async (entidad) => {
-    console.log()
+
     const { _id, ...others } = entidad
     let response = await fetch(`http://localhost:5000/api/pieza/${_id}`, {
         method: 'PUT',

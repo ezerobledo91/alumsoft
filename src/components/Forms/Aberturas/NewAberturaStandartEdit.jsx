@@ -135,7 +135,7 @@ const NewAberturaStandartEdit = ({ data_edit, setDataEdit }) => {
     data.tipo = 'estandar'
     data.total = total
     setLoading(true)
-    console.log(data)
+
     await dispatch(updateDataAbertura(data))
     setLoading(false)
     toast({

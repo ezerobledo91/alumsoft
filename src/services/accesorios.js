@@ -34,7 +34,7 @@ const deleteAccesorio = async (id) => {
 
 // Actualizar Accesorio
 const updateAccesorio= async (entidad) => {
-    console.log()
+
     const { _id, ...others } = entidad
     let response = await fetch(`http://localhost:5000/api/accesorio/${_id}`, {
         method: 'PUT',

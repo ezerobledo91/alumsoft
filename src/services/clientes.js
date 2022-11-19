@@ -34,7 +34,6 @@ const deleteCliente = async (id) => {
 
 // Actualizar Cliente
 const updateCliente = async (entidad) => {
-    console.log()
     const { _id, ...others } = entidad
     let response = await fetch(`http://localhost:5000/api/cliente/${_id}`, {
         method: 'PUT',

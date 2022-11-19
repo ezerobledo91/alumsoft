@@ -344,7 +344,7 @@ export const DataTableSlice = createSlice({
     reducers: {
         filterPresupuesto: (state, action) => {
             const busqueda  = action.payload
-            console.log(busqueda)
+
             // state.presupuestos.filter((presupuesto) => presupuesto.numero === busqueda)
             // if(resultado){
                 //     return resultado

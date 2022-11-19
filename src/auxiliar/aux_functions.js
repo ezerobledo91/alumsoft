@@ -90,7 +90,6 @@ export const createPresupuestoItem = (values, data_aberturas, data_perfiles, dat
 
 
     }
-    console.log(new_item)
     return new_item
 
 }

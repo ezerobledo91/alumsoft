@@ -35,7 +35,7 @@ const deleteAbertura = async (id) => {
 // Actualizar Abertura
 const updateAbertura = async (entidad) => {
     const { _id, ...others } = entidad
-    // console.log(entidad)
+
     let response = await fetch(`http://localhost:5000/api/abertura/${_id}`, {
         method: 'PUT',
         headers: {

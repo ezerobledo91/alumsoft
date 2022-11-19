@@ -105,7 +105,6 @@ const Presupuestos = () => {
     precio = precio + ( item.precio_total + item.precio_vidrio + item.precio_accesorios + item.precio_revestimiento_al) * item.cantidad  // Precio total.
     })
 
-  console.log(data_preview)
 
   // GUARDAR PRESUPUESTO
   const [isLoading, setLoading] = useState(false)
