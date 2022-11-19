@@ -33,12 +33,7 @@ const ModalComponent = ({close=true ,setState, ...props}) => {
         <ModalHeader> {props.title}</ModalHeader>
         <ModalCloseButton />
         <ModalBody> {props.children}</ModalBody>
-        <ModalFooter>
-         {close && <Button colorScheme='blue' mr={3} onClick={onClose}>
-            Cerrar
-          </Button>}
-        </ModalFooter>
-      </ModalContent>
+       </ModalContent>
     </Modal>
   )
 }

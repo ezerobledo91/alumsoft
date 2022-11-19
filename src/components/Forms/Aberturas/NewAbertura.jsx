@@ -37,6 +37,7 @@ const NewAberturaRefactor = () => {
   
     data.piezas = arrayPerfiles
     data.accesorios = arrayAccesorios
+    data.tipo = 'medida'
     setLoading(true)
     await dispatch(saveDataAbertura(data))
     setLoading(false)

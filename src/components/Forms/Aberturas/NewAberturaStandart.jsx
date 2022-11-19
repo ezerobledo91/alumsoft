@@ -81,7 +81,7 @@ const NewAberturaStandart = () => {
     setArrayPerfiles([...arrayPerfiles.filter((p) => p._id !== id)])
   }
 
-  // ------- Aniadir perfiles y borrar perfiles -------
+  // ------- Añadir perfiles y borrar perfiles -------
   // ------- Add Accesorios y delete accesorios --------------
   const addAccesorio = () => {
     const data_form_acc = getValues(['codigo_acc', 'cantidad_acc'])
@@ -108,12 +108,12 @@ const NewAberturaStandart = () => {
       setError('Debe Seleccionar por lo menos un perfil')
       return
     }
+    data.precio_total = precio_total_perfiles
     data.piezas = arrayPerfiles
     data.accesorios = arrayAccesorios
     data.tipo = 'estandar'
     data.total = total
     setLoading(true)
-    console.log(data)
     await dispatch(saveDataAbertura(data))
     setLoading(false)
     toast({
@@ -134,17 +134,22 @@ const NewAberturaStandart = () => {
   useEffect(() => {
     const r_selected = revestimientos.find((r) => r.codigo === +revestimiento.revestimiento_cod)
     if (r_selected) {
-      let precio = r_selected.peso * revestimiento.revestimiento_ml * porcentaje * precioKg
+      let precio = r_selected.peso * revestimiento.revestimiento_ml * (porcentaje / 100 + 1) * precioKg
       setPrecioRevestimiento(precio)
+      return
     }
-  }, [revestimiento, precioKg, porcentaje])
+
+    setPrecioRevestimiento(0)
+  }, [revestimiento, precioKg, porcentaje, revestimiento.revestimiento_cod])
 
   // CUANDO CAMBIA UN VIDRIO O REVESTIMIENTO
   useEffect(() => {
     const v_selected = vidrios.find((v) => v.nombre === vidrio.vidrio_cod)
     if (v_selected) {
       setPrecioVidrio(v_selected.precio * vidrio.vidrio_m2)
+      return
     }
+    setPrecioVidrio(0)
   }, [vidrio])
 
   useEffect(() => {
@@ -199,13 +204,7 @@ const NewAberturaStandart = () => {
           </Select>
           <FormHelperText>Seleccione una Linea</FormHelperText>
         </FormControl>
-        <FormControl>
-          <FormLabel htmlFor='alto'>
-            Alto <RequiredAsterisk>*</RequiredAsterisk>
-          </FormLabel>
-          <Input id='alto' type='number' size='sm' step='any' {...register('alto')} />
-          <FormHelperText>Alto Abertura</FormHelperText>
-        </FormControl>
+
         <FormControl>
           <FormLabel htmlFor='ancho'>
             Ancho <RequiredAsterisk>*</RequiredAsterisk>
@@ -213,9 +212,17 @@ const NewAberturaStandart = () => {
           <Input id='ancho' type='number' size='sm' step='any' {...register('ancho')} />
           <FormHelperText>Ancho Abertura</FormHelperText>
         </FormControl>
+        <FormControl>
+          <FormLabel htmlFor='alto'>
+            Alto <RequiredAsterisk>*</RequiredAsterisk>
+          </FormLabel>
+          <Input id='alto' type='number' size='sm' step='any' {...register('alto')} />
+          <FormHelperText>Alto Abertura</FormHelperText>
+        </FormControl>
       </WrapperFlexRow>
       {/* ----------------------- MEDIDAS Y GENERAL  ------------------------*/}
       {/* ----------------------- PERFILES ------------------------*/}
+      <TitleGroupInput>Perfiles </TitleGroupInput>
       <WrapperFlexRow>
         <FormControl>
           <FormLabel htmlFor='nombre'>
@@ -270,6 +277,7 @@ const NewAberturaStandart = () => {
 
       {/* ----------------------------------- ACCESORIOS --------------------------- */}
       <>
+        <TitleGroupInput>Accesorios</TitleGroupInput>
         <WrapperFlexRow>
           <FormControl>
             <FormLabel htmlFor='accesorios'>
@@ -320,10 +328,9 @@ const NewAberturaStandart = () => {
 
       {/* ----------------------------------- ACCESORIOS --------------------------- */}
       {/* ----------------------------------- VIDRIOS --------------------------- */}
-
+      <TitleGroupInput>Revestimientos </TitleGroupInput>
       <WrapperFlexRow>
         <FormControl>
-          <FormLabel htmlFor='Vidrio'>Revestimientos</FormLabel>
           <FormLabel htmlFor='Vidrio'>Vidrio</FormLabel>
           <Select
             placeholder='Seleccione un Vidrio'
@@ -368,8 +375,11 @@ const NewAberturaStandart = () => {
             id='perfil'
             size='sm'
             {...register('revestimiento_cod')}
-            onChange={(e) => setRevestimiento({ ...revestimiento, revestimiento_cod: e.target.value })}
+            onChange={(e) => {
+              setRevestimiento({ ...revestimiento, revestimiento_cod: e.target.value })
+            }}
           >
+            <option value=''>Sin Revestimiento</option>
             {revestimientos.map((item) => {
               return (
                 <option key={item._id} value={item.codigo}>
@@ -388,6 +398,7 @@ const NewAberturaStandart = () => {
             type='number'
             step='0.01'
             size='sm'
+            defaultValue='0'
             {...register('revestimiento_ml')}
             onChange={(e) => setRevestimiento({ ...revestimiento, revestimiento_ml: e.target.value })}
           />
@@ -396,6 +407,8 @@ const NewAberturaStandart = () => {
       </WrapperFlexRow>
       {/* ----------------------------------- REVESTIMIENTO --------------------------- */}
       {/* ------------------------------------PRECIOS -------------------------------- */}
+      <WrapperFlexRow></WrapperFlexRow>
+      <TitleGroupInput>Resumen de Precios </TitleGroupInput>
       <WrapperFlexRow>
         <FormControl>
           <FormLabel htmlFor='precio'>
@@ -439,22 +452,12 @@ const NewAberturaStandart = () => {
           />
           <FormHelperText>Costo en aluminio (sin revestimiento)</FormHelperText>
         </FormControl>
-        <FormControl>
-          <FormLabel htmlFor='precio'>Precio Total Aluminio</FormLabel>
-          <Input
-            id='mt2'
-            type='number'
-            step='0.01'
-            size='sm'
-            {...register('precio_total')}
-            value={precio_total_perfiles}
-          />
-          <FormHelperText>Precio Total Aluminio</FormHelperText>
-        </FormControl>
       </WrapperFlexRow>
+
       <WrapperFlexRow>
         <Stat style={{ flex: 'none', marginTop: '10px' }}>
-          <StatLabel>Accesorios : $ {precio_accesorios}</StatLabel>
+          <StatLabel>Perfiles : $ {Math.round(precio_total_perfiles)}</StatLabel>
+          <StatLabel>Accesorios : $ {Math.round(precio_accesorios)}</StatLabel>
           <StatLabel>Revestimiento : $ {Math.round(precio_revestimiento)}</StatLabel>
           <StatLabel>Vidrio : $ {Math.round(precio_vidrio)}</StatLabel>
           <StatLabel>Total</StatLabel>

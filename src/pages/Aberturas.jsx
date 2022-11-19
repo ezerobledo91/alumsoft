@@ -4,6 +4,7 @@ import React, { useEffect } from 'react'
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
+import EditorLoteEstandar from '../components/Forms/Aberturas/EditorLoteEstandar'
 import NewAberturaRefactor from '../components/Forms/Aberturas/NewAbertura'
 import NewAberturaEdit from '../components/Forms/Aberturas/NewAberturaEdit'
 import NewAberturaStandart from '../components/Forms/Aberturas/NewAberturaStandart'
@@ -24,7 +25,7 @@ const Aberturas = () => {
   const [data_edit, setDataEdit] = useState(false)
   const [tabIndex, setTabIndex] = useState(0)
   const dispatch = useDispatch() // Set state redux toolkit
-  
+
   // GET DATOS DE API Y SETEAR EL STATE REDUX
   useEffect(() => {
     dispatch(getDataAbertura())
@@ -33,12 +34,11 @@ const Aberturas = () => {
 
   // MOVIMIENTOS ENTRE TABAS CUANDO VAMOS A EDITAR
   useEffect(() => {
-    if (data_edit){
+    if (data_edit) {
       setTabIndex(2)
       return
     }
     setTabIndex(0)
-  
   }, [data_edit])
 
   // CONTROL DE TABS
@@ -71,12 +71,15 @@ const Aberturas = () => {
               Editar
             </Tab>
             <Tab _selected={{ color: '#319795', borderColor: '#319795' }} _focus={{ boxShadow: 'none' }}>
-             Nueva Estandar
+              Nueva Estandar
+            </Tab>
+            <Tab _selected={{ color: '#319795', borderColor: '#319795' }} _focus={{ boxShadow: 'none' }}>
+              Editor Lotes Estandar
             </Tab>
           </TabList>
           <TabPanels>
             <TabPanel>
-            <WrapperFlexRowMin>
+              <WrapperFlexRowMin>
                 <FormControl>
                   <FormLabel htmlFor='categoria'>Filtro Categoria</FormLabel>
                   <Select
@@ -111,9 +114,28 @@ const Aberturas = () => {
                     <option value='otro'>Otro</option>
                   </Select>
                 </FormControl>
+                <FormControl>
+                  <FormLabel htmlFor='categoria'>Filtro Tipo</FormLabel>
+                  <Select
+                    placeholder='Seleccione una Tipo'
+                    id='tipo'
+                    defaultValue={''}
+                    size='sm'
+                    onChange={(e) => {
+                      setDataFiltro(e.target.value, 'tipo')
+                    }}
+                  >
+                    <option value='estandar'>Estandar</option>
+                    <option value='medida'>A Medida</option>
+                  </Select>
+                </FormControl>
               </WrapperFlexRowMin>
               {data.aberturas.length > 0 ? (
-                <AberturasTable data={data_filtrada.length > 0 ? data_filtrada : data.aberturas} titles={data_titles} setDataEdit={setDataEdit} />
+                <AberturasTable
+                  data={data_filtrada.length > 0 ? data_filtrada : data.aberturas}
+                  titles={data_titles}
+                  setDataEdit={setDataEdit}
+                />
               ) : (
                 <NoData>
                   <NotAllowedIcon /> No existen Datos
@@ -125,7 +147,11 @@ const Aberturas = () => {
             </TabPanel>
             <TabPanel>
               {data_edit ? (
-               data_edit?.tipo === 'estandar' ? <NewAberturaStandartEdit data_edit={data_edit} setDataEdit={setDataEdit} /> : <NewAberturaEdit data_edit={data_edit} setDataEdit={setDataEdit}/>
+                data_edit?.tipo === 'estandar' ? (
+                  <NewAberturaStandartEdit data_edit={data_edit} setDataEdit={setDataEdit} />
+                ) : (
+                  <NewAberturaEdit data_edit={data_edit} setDataEdit={setDataEdit} />
+                )
               ) : (
                 <NoData>
                   <NotAllowedIcon /> Seleccione una Abertura para editar.
@@ -133,7 +159,10 @@ const Aberturas = () => {
               )}
             </TabPanel>
             <TabPanel>
-                <NewAberturaStandart></NewAberturaStandart>
+              <NewAberturaStandart></NewAberturaStandart>
+            </TabPanel>
+            <TabPanel>
+              <EditorLoteEstandar></EditorLoteEstandar>
             </TabPanel>
           </TabPanels>
         </Tabs>

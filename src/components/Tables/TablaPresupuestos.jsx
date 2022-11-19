@@ -97,7 +97,7 @@ const TablaPresupuestos = ({ titles, data, setDataEdit }) => {
                 </IconWrapper>
               </Td>
             </Tr>
-          ))}
+          )).reverse()}
         </Tbody>
         <Tfoot></Tfoot>
       </Table>

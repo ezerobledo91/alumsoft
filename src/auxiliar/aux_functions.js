@@ -1,7 +1,6 @@
 export const createPresupuestoItem = (values, data_aberturas, data_perfiles, data_vidrio, data_accesorios, ID) => {
     const abertura = data_aberturas.find((item) => item._id === values.abertura) // Busco en las aberturas el objeto que corresponde a la seleccion
     const accesorios = abertura?.accesorios
-
     // ESTANDAR
     if (abertura.tipo === 'estandar') {
         const vidrio = data_vidrio.find((item) => item.nombre === abertura.vidrio_cod)

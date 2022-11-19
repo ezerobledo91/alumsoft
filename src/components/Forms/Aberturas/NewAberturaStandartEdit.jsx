@@ -76,6 +76,10 @@ const NewAberturaStandartEdit = ({ data_edit, setDataEdit }) => {
     setRevestimiento({ revestimiento_ml: data_edit.revestimiento_ml, revestimiento_cod: data_edit.revestimiento_cod })
     setVidrio({ vidrio_m2: data_edit.vidrio_m2, vidrio_cod: data_edit.vidrio_cod })
     setTotal(data_edit.total)
+    setPorcentaje(data_edit.porcentaje)
+    setPrecioKg(data_edit.precio_kg)
+    setPrecioPerfiles(data_edit.precio_total)
+
 
     // eslint-disable-next-line
   }, [data_edit])
@@ -182,9 +186,11 @@ const NewAberturaStandartEdit = ({ data_edit, setDataEdit }) => {
   useEffect(() => {
     const r_selected = revestimientos.find((r) => r.codigo === +revestimiento.revestimiento_cod)
     if (r_selected) {
-      let precio = r_selected.peso * revestimiento.revestimiento_ml * porcentaje * precioKg
+      let precio = r_selected.peso * revestimiento.revestimiento_ml * (porcentaje / 100 + 1) * precioKg
       setPrecioRevestimiento(precio)
+      return
     }
+    setPrecioRevestimiento(0)
   }, [revestimiento, precioKg, porcentaje, data_edit])
 
   // CUANDO CAMBIA UN VIDRIO O REVESTIMIENTO
@@ -192,7 +198,9 @@ const NewAberturaStandartEdit = ({ data_edit, setDataEdit }) => {
     const v_selected = vidrios.find((v) => v.nombre === vidrio.vidrio_cod)
     if (v_selected) {
       setPrecioVidrio(v_selected.precio * vidrio.vidrio_m2)
+      return
     }
+    setPrecioVidrio(0)
   }, [vidrio, data_edit])
 
   useEffect(() => {
@@ -278,6 +286,7 @@ const NewAberturaStandartEdit = ({ data_edit, setDataEdit }) => {
       </WrapperFlexRow>
       {/* ----------------------- MEDIDAS Y GENERAL  ------------------------*/}
       {/* ----------------------- PERFILES ------------------------*/}
+      <TitleGroupInput>Perfiles </TitleGroupInput>
       <WrapperFlexRow>
         <FormControl>
           <FormLabel htmlFor='nombre'>
@@ -332,6 +341,7 @@ const NewAberturaStandartEdit = ({ data_edit, setDataEdit }) => {
 
       {/* ----------------------------------- ACCESORIOS --------------------------- */}
       <>
+        <TitleGroupInput>Accesorios</TitleGroupInput>
         <WrapperFlexRow>
           <FormControl>
             <FormLabel htmlFor='accesorios'>
@@ -382,7 +392,7 @@ const NewAberturaStandartEdit = ({ data_edit, setDataEdit }) => {
 
       {/* ----------------------------------- ACCESORIOS --------------------------- */}
       {/* ----------------------------------- VIDRIOS --------------------------- */}
-
+      <TitleGroupInput>Revestimientos </TitleGroupInput>
       <WrapperFlexRow>
         <FormControl>
           <FormLabel htmlFor='Vidrio'>Vidrio</FormLabel>
@@ -462,6 +472,8 @@ const NewAberturaStandartEdit = ({ data_edit, setDataEdit }) => {
       </WrapperFlexRow>
       {/* ----------------------------------- REVESTIMIENTO --------------------------- */}
       {/* ------------------------------------PRECIOS -------------------------------- */}
+      <WrapperFlexRow></WrapperFlexRow>
+      <TitleGroupInput>Resumen de Precios </TitleGroupInput>
       <WrapperFlexRow>
         <FormControl>
           <FormLabel htmlFor='precio'>
@@ -507,21 +519,10 @@ const NewAberturaStandartEdit = ({ data_edit, setDataEdit }) => {
           />
           <FormHelperText>Costo en aluminio (sin revestimiento)</FormHelperText>
         </FormControl>
-        <FormControl>
-          <FormLabel htmlFor='precio'>Precio Total Aluminio</FormLabel>
-          <Input
-            id='mt2'
-            type='number'
-            step='0.01'
-            size='sm'
-            {...register('precio_total')}
-            value={precio_total_perfiles}
-          />
-          <FormHelperText>Precio Total Aluminio</FormHelperText>
-        </FormControl>
       </WrapperFlexRow>
       <WrapperFlexRow>
         <Stat style={{ flex: 'none', marginTop: '10px' }}>
+          <StatLabel>Perfiles : $ {Math.round(precio_total_perfiles)}</StatLabel>
           <StatLabel>Accesorios : $ {precio_accesorios}</StatLabel>
           <StatLabel>Revestimiento : $ {Math.round(precio_revestimiento)}</StatLabel>
           <StatLabel>Vidrio : $ {Math.round(precio_vidrio)}</StatLabel>

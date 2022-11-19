@@ -1,6 +1,10 @@
 import {
   Button,
   Divider,
+  FormControl,
+  FormHelperText,
+  FormLabel,
+  Input,
   Stack,
   Stat,
   StatHelpText,
@@ -20,10 +24,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
 import Items from './Items'
 import { getDataPresupuesto, saveDataPresupuesto, updateDataPresupuesto } from '../../../reducer/DataTablesSlice'
-import {  setDataEditPresupuesto } from '../../../reducer/UiSlice'
+import { setDataEditPresupuesto } from '../../../reducer/UiSlice'
 import ModalComponent from '../../Modal'
 import DetailModal from './DetailModal'
 import NewItemEditPresupuesto from './NewItemEditPresupuesto'
+import { UniqueFlexRow, WrapperFlexRow } from '../../Styled/StyledGenericLayout'
+import { useForm } from 'react-hook-form'
 
 const Wrapper = styled.div`
   padding: 10px 20px;
@@ -59,7 +65,7 @@ const ContainerPre = styled.div`
   flex-direction: column;
   justify-content: space-between;
   height: fit-content;
-  width:60%;
+  width: 60%;
 `
 const WrapperTop = styled.div`
   display: flex;
@@ -85,18 +91,26 @@ const EditPresupuestos = ({ data_edit, setDataEdit }) => {
   const [cliente, setCliente] = useState(data_edit?.cliente)
   // Observaciones
   let [textObservacion, setObservacion] = useState(data_edit?.observaciones)
+  let [actualizacion, setActualizacion] = useState(false)
+  let [actualizacion_porcentajes, setActualizacionPorcentajes] = useState({ aluminio: 1, vidrio: 1, accesorios: 1 })
+
   // Reset Form
   const [reset, setReset] = useState(false)
+  const { getValues, register } = useForm()
 
   // Modal Detalles
   const [detailModal, setDetailModal] = useState(false)
-
   let precio = 0 // precio total de los items.
   let numero = data_edit.numero // numero de presupuestos.
+
   data_preview.forEach((item) => {
     precio =
       precio +
-      (item.precio_total + item.precio_vidrio + item.precio_accesorios + item.precio_revestimiento_al) * item.cantidad // Precio total.
+      (item.precio_total * actualizacion_porcentajes.aluminio +
+        item.precio_vidrio * actualizacion_porcentajes.vidrio +
+        item.precio_accesorios * actualizacion_porcentajes.accesorios +
+        item.precio_revestimiento_al * actualizacion_porcentajes.aluminio) *
+        item.cantidad // Precio total.
   })
 
   // GUARDAR PRESUPUESTO
@@ -105,9 +119,18 @@ const EditPresupuestos = ({ data_edit, setDataEdit }) => {
   const dispatch = useDispatch()
   // On Submit Presupuesto.
   const onSubmit = async () => {
+    let data_precios_actualizada = data_preview.map((a) => {
+      return {
+        ...a,
+        precio_total: a.precio_total * actualizacion_porcentajes.aluminio,
+        precio_vidrio: a.precio_vidrio * actualizacion_porcentajes.vidrio,
+        precio_accesorio: a.precio_accesorios * actualizacion_porcentajes.accesorios,
+        precio_revestimiento_al: a.precio_revestimiento_al * actualizacion_porcentajes.aluminio,
+      }
+    })
     const data = {
       precio: Math.round(precio * 100) / 100,
-      aberturas: data_preview,
+      aberturas: data_precios_actualizada,
       observaciones: textObservacion,
       cliente: cliente,
       numero: numero,
@@ -151,7 +174,8 @@ const EditPresupuestos = ({ data_edit, setDataEdit }) => {
     let month = date.getMonth() + 1
     let year = date.getFullYear()
     let currentDate = `${day}-${month}-${year}`
-    let numero_new = presupuestos.at(-1)?.numero + 1 
+    let numero_new = presupuestos.at(-1)?.numero + 1
+
     const data = {
       precio: Math.round(precio * 100) / 100,
       aberturas: data_preview,
@@ -186,6 +210,24 @@ const EditPresupuestos = ({ data_edit, setDataEdit }) => {
     setDataEdit(false)
   }
 
+  const actualizarPrecios = async (e) => {
+    e.preventDefault()
+    const vidrio = getValues('vidrios') || 0
+    const accesorios = getValues('accesorios') || 0
+    const aluminio = getValues('aluminio') || 0
+
+    setActualizacionPorcentajes({
+      vidrio: 1 + vidrio / 100,
+      accesorios: 1 + accesorios / 100,
+      aluminio: 1 + aluminio / 100,
+    })
+    toast({
+      title: `Precios Actualizados, Guardar si es correcto.`,
+      status: 'success',
+      isClosable: true,
+    })
+  }
+
   return (
     <>
       <Container>
@@ -214,10 +256,10 @@ const EditPresupuestos = ({ data_edit, setDataEdit }) => {
                   <Tr>
                     <Th textAlign='center'>Abertura</Th>
                     <Th textAlign='center'>Medidas</Th>
-                    <Th textAlign='center'>Vidrio</Th>
+                    {/* <Th textAlign='center'>Vidrio</Th>
                     <Th textAlign='center'>M2</Th>
                     <Th textAlign='center'>Revestimiento Aluminio</Th>
-                    <Th textAlign='center'>M</Th>
+                    <Th textAlign='center'>M</Th> */}
                     <Th textAlign='center'>P.Unitario</Th>
                     <Th textAlign='center'>Cantidad</Th>
                     <Th textAlign='center'>P.Total</Th>
@@ -226,7 +268,14 @@ const EditPresupuestos = ({ data_edit, setDataEdit }) => {
                 </Thead>
                 <Tbody>
                   {data_preview.map((data, index) => (
-                    <Items data={data} index={index} key={index} setDetailModal={setDetailModal} edit={true}></Items>
+                    <Items
+                      data={data}
+                      index={index}
+                      key={index}
+                      setDetailModal={setDetailModal}
+                      edit={true}
+                      actualizacion_porcentajes={actualizacion_porcentajes}
+                    ></Items>
                   ))}
                 </Tbody>
               </Table>
@@ -237,9 +286,12 @@ const EditPresupuestos = ({ data_edit, setDataEdit }) => {
             <Stat style={{ flex: 'none', marginTop: '10px' }}>
               <StatLabel>Total</StatLabel>
               <StatNumber>$ {Math.round(precio * 100) / 100}</StatNumber>
-              <FooterTextObs>{textObservacion}</FooterTextObs>
+              <FooterTextObs style={{ maxWidth: '300px', overflow: 'auto' }}>{textObservacion}</FooterTextObs>
             </Stat>
             <Stack direction='row' spacing={4} align='center'>
+              <Button isLoading={isLoading} colorScheme='gray' onClick={() => setActualizacion(true)}>
+                Actualizar Precios
+              </Button>
               <Button type='submit' isLoading={isLoading} colorScheme='teal' onClick={() => onSubmit()}>
                 Guardar Cambios
               </Button>
@@ -252,6 +304,39 @@ const EditPresupuestos = ({ data_edit, setDataEdit }) => {
       </Container>
       <ModalComponent title='Detalles' open={detailModal} setState={setDetailModal}>
         {detailModal && <DetailModal detalles={detailModal} />}
+      </ModalComponent>
+      <ModalComponent title='Actualizacion de Precios' open={actualizacion} setState={setActualizacion}>
+        <Wrapper>
+          <WrapperFlexRow>
+            <FormControl width={'200px'}>
+              <FormLabel htmlFor=''>Accesorios</FormLabel>
+              <Input
+                aria-required={true}
+                id='cantidad'
+                type='number'
+                step='0.01'
+                size='sm'
+                {...register('accesorios')}
+              />
+              <FormHelperText>Porcentaje Actualización (%)</FormHelperText>
+            </FormControl>
+          </WrapperFlexRow>
+          <WrapperFlexRow>
+            <FormControl width={'200px'}>
+              <FormLabel htmlFor=''>Vidrios</FormLabel>
+              <Input aria-required={true} id='cantidad' type='number' step='0.01' size='sm' {...register('vidrios')} />
+              <FormHelperText>Porcentaje Actualización (%)</FormHelperText>
+            </FormControl>
+          </WrapperFlexRow>
+          <WrapperFlexRow>
+            <FormControl width={'200px'}>
+              <FormLabel htmlFor=''>Aluminio</FormLabel>
+              <Input aria-required={true} id='cantidad' type='number' step='0.01' size='sm' {...register('aluminio')} />
+              <FormHelperText>Porcentaje Actualización (%)</FormHelperText>
+            </FormControl>
+          </WrapperFlexRow>
+          <Button onClick={(e) => actualizarPrecios(e)}>Actualizar</Button>
+        </Wrapper>
       </ModalComponent>
     </>
   )

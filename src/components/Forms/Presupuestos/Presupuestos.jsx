@@ -71,6 +71,8 @@ const FooterTextObs = styled.div`
   font-weight: 300;
   font-size: 12px;
   padding: 10px;
+  max-width: 450px;
+  overflow: auto;
 `
 const WrapperFooter = styled.div`
   display: flex;
@@ -103,7 +105,7 @@ const Presupuestos = () => {
     precio = precio + ( item.precio_total + item.precio_vidrio + item.precio_accesorios + item.precio_revestimiento_al) * item.cantidad  // Precio total.
     })
 
-  
+  console.log(data_preview)
 
   // GUARDAR PRESUPUESTO
   const [isLoading, setLoading] = useState(false)
@@ -170,10 +172,10 @@ const Presupuestos = () => {
                   <Tr>
                     <Th textAlign='center'>Abertura</Th>
                     <Th textAlign='center'>Medidas</Th>
-                    <Th textAlign='center'>Vidrio</Th>
+                    {/* <Th textAlign='center'>Vidrio</Th>
                     <Th textAlign='center'>M2</Th>
                     <Th textAlign='center'>Revestimiento Aluminio</Th>
-                    <Th textAlign='center'>M</Th>
+                    <Th textAlign='center'>M</Th> */}
                     <Th textAlign='center'>P.Unitario</Th>
                     <Th textAlign='center'>Cantidad</Th>
                     <Th textAlign='center'>P.Total</Th>
