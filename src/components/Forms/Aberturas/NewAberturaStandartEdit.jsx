@@ -129,6 +129,7 @@ const NewAberturaStandartEdit = ({ data_edit, setDataEdit }) => {
       setError('Debe Seleccionar por lo menos un perfil')
       return
     }
+    data.precio_total = precio_total_perfiles
     data._id = data_edit._id
     data.piezas = arrayPerfiles
     data.accesorios = arrayAccesorios

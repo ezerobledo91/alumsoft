@@ -92,7 +92,7 @@ const EditPresupuestos = ({ data_edit, setDataEdit }) => {
   // Observaciones
   let [textObservacion, setObservacion] = useState(data_edit?.observaciones)
   let [actualizacion, setActualizacion] = useState(false)
-  let [actualizacion_porcentajes, setActualizacionPorcentajes] = useState({ aluminio: 1, vidrio: 1, accesorios: 1 })
+  let [actualizacion_porcentajes, setActualizacionPorcentajes] = useState({aluminio_precio: 0, aluminio: 1, vidrio: 1, accesorios: 1 })
 
   // Reset Form
   const [reset, setReset] = useState(false)
@@ -122,6 +122,7 @@ const EditPresupuestos = ({ data_edit, setDataEdit }) => {
     let data_precios_actualizada = data_preview.map((a) => {
       return {
         ...a,
+        precio_aluminio: actualizacion_porcentajes.aluminio_precio !== 0 ? actualizacion_porcentajes.aluminio_precio : a.precio_aluminio,
         precio_total: a.precio_total * actualizacion_porcentajes.aluminio,
         precio_vidrio: a.precio_vidrio * actualizacion_porcentajes.vidrio,
         precio_accesorio: a.precio_accesorios * actualizacion_porcentajes.accesorios,
@@ -210,16 +211,19 @@ const EditPresupuestos = ({ data_edit, setDataEdit }) => {
     setDataEdit(false)
   }
 
+  
   const actualizarPrecios = async (e) => {
     e.preventDefault()
     const vidrio = getValues('vidrios') || 0
     const accesorios = getValues('accesorios') || 0
     const aluminio = getValues('aluminio') || 0
+    const porcentaje = aluminio !== 0 ? (aluminio - data_preview[0].precio_aluminio) * 100 / data_preview[0].precio_aluminio : 0
 
     setActualizacionPorcentajes({
       vidrio: 1 + vidrio / 100,
       accesorios: 1 + accesorios / 100,
-      aluminio: 1 + aluminio / 100,
+      aluminio_precio: +aluminio,
+      aluminio: 1 + porcentaje / 100,
     })
     toast({
       title: `Precios Actualizados, Guardar si es correcto.`,
@@ -332,7 +336,7 @@ const EditPresupuestos = ({ data_edit, setDataEdit }) => {
             <FormControl width={'200px'}>
               <FormLabel htmlFor=''>Aluminio</FormLabel>
               <Input aria-required={true} id='cantidad' type='number' step='0.01' size='sm' {...register('aluminio')} />
-              <FormHelperText>Porcentaje Actualización (%)</FormHelperText>
+              <FormHelperText>Nuevo Precio x Kg ($)</FormHelperText>
             </FormControl>
           </WrapperFlexRow>
           <Button onClick={(e) => actualizarPrecios(e)}>Actualizar</Button>
