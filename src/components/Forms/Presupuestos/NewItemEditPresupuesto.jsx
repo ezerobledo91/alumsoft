@@ -115,176 +115,176 @@ const NewItemEditPresupuesto = ({ data_edit, setCliente, setObservacion, resetFo
 
           <TabPanels>
             <TabPanel>
-              <FormControl isRequired>
-                <FormLabel htmlFor='abertura'>Abertura</FormLabel>
-                <Select placeholder='Seleccione una Abertura' id='abertura' size='sm' {...register('abertura')}>
-                  {generateOptionGroups(
-                    data_aberturas.filter((a) => a?.tipo === 'estandar'),
-                    'categoria',
-                    '_id',
-                    'nombre'
-                  )}
-                </Select>
-                <FormHelperText>Seleccione Aberturas para este Presupuesto</FormHelperText>
-              </FormControl>
-              <FormControl>
-                <FormLabel htmlFor=''>Cantidad</FormLabel>
-                <Input
-                  aria-required={true}
-                  id='cantidad'
-                  type='number'
-                  step='0.01'
-                  size='sm'
-                  {...register('cantidad')}
-                />
-                <FormHelperText>Cantidad (u)</FormHelperText>
-              </FormControl>
+              {tabIndex === 0 && (
+                <>
+                  <FormControl isRequired>
+                    <FormLabel htmlFor='abertura'>Abertura</FormLabel>
+                    <Select placeholder='Seleccione una Abertura' id='abertura' size='sm' {...register('abertura')}>
+                      {generateOptionGroups(
+                        data_aberturas.filter((a) => a?.tipo === 'estandar'),
+                        'categoria',
+                        '_id',
+                        'nombre'
+                      )}
+                    </Select>
+                    <FormHelperText>Seleccione Aberturas para este Presupuesto</FormHelperText>
+                  </FormControl>
+                  <FormControl>
+                    <FormLabel htmlFor=''>Cantidad</FormLabel>
+                    <Input
+                      aria-required={true}
+                      id='cantidad'
+                      type='number'
+                      step='0.01'
+                      size='sm'
+                      {...register('cantidad')}
+                    />
+                    <FormHelperText>Cantidad (u)</FormHelperText>
+                  </FormControl>
+                </>
+              )}
             </TabPanel>
-            {tabIndex === 1 && (
-              <TabPanel>
-                <FormControl isRequired>
-                  <FormLabel htmlFor='abertura'>Abertura</FormLabel>
-                  <Select placeholder='Seleccione una Abertura' id='abertura' size='sm' {...register('abertura')}>
-                    {generateOptionGroups(
-                      data_aberturas.filter((a) => a?.tipo !== 'estandar'),
-                      'categoria',
-                      '_id',
-                      'nombre'
-                    )}
-                  </Select>
-                  <FormHelperText>Seleccione Aberturas para este Presupuesto</FormHelperText>
-                </FormControl>
-                <FormControl isRequired>
-                  <FormLabel htmlFor='ancho'>Medidas | Precios | Cantidad </FormLabel>
-                  <WrapperInput>
-                    <div>
-                      <Input id='ancho' type='number' step='0.01' size='sm' {...register('ancho')} required />
-                      <FormHelperText>Ancho (m)</FormHelperText>
-                    </div>
-                    <div>
-                      <Input id='alto' type='number' step='0.01' size='sm' {...register('alto')} required />
-                      <FormHelperText>Alto (m)</FormHelperText>
-                    </div>
-                    <div>
-                      <Input id='precio' type='number' step='0.01' size='sm' {...register('precio')} required />
-                      <FormHelperText>Precio Kg</FormHelperText>
-                    </div>
-                    <div>
-                      <Input id='porcentaje' type='number' step='0.01' size='sm' {...register('porcentaje')} required />
-                      <FormHelperText>Porcentaje</FormHelperText>
-                    </div>
-                    <div>
-                      <Input
-                        aria-required={true}
-                        id='cantidad'
-                        type='number'
-                        step='0.01'
-                        size='sm'
-                        {...register('cantidad')}
-                      />
-                      <FormHelperText>Cantidad (u)</FormHelperText>
-                    </div>
-                  </WrapperInput>
-                </FormControl>
-                <Tabs>
-                  <TabList>
-                    <Tab _selected={{ color: '#319795', borderColor: '#319795' }} _focus={{ boxShadow: 'none' }}>
-                      Vidrio
-                    </Tab>
-                    <Tab _selected={{ color: '#319795', borderColor: '#319795' }} _focus={{ boxShadow: 'none' }}>
-                      Revestimiento Aluminio
-                    </Tab>
-                  </TabList>
+            <TabPanel>
+              {tabIndex === 1 && (
+                <>
+                  <FormControl isRequired>
+                    <FormLabel htmlFor='abertura'>Abertura</FormLabel>
+                    <Select placeholder='Seleccione una Abertura' id='abertura' size='sm' {...register('abertura')}>
+                      {generateOptionGroups(
+                        data_aberturas.filter((a) => a?.tipo !== 'estandar'),
+                        'categoria',
+                        '_id',
+                        'nombre'
+                      )}
+                    </Select>
+                    <FormHelperText>Seleccione Aberturas para este Presupuesto</FormHelperText>
+                  </FormControl>
+                  <FormControl isRequired>
+                    <FormLabel htmlFor='ancho'>Medidas | Precios | Cantidad </FormLabel>
+                    <WrapperInput>
+                      <div>
+                        <Input id='ancho' type='number' step='0.01' size='sm' {...register('ancho')} required />
+                        <FormHelperText>Ancho (m)</FormHelperText>
+                      </div>
+                      <div>
+                        <Input id='alto' type='number' step='0.01' size='sm' {...register('alto')} required />
+                        <FormHelperText>Alto (m)</FormHelperText>
+                      </div>
+                      <div>
+                        <Input id='precio' type='number' step='0.01' size='sm' {...register('precio')} required />
+                        <FormHelperText>Precio Kg</FormHelperText>
+                      </div>
+                      <div>
+                        <Input
+                          id='porcentaje'
+                          type='number'
+                          step='0.01'
+                          size='sm'
+                          {...register('porcentaje')}
+                          required
+                        />
+                        <FormHelperText>Porcentaje</FormHelperText>
+                      </div>
+                      <div>
+                        <Input
+                          aria-required={true}
+                          id='cantidad'
+                          type='number'
+                          step='0.01'
+                          size='sm'
+                          {...register('cantidad')}
+                        />
+                        <FormHelperText>Cantidad (u)</FormHelperText>
+                      </div>
+                    </WrapperInput>
+                  </FormControl>
+                  <Tabs>
+                    <TabList>
+                      <Tab _selected={{ color: '#319795', borderColor: '#319795' }} _focus={{ boxShadow: 'none' }}>
+                        Vidrio
+                      </Tab>
+                      <Tab _selected={{ color: '#319795', borderColor: '#319795' }} _focus={{ boxShadow: 'none' }}>
+                        Revestimiento Aluminio
+                      </Tab>
+                    </TabList>
 
-                  <TabPanels>
-                    <TabPanel>
-                      <WrapperInput>
-                        <FormControl>
-                          <FormLabel htmlFor='Vidrio'>Vidrio</FormLabel>
-                          <Select
-                            placeholder='Seleccione un Vidrio'
-                            defaultValue='Sin Vidrio'
-                            id='vidrio'
-                            size='sm'
-                            {...register('vidrio')}
-                          >
-                            {data_vidrios.map((item) => {
-                              return (
-                                <option key={item._id} value={item._id}>
-                                  Nombre: {item.nombre} Espesor: {item.espesor}
-                                </option>
-                              )
-                            })}
-                          </Select>
-                          <FormHelperText>Seleccione un vidrio (opcional)</FormHelperText>
-                        </FormControl>
-                        <FormControl>
-                          <FormLabel htmlFor='Vidrio'>Cantidad</FormLabel>
-                          <Input
-                            aria-required={true}
-                            id='mt2'
-                            type='number'
-                            step='0.01'
-                            size='sm'
-                            {...register('vidrio_mt2')}
-                          />
-                          <FormHelperText>Cantidad en m2</FormHelperText>
-                        </FormControl>
-                      </WrapperInput>
-                    </TabPanel>
-                    <TabPanel>
-                      <WrapperInput>
-                        <FormControl>
-                          <FormLabel htmlFor='Vidrio'>Aluminio</FormLabel>
-                          <Select
-                            placeholder='Seleccione un Perfil'
-                            id='perfil'
-                            size='sm'
-                            {...register('revestimiento_aluminio')}
-                          >
-                            {data_perfiles
-                              .filter((perfil) => perfil.categoria === 'revestimientos')
-                              .map((item) => {
+                    <TabPanels>
+                      <TabPanel>
+                        <WrapperInput>
+                          <FormControl>
+                            <FormLabel htmlFor='Vidrio'>Vidrio</FormLabel>
+                            <Select
+                              placeholder='Seleccione un Vidrio'
+                              defaultValue='Sin Vidrio'
+                              id='vidrio'
+                              size='sm'
+                              {...register('vidrio')}
+                            >
+                              {data_vidrios.map((item) => {
                                 return (
                                   <option key={item._id} value={item._id}>
-                                    Codigo: {item.codigo} Nombre: {item.nombre}
+                                    Nombre: {item.nombre} Espesor: {item.espesor}
                                   </option>
                                 )
                               })}
-                          </Select>
-                          <FormHelperText>Seleccione un revestimiento(opcional)</FormHelperText>
-                        </FormControl>
-                        <FormControl>
-                          <FormLabel htmlFor='Vidrio'>Cantidad</FormLabel>
-                          <Input
-                            aria-required={true}
-                            id='mt2'
-                            type='number'
-                            step='0.01'
-                            size='sm'
-                            {...register('r_aluminio_mt')}
-                          />
-                          <FormHelperText>Cantidad en m lineales</FormHelperText>
-                        </FormControl>
-                      </WrapperInput>
-                    </TabPanel>
-                  </TabPanels>
-                </Tabs>
-
-                <FormControl>
-                  <FormLabel htmlFor=''>Cantidad</FormLabel>
-                  <Input
-                    aria-required={true}
-                    id='cantidad'
-                    type='number'
-                    step='0.01'
-                    size='sm'
-                    {...register('cantidad')}
-                  />
-                  <FormHelperText>Cantidad (u)</FormHelperText>
-                </FormControl>
-              </TabPanel>
-            )}
+                            </Select>
+                            <FormHelperText>Seleccione un vidrio (opcional)</FormHelperText>
+                          </FormControl>
+                          <FormControl>
+                            <FormLabel htmlFor='Vidrio'>Cantidad</FormLabel>
+                            <Input
+                              aria-required={true}
+                              id='mt2'
+                              type='number'
+                              step='0.01'
+                              size='sm'
+                              {...register('vidrio_mt2')}
+                            />
+                            <FormHelperText>Cantidad en m2</FormHelperText>
+                          </FormControl>
+                        </WrapperInput>
+                      </TabPanel>
+                      <TabPanel>
+                        <WrapperInput>
+                          <FormControl>
+                            <FormLabel htmlFor='Vidrio'>Aluminio</FormLabel>
+                            <Select
+                              placeholder='Seleccione un Perfil'
+                              id='perfil'
+                              size='sm'
+                              {...register('revestimiento_aluminio')}
+                            >
+                              {data_perfiles
+                                .filter((perfil) => perfil.categoria === 'revestimientos')
+                                .map((item) => {
+                                  return (
+                                    <option key={item._id} value={item._id}>
+                                      Codigo: {item.codigo} Nombre: {item.nombre}
+                                    </option>
+                                  )
+                                })}
+                            </Select>
+                            <FormHelperText>Seleccione un revestimiento(opcional)</FormHelperText>
+                          </FormControl>
+                          <FormControl>
+                            <FormLabel htmlFor='Vidrio'>Cantidad</FormLabel>
+                            <Input
+                              aria-required={true}
+                              id='mt2'
+                              type='number'
+                              step='0.01'
+                              size='sm'
+                              {...register('r_aluminio_mt')}
+                            />
+                            <FormHelperText>Cantidad en m lineales</FormHelperText>
+                          </FormControl>
+                        </WrapperInput>
+                      </TabPanel>
+                    </TabPanels>
+                  </Tabs>
+                </>
+              )}
+            </TabPanel>
           </TabPanels>
         </Tabs>
       </DividerAberturas>
