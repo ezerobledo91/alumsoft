@@ -59,7 +59,7 @@ const ContainerPre = styled.div`
   flex-direction: column;
   justify-content: space-between;
   height: fit-content;
-  width:60%;
+  width: 60%;
 `
 const WrapperTop = styled.div`
   display: flex;
@@ -93,35 +93,45 @@ const Presupuestos = () => {
   const [cliente, setCliente] = useState('Consumidor Final')
   // Observaciones
   let [textObservacion, setObservacion] = useState('')
+  let [notas, setNotas] = useState('')
+
   // Reset Form
   const [reset, setReset] = useState(false)
 
-  // Modal Detalles 
+  // Modal Detalles
   const [detailModal, setDetailModal] = useState(false)
+
+  // Fecha de Entrega
+  const [fechaEntrega, setFechaEntrega] = useState('')
 
   let precio = 0 // precio total de los items.
   let numero = presupuestos.at(-1)?.numero === undefined ? 1 : presupuestos.at(-1)?.numero + 1 // numero de presupuestos.
   data_preview.forEach((item) => {
-    precio = precio + ( item.precio_total + item.precio_vidrio + item.precio_accesorios + item.precio_revestimiento_al) * item.cantidad  // Precio total.
-    })
-
+    precio =
+      precio +
+      (item.precio_total + item.precio_vidrio + item.precio_accesorios + item.precio_revestimiento_al) * item.cantidad // Precio total.
+  })
 
   // GUARDAR PRESUPUESTO
   const [isLoading, setLoading] = useState(false)
   const toast = useToast()
   const dispatch = useDispatch()
-  // On Submit Presupuesto. 
+  // On Submit Presupuesto.
   const onSubmit = async () => {
     const data = {
       precio: Math.round(precio * 100) / 100,
       aberturas: data_preview,
       observaciones: textObservacion,
-      cliente: cliente,
+      cliente: cliente.nombre || 'Consumidor Final',
+      cliente_telefono: cliente.telefono || 'Sin Teléfono',
+      cliente_direccion: cliente.direccion || 'Sin dirección',
+      fecha_entrega: fechaEntrega,
+      notas: notas,
       numero: numero,
-      fecha:currentDate,
+      fecha: currentDate,
     }
-    
-    if(data.aberturas.length === 0) {
+
+    if (data.aberturas.length === 0) {
       toast({
         title: `Error Presupuesto vacio.`,
         status: 'error',
@@ -140,25 +150,33 @@ const Presupuestos = () => {
     })
     dispatch(removeAllDataPreview())
     setReset(true)
-    setTimeout(()=> setReset(false), 1000)
+    setTimeout(() => setReset(false), 1000)
     setCliente('Consumidor Final')
     setObservacion('')
-    }
+  }
 
   useEffect(() => {
     dispatch(getDataPresupuesto())
   }, [dispatch])
+
   return (
     <>
       <Container>
         <ContainerForm>
-          <NewPresupuesto setCliente={setCliente} setObservacion={setObservacion} resetForm={reset} />
+          <NewPresupuesto
+            setCliente={setCliente}
+            setObservacion={setObservacion}
+            resetForm={reset}
+            setFechaEntrega={setFechaEntrega}
+            setNotas={setNotas}
+          />
         </ContainerForm>
         <ContainerPre>
           <Title>Previsualización</Title>
           <WrapperTop>
-            <div>Cliente: {cliente === '' ? 'Consumidor Final' : cliente} </div>
-            <Stat style={{ flex: 'none', textAlign:'right' }}>
+            <div>Cliente: {!cliente ? 'Consumidor Final' : cliente.nombre} </div>
+
+            <Stat style={{ flex: 'none', textAlign: 'right' }}>
               <StatHelpText>Presupuesto N°: {numero}</StatHelpText>
               <StatHelpText>Fecha: {currentDate}</StatHelpText>
             </Stat>
@@ -202,7 +220,7 @@ const Presupuestos = () => {
           </WrapperFooter>
         </ContainerPre>
       </Container>
-      <ModalComponent title='Detalles' open={detailModal} setState={setDetailModal} >
+      <ModalComponent title='Detalles' open={detailModal} setState={setDetailModal}>
         {detailModal && <DetailModal detalles={detailModal} />}
       </ModalComponent>
     </>

@@ -45,7 +45,17 @@ const DividerAberturas = styled.div`
   border-radius: 5px;
 `
 // FORM!!!!
-const NewItemEditPresupuesto = ({ data_edit, setCliente, setObservacion, resetForm }) => {
+const NewItemEditPresupuesto = ({
+  data_edit,
+  setCliente,
+  setObservacion,
+  resetForm,
+  setFechaEntrega,
+  fecha_entrega,
+  textObservacion,
+  setNotas,
+  notas,
+}) => {
   //React Hook form
   const { register, handleSubmit, reset } = useForm()
   const dispatch = useDispatch()
@@ -79,6 +89,27 @@ const NewItemEditPresupuesto = ({ data_edit, setCliente, setObservacion, resetFo
     resetForm && reset()
   }, [resetForm, reset])
 
+  // NUEVO CLIENTE Y FECHA DE ENTREGA -------
+  const handleClienteChange = (nombre) => {
+    const cliente = data_clientes.find((c) => c.nombre === nombre)
+    setCliente(cliente)
+  }
+
+  const handleFechaEntrega = (e) => {
+    setFechaEntrega(e.target.value)
+  }
+
+  useEffect(() => {
+    const cliente = data_clientes.find((c) => c.nombre === data_edit.cliente)
+    setCliente(cliente)
+
+    data_edit.fecha_entrega ? setFechaEntrega(data_edit.fecha_entrega) : setFechaEntrega('')
+    data_edit.observaciones ? setObservacion(data_edit.observaciones) : setObservacion('')
+    data_edit.notas ? setNotas(data_edit.notas) : setObservacion('')
+
+    //eslint-disable-next-line
+  }, [data_edit])
+
   return (
     <Container onSubmit={handleSubmit(onSubmit)}>
       <FormControl>
@@ -88,7 +119,7 @@ const NewItemEditPresupuesto = ({ data_edit, setCliente, setObservacion, resetFo
           id='cliente'
           size='sm'
           defaultValue={data_edit?.cliente}
-          onChange={(e) => setCliente(e.target.value)}
+          onChange={(e) => handleClienteChange(e.target.value)}
         >
           <option value='Consumidor Final'>Consumidor Final</option>
           {data_clientes.map((item) => {
@@ -288,16 +319,37 @@ const NewItemEditPresupuesto = ({ data_edit, setCliente, setObservacion, resetFo
           </TabPanels>
         </Tabs>
       </DividerAberturas>
+
+      <FormControl>
+        <FormLabel htmlFor='observacion'>Demora</FormLabel>
+        <Input type='text' onChange={handleFechaEntrega} size='xs' defaultValue={fecha_entrega || ''} />
+        <FormHelperText>Demora días</FormHelperText>
+      </FormControl>
       <FormControl>
         <FormLabel htmlFor='observacion'>Observaciones</FormLabel>
         <Textarea
           onChange={(e) => setObservacion(e.target.value)}
           placeholder='Observaciones'
-          size='sm'
-          defaultValue={data_edit.observaciones}
+          size='xs'
+          defaultValue={textObservacion}
+          maxH='60px'
+          minH={'60px'}
         />
-        <FormHelperText>Detalle visible al pie del Presupuesto</FormHelperText>
       </FormControl>
+      <FormControl>
+        <FormHelperText>Detalle visible al pie del Presupuesto</FormHelperText>
+        <FormLabel htmlFor='observacion'>Notas</FormLabel>
+        <Textarea
+          defaultValue={notas || 'Sin Notas'}
+          onChange={(e) => setNotas(e.target.value)}
+          placeholder='Notas'
+          size='xs'
+          maxH='60px'
+          minH={'60px'}
+        />
+        <FormHelperText>Notas para Fábrica</FormHelperText>
+      </FormControl>
+
       <Button leftIcon={<AddIcon />} colorScheme='teal' variant='solid' size='sm' type='submit'>
         Añadir
       </Button>

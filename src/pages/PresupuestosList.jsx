@@ -14,7 +14,7 @@ import { setDataEditPresupuesto } from '../reducer/UiSlice'
 const NoData = styled.div`
   padding: 10px 20px;
 `
-let data_titles = ['numero', 'cliente', 'observacion', 'precio', 'fecha']
+let data_titles = ['numero', 'cliente', 'observacion', 'precio', 'fecha', "demora", "estado"]
 const PresupuestosList = () => {
   const data = useSelector((state) => state.DataTables)
   const dispatch = useDispatch()

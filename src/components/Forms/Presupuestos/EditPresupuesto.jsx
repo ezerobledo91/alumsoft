@@ -28,7 +28,7 @@ import { setDataEditPresupuesto } from '../../../reducer/UiSlice'
 import ModalComponent from '../../Modal'
 import DetailModal from './DetailModal'
 import NewItemEditPresupuesto from './NewItemEditPresupuesto'
-import { UniqueFlexRow, WrapperFlexRow } from '../../Styled/StyledGenericLayout'
+import { WrapperFlexRow } from '../../Styled/StyledGenericLayout'
 import { useForm } from 'react-hook-form'
 
 const Wrapper = styled.div`
@@ -88,11 +88,23 @@ const EditPresupuestos = ({ data_edit, setDataEdit }) => {
   const data_preview = useSelector((state) => state.UiSlice.editPresupuesto.data) // Los items de Presupuestos.
   const presupuestos = useSelector((state) => state.DataTables.presupuestos)
   // Cliente
-  const [cliente, setCliente] = useState(data_edit?.cliente)
+  const [cliente, setCliente] = useState('')
+
+  // Fecha de Entrega
+  const [fechaEntrega, setFechaEntrega] = useState('')
+
   // Observaciones
-  let [textObservacion, setObservacion] = useState(data_edit?.observaciones)
+  let [textObservacion, setObservacion] = useState('')
+
+  let [notas, setNotas] = useState('')
+
   let [actualizacion, setActualizacion] = useState(false)
-  let [actualizacion_porcentajes, setActualizacionPorcentajes] = useState({aluminio_precio: 0, aluminio: 1, vidrio: 1, accesorios: 1 })
+  let [actualizacion_porcentajes, setActualizacionPorcentajes] = useState({
+    aluminio_precio: 0,
+    aluminio: 1,
+    vidrio: 1,
+    accesorios: 1,
+  })
 
   // Reset Form
   const [reset, setReset] = useState(false)
@@ -122,7 +134,10 @@ const EditPresupuestos = ({ data_edit, setDataEdit }) => {
     let data_precios_actualizada = data_preview.map((a) => {
       return {
         ...a,
-        precio_aluminio: actualizacion_porcentajes.aluminio_precio !== 0 ? actualizacion_porcentajes.aluminio_precio : a.precio_aluminio,
+        precio_aluminio:
+          actualizacion_porcentajes.aluminio_precio !== 0
+            ? actualizacion_porcentajes.aluminio_precio
+            : a.precio_aluminio,
         precio_total: a.precio_total * actualizacion_porcentajes.aluminio,
         precio_vidrio: a.precio_vidrio * actualizacion_porcentajes.vidrio,
         precio_accesorio: a.precio_accesorios * actualizacion_porcentajes.accesorios,
@@ -133,8 +148,12 @@ const EditPresupuestos = ({ data_edit, setDataEdit }) => {
       precio: Math.round(precio * 100) / 100,
       aberturas: data_precios_actualizada,
       observaciones: textObservacion,
-      cliente: cliente,
       numero: numero,
+      cliente: cliente.nombre || cliente || 'Consumidor Final',
+      cliente_telefono: cliente.telefono || 'Sin Teléfono',
+      cliente_direccion: cliente.direccion || 'Sin dirección',
+      notas: notas || "Sin Notas",
+      fecha_entrega: fechaEntrega,
       fecha: data_edit.fecha,
       _id: data_edit._id,
     }
@@ -181,7 +200,11 @@ const EditPresupuestos = ({ data_edit, setDataEdit }) => {
       precio: Math.round(precio * 100) / 100,
       aberturas: data_preview,
       observaciones: textObservacion,
-      cliente: cliente,
+      cliente: cliente.nombre || 'Consumidor Final',
+      cliente_telefono: cliente.telefono || 'Sin Teléfono',
+      cliente_direccion: cliente.direccion || 'Sin dirección',
+      fecha_entrega: fechaEntrega,
+      notas: notas || "Sin Notas",
       numero: numero_new,
       fecha: currentDate,
     }
@@ -211,13 +234,13 @@ const EditPresupuestos = ({ data_edit, setDataEdit }) => {
     setDataEdit(false)
   }
 
-  
   const actualizarPrecios = async (e) => {
     e.preventDefault()
     const vidrio = getValues('vidrios') || 0
     const accesorios = getValues('accesorios') || 0
     const aluminio = getValues('aluminio') || 0
-    const porcentaje = aluminio !== 0 ? (aluminio - data_preview[0].precio_aluminio) * 100 / data_preview[0].precio_aluminio : 0
+    const porcentaje =
+      aluminio !== 0 ? ((aluminio - data_preview[0].precio_aluminio) * 100) / data_preview[0].precio_aluminio : 0
 
     setActualizacionPorcentajes({
       vidrio: 1 + vidrio / 100,
@@ -241,12 +264,17 @@ const EditPresupuestos = ({ data_edit, setDataEdit }) => {
             setCliente={setCliente}
             setObservacion={setObservacion}
             resetForm={reset}
+            setFechaEntrega={setFechaEntrega}
+            fecha_entrega={fechaEntrega}
+            textObservacion={textObservacion}
+            setNotas={setNotas}
+            notas={notas}
           />
         </ContainerForm>
         <ContainerPre>
           <Title>Previsualización</Title>
           <WrapperTop>
-            <div>Cliente: {cliente} </div>
+            <div>Cliente: {!cliente ? 'Consumidor Final' : cliente.nombre} </div>
             <Stat style={{ flex: 'none', textAlign: 'right' }}>
               <StatHelpText>Presupuesto N°: {data_edit?.numero}</StatHelpText>
               <StatHelpText>Fecha: {data_edit?.fecha}</StatHelpText>

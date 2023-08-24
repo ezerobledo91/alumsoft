@@ -48,4 +48,20 @@ const updatePresupuesto = async (entidad) => {
     return result
 }
 
-export { savePresupuesto, getAllPresupuestos, deletePresupuesto, updatePresupuesto}
+const updatePresupuestoEstado = async (entidad) => {
+    const { _id } = entidad
+
+    let response = await fetch(`http://localhost:5000/api/presupuesto/estados/${_id}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8',
+        },
+        body: JSON.stringify(entidad),
+    })
+
+    let result = await response.json()
+    return result
+}
+
+
+export { savePresupuesto, getAllPresupuestos, deletePresupuesto, updatePresupuesto, updatePresupuestoEstado }
