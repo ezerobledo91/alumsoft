@@ -80,7 +80,7 @@ const TablaPresupuestos = ({ titles, data, setDataEdit }) => {
                   <Tr key={index}>
                     <Td>{item.numero}</Td>
                     <Td>{item.cliente}</Td>
-                    <Td>{item.observaciones}</Td>
+                    <Td style={{maxWidth:"300px", overflow:"hidden"}}>{item.observaciones}</Td>
                     <Td>$ {item.precio}</Td>
                     <Td> {item.fecha}</Td>
                     <Td> {item.fecha_entrega ? `${item.fecha_entrega} días` : 'Sin Fecha'} </Td>

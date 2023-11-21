@@ -73,6 +73,22 @@ const NewItemEditPresupuesto = ({
 
   //Guardar Presupuesto Nuevo
   const onSubmit = (values) => {
+    if (values.nombre_adicional && values.precio_adicional && values.cantidad_adicional) {
+      const { nombre_adicional, precio_adicional, cantidad_adicional } = values
+      const adicionales = { nombre_adicional, precio_adicional, cantidad_adicional }
+      const new_item = createPresupuestoItem(
+        values,
+        data_aberturas,
+        data_perfiles,
+        data_vidrios,
+        data_accesorios,
+        ID,
+        adicionales
+      )
+      dispatch(setDataEditPresupuestoItem(new_item))
+      reset()
+      return
+    }
     const new_item = createPresupuestoItem(values, data_aberturas, data_perfiles, data_vidrios, data_accesorios, ID)
     dispatch(setDataEditPresupuestoItem(new_item)) // Guardo ese item en una variable global.
   }
@@ -91,8 +107,8 @@ const NewItemEditPresupuesto = ({
 
   // NUEVO CLIENTE Y FECHA DE ENTREGA -------
   const handleClienteChange = (nombre) => {
-    const cliente = data_clientes.find((c) => c.nombre === nombre)
-    setCliente(cliente)
+    const cliente = data_clientes.find((c) => c?.nombre === nombre)
+    setCliente(cliente || { cliente: 'Consumidor Final' })
   }
 
   const handleFechaEntrega = (e) => {
@@ -121,7 +137,6 @@ const NewItemEditPresupuesto = ({
           defaultValue={data_edit?.cliente}
           onChange={(e) => handleClienteChange(e.target.value)}
         >
-          <option value='Consumidor Final'>Consumidor Final</option>
           {data_clientes.map((item) => {
             return (
               <option key={item._id} value={item.nombre}>
@@ -141,6 +156,9 @@ const NewItemEditPresupuesto = ({
             </Tab>
             <Tab _selected={{ color: '#319795', borderColor: '#319795' }} _focus={{ boxShadow: 'none' }}>
               Abertura a Medida
+            </Tab>
+            <Tab _selected={{ color: '#319795', borderColor: '#319795' }} _focus={{ boxShadow: 'none' }}>
+              Adicionales
             </Tab>
           </TabList>
 
@@ -313,6 +331,47 @@ const NewItemEditPresupuesto = ({
                       </TabPanel>
                     </TabPanels>
                   </Tabs>
+                </>
+              )}
+            </TabPanel>
+            <TabPanel>
+              {tabIndex === 2 && (
+                <>
+                  <FormControl isRequired>
+                    <FormLabel htmlFor='nombre_adicional'>Adicionales</FormLabel>
+                    <Input
+                      aria-required={true}
+                      id='nombre_adicional'
+                      type='text'
+                      size='sm'
+                      {...register('nombre_adicional')}
+                    />
+                    <FormHelperText>Ingrese el nombre del adicional</FormHelperText>
+                  </FormControl>
+                  <FormControl>
+                    <FormLabel htmlFor='cantidad_adicional'>Cantidad</FormLabel>
+                    <Input
+                      aria-required={true}
+                      id='cantidad_adicional'
+                      type='number'
+                      step='0.01'
+                      size='sm'
+                      {...register('cantidad_adicional')}
+                    />
+                    <FormHelperText>Cantidad (u)</FormHelperText>
+                  </FormControl>
+                  <FormControl>
+                    <FormLabel htmlFor='precio_adicional'>Precio</FormLabel>
+                    <Input
+                      aria-required={true}
+                      id='precio_adicional'
+                      type='number'
+                      step='0.01'
+                      size='sm'
+                      {...register('precio_adicional')}
+                    />
+                    <FormHelperText>Precio Adicional Final</FormHelperText>
+                  </FormControl>
                 </>
               )}
             </TabPanel>

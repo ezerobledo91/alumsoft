@@ -1,14 +1,49 @@
-export const createPresupuestoItem = (values, data_aberturas, data_perfiles, data_vidrio, data_accesorios, ID) => {
+export const createPresupuestoItem = (values, data_aberturas, data_perfiles, data_vidrio, data_accesorios, ID, adicional) => {
+
+    if (adicional) {
+        const { nombre_adicional, precio_adicional, cantidad_adicional } = adicional
+        // Creo un item con todos los datos, el data de las piezas y sus pesos y longitudes el nombre de la abertura, peso total, precio total
+        const new_item = {
+            _id: ID + 1,
+            data: [],
+            abertura: nombre_adicional,
+            peso_total: 0,
+            precio_total: +precio_adicional,
+            precio_aluminio: 0,
+            precio_accesorios: 0,
+            porcentaje_aplicado: 0,
+            medidas: {
+                alto: 0,
+                ancho: 0,
+            },
+            vidrio: 'Sin Vidrio',
+            vidrio_mt: '',
+            precio_vidrio: 0,
+            cantidad: cantidad_adicional,
+            accesorios: [],
+            revestimiento_al: 'Sin Revestimiento',
+            revestimiento_al_mt: '',
+            precio_revestimiento_al: 0,
+        }
+        return new_item
+    }
+
+
+
+
     const abertura = data_aberturas.find((item) => item._id === values.abertura) // Busco en las aberturas el objeto que corresponde a la seleccion
     const accesorios = abertura?.accesorios
     // ESTANDAR
     if (abertura.tipo === 'estandar') {
         const vidrio = data_vidrio.find((item) => item.nombre === abertura.vidrio_cod)
         const revestimiento_al = data_perfiles.find((item) => item.codigo === +abertura.revestimiento_cod)
-        const calculated = abertura.piezas.map(p=> {return {
-            nombre_pieza: p.nombre,
-            total_aluminio_long: p.largo, // Math Round para redondear con dos decimales 
-            total_aluminio_peso: Math.round(p.peso * p.largo)}})
+        const calculated = abertura.piezas.map(p => {
+            return {
+                nombre_pieza: p.nombre,
+                total_aluminio_long: p.largo, // Math Round para redondear con dos decimales 
+                total_aluminio_peso: Math.round(p.peso * p.largo)
+            }
+        })
         return ({
             _id: ID + 1,
             data: calculated,
@@ -16,10 +51,10 @@ export const createPresupuestoItem = (values, data_aberturas, data_perfiles, dat
             peso_total: 0,
             precio_total: abertura.precio_total,
             precio_aluminio: abertura.precio_kg,
-            precio_accesorios: abertura.accesorios.map(a=> a.precio * a.cantidad).reduce((a, b) => a + b, 0),
+            precio_accesorios: abertura.accesorios.map(a => a.precio * a.cantidad).reduce((a, b) => a + b, 0),
             porcentaje_aplicado: abertura.porcentaje,
             medidas: {
-                alto:abertura.alto,
+                alto: abertura.alto,
                 ancho: abertura.ancho,
             },
             vidrio: vidrio ? vidrio.nombre : 'Sin Vidrio',
@@ -30,11 +65,11 @@ export const createPresupuestoItem = (values, data_aberturas, data_perfiles, dat
             revestimiento_al: revestimiento_al ? revestimiento_al.nombre : 'Sin Revestimiento',
             revestimiento_al_mt: revestimiento_al ? abertura.revestimiento_ml : '',
             precio_revestimiento_al: revestimiento_al ? Math.round(abertura.revestimiento_ml * revestimiento_al.peso * abertura.precio_kg * (1 + (abertura.porcentaje / 100)) * 100) / 100 : 0,
-            
+
 
         })
     }
-    
+
     const vidrio = data_vidrio.find((item) => item._id === values.vidrio)
     const revestimiento_al = data_perfiles.find((item) => item._id === values.revestimiento_aluminio)
     const piezas = abertura.piezas  // Guardo las piezas

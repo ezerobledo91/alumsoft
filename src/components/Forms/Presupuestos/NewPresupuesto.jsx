@@ -64,6 +64,22 @@ const NewPre = ({ setCliente, setObservacion, resetForm, setFechaEntrega, setNot
 
   //Guardar Presupuesto Nuevo
   const onSubmit = (values) => {
+    if (values.nombre_adicional && values.precio_adicional && values.cantidad_adicional) {
+      const { nombre_adicional, precio_adicional, cantidad_adicional } = values
+      const adicionales = { nombre_adicional, precio_adicional, cantidad_adicional }
+      const new_item = createPresupuestoItem(
+        values,
+        data_aberturas,
+        data_perfiles,
+        data_vidrios,
+        data_accesorios,
+        ID,
+        adicionales
+      )
+      dispatch(setDataPreview(new_item))
+      reset()
+      return
+    }
     const new_item = createPresupuestoItem(values, data_aberturas, data_perfiles, data_vidrios, data_accesorios, ID)
     dispatch(setDataPreview(new_item)) // Guardo ese item en una variable global.
   }
@@ -119,6 +135,9 @@ const NewPre = ({ setCliente, setObservacion, resetForm, setFechaEntrega, setNot
             </Tab>
             <Tab _selected={{ color: '#319795', borderColor: '#319795' }} _focus={{ boxShadow: 'none' }}>
               Abertura a Medida
+            </Tab>
+            <Tab _selected={{ color: '#319795', borderColor: '#319795' }} _focus={{ boxShadow: 'none' }}>
+              Adicionales
             </Tab>
           </TabList>
 
@@ -291,6 +310,47 @@ const NewPre = ({ setCliente, setObservacion, resetForm, setFechaEntrega, setNot
                       </TabPanel>
                     </TabPanels>
                   </Tabs>
+                </>
+              )}
+            </TabPanel>
+            <TabPanel>
+              {tabIndex === 2 && (
+                <>
+                  <FormControl isRequired>
+                    <FormLabel htmlFor='nombre_adicional'>Adicionales</FormLabel>
+                    <Input
+                      aria-required={true}
+                      id='nombre_adicional'
+                      type='text'
+                      size='sm'
+                      {...register('nombre_adicional')}
+                    />
+                    <FormHelperText>Ingrese el nombre del adicional</FormHelperText>
+                  </FormControl>
+                  <FormControl>
+                    <FormLabel htmlFor='cantidad_adicional'>Cantidad</FormLabel>
+                    <Input
+                      aria-required={true}
+                      id='cantidad_adicional'
+                      type='number'
+                      step='0.01'
+                      size='sm'
+                      {...register('cantidad_adicional')}
+                    />
+                    <FormHelperText>Cantidad (u)</FormHelperText>
+                  </FormControl>
+                  <FormControl>
+                    <FormLabel htmlFor='precio_adicional'>Precio</FormLabel>
+                    <Input
+                      aria-required={true}
+                      id='precio_adicional'
+                      type='number'
+                      step='0.01'
+                      size='sm'
+                      {...register('precio_adicional')}
+                    />
+                    <FormHelperText>Precio Adicional Final</FormHelperText>
+                  </FormControl>
                 </>
               )}
             </TabPanel>

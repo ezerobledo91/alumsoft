@@ -28,6 +28,9 @@ const ContainerPre = styled.div`
   flex-direction: column;
   justify-content: top;
   height: fit-content;
+  @media print {
+    overflow: hidden;
+  }
 `
 const Print = styled.div`
   display: flex;
@@ -36,7 +39,25 @@ const Print = styled.div`
   padding: 10px;
   border-radius: 5px;
   @media print {
+    size: A4 horizontal;
+    overflow: 'hidden';
     margin: 20px;
+
+    table {
+      font-size: 10px;
+      border-collapse: collapse;
+      max-width: 100%;
+      overflow-x: hidden;
+    }
+    td,
+    th {
+      border: 1px solid lightgray;
+      padding: 8px;
+      /* Ajusta el alto de las filas automáticamente */
+      height: auto;
+      max-height: 100px; /* Opcional: establece un máximo alto */
+      // Evita el salto de línea en las celdas
+    }
   }
 `
 
@@ -47,8 +68,11 @@ const WrapperTop = styled.div`
 const FooterTextObs = styled.div`
   display: flex;
   font-weight: 300;
-  font-size: 12px;
+  font-size: 10px;
   padding: 10px;
+  max-width: 90vw;
+  justify-content: flex-end;
+  word-break: normal;
 `
 const WrapperFooter = styled.div`
   display: flex;
@@ -63,7 +87,7 @@ const WrapperData = styled.div`
   padding: 5px;
 `
 const TitleName = styled.div`
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 700;
 `
 
@@ -73,7 +97,7 @@ const WrapperX = styled.div`
   justify-content: top;
   align-items: center;
   flex-direction: column;
-  font-size: 12px;
+  font-size: 10px;
 `
 const X = styled.div`
   font-size: 30px;
@@ -82,14 +106,15 @@ const X = styled.div`
 const PrintableBodyWrapper = styled.div`
   @media print {
     height: auto;
-    width: 100%;
+    width: auto;
+    overflow: 'hidden';
   }
 `
 
 const PreviewPresupuestos = React.forwardRef((props, ref) => {
-  const { cliente, fecha, numero, observaciones, precio, aberturas } = props.data
+  const { cliente, fecha, numero, observaciones, precio, aberturas, cliente_telefono, cliente_direccion } = props.data
   return (
-    <Print ref={ref}>
+    <Print ref={ref} id='toPDF'>
       <ContainerPre>
         <WrapperTop>
           <WrapperData>
@@ -114,23 +139,28 @@ const PreviewPresupuestos = React.forwardRef((props, ref) => {
         </WrapperTop>
         <Divider />
         <Wrapper>
-        <div style={{ margin: '20px 0', borderBottom: 'solid 1px lightgray' }}>Datos de Cliente: {cliente} </div>
+          <div style={{ margin: '5px 0', borderBottom: 'solid 1px lightgray' }}>
+            <p style={{ display: 'flex', gap: '5px' }}>
+              <span>Cliente: {cliente} </span>-<span>Teléfono: {cliente_telefono || 'Sin Información'} </span> -
+              <span>Dirección: {cliente_direccion || 'Sin Información'}</span>
+            </p>
+          </div>
           <PrintableBodyWrapper>
             <TableContainer>
-              <Table variant='simple' size='sm'>
+              <Table variant='simple' size='xs' width='100%'>
                 <Thead position='sticky' top={0} bgColor='white'>
                   <Tr>
                     <Th textAlign='center'>Abertura</Th>
                     <Th textAlign='center'>Medidas</Th>
+                    <Th textAlign='center'>Vidrios</Th>
                     <Th textAlign='center'>P.Unitario</Th>
                     <Th textAlign='center'>Cantidad</Th>
                     <Th textAlign='center'>P.Total</Th>
-                    <Th></Th>
                   </Tr>
                 </Thead>
                 <Tbody>
                   {aberturas.map((data, index) => (
-                    <ItemsPrint data={data} index={index} key={index}></ItemsPrint>
+                    <ItemsPrint data={data} index={`${index}a`} key={index}></ItemsPrint>
                   ))}
                 </Tbody>
               </Table>

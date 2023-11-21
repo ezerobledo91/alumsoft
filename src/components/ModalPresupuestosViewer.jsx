@@ -14,6 +14,7 @@ import PreviewPresupuestos from './PreviewPresupuestos'
 import { FaPrint } from 'react-icons/fa'
 import { useReactToPrint } from 'react-to-print'
 
+
 const ModalPresupuestosViewer = ({ data, open, setOpen }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
@@ -35,13 +36,22 @@ const ModalPresupuestosViewer = ({ data, open, setOpen }) => {
         <ModalBody>
           <PreviewPresupuestos data={data} ref={componentRef} />
         </ModalBody>
-        <ModalFooter style={{gap:'10px'}}>
-          <Button onClick={handlePrint}>
-            <FaPrint />
-          </Button>
-          <Button colorScheme='blue' mr={3} onClick={onClose}>
-            Cerrar
-          </Button>
+        <ModalFooter style={{ gap: '10px', justifyContent: 'space-between' }}>
+          <div>
+            <ul style={{ listStyle: 'none' }}>
+              <li>Demora: {data?.fecha_entrega ? `${data.fecha_entrega} días` : 'Sin Fecha'}</li>
+              <li>Notas para fabrica: {data?.notas || 'Sin Notas'}</li>
+              <li>Estado: {data?.estado || 'Sin Estado'}</li>
+            </ul>
+          </div>
+          <div style={{ display: 'flex', gap: '10px' }}>
+            <Button onClick={handlePrint}>
+              <FaPrint />
+            </Button>
+            <Button colorScheme='blue' mr={3} onClick={onClose}>
+              Cerrar
+            </Button>
+          </div>
         </ModalFooter>
       </ModalContent>
     </Modal>
